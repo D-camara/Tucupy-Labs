@@ -4,6 +4,14 @@ All notable changes to the EcoTrade platform.
 
 ## [Unreleased]
 
+### 2025-10-29 - Bootstrap Scaffolding
+- Added initial Django project structure (`ecotrade` project, `manage.py`)
+- Created apps: `accounts`, `credits`, `transactions`, `dashboard`
+- Implemented custom `accounts.User` model with role field
+- Added core models for credits and transactions
+- Configured settings, URLs, and a minimal dashboard template
+- Added `requirements.txt` (Django>=5,<6)
+
 ### 2025-10-29 - Project Planning
 - Created comprehensive implementation plan for EcoTrade platform
 - Defined 4 Django apps: accounts, credits, transactions, dashboard
