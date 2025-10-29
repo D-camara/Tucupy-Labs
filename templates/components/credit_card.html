@@ -1,0 +1,30 @@
+<div class="credit-card">
+  <div class="flex items-center justify-between">
+    <h3 class="text-lg font-semibold text-gray-900">{{ title|default:"Carbon Credit" }}</h3>
+    <span class="text-sm text-gray-500">{{ status|default:"AVAILABLE" }}</span>
+  </div>
+  <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+    <div>
+      <div class="text-gray-500">Origin</div>
+      <div class="text-gray-900">{{ origin|default:"Farm/Project" }}</div>
+    </div>
+    <div>
+      <div class="text-gray-500">Amount</div>
+      <div class="text-gray-900">{{ amount|default:"1.0 tCO₂e" }}</div>
+    </div>
+    <div>
+      <div class="text-gray-500">Generation Date</div>
+      <div class="text-gray-900">{{ generation_date|default:"YYYY-MM-DD" }}</div>
+    </div>
+    <div>
+      <div class="text-gray-500">Price</div>
+      <div class="text-gray-900">{{ price|default:"$0.00" }}</div>
+    </div>
+  </div>
+  {% if cta_url %}
+  <div class="mt-6">
+    <a href="{{ cta_url }}" class="btn-primary">{{ cta_label|default:"View" }}</a>
+  </div>
+  {% endif %}
+</div>
+

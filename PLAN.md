@@ -4,8 +4,9 @@
 - Python 3.11+ with venv
 - Django 5.x
 - SQLite (dev)
-- TailwindCSS 3.x
-- django-tailwind package
+- TailwindCSS 4.x
+- django-tailwind-4[reload] package
+- Node.js 18+ (for Tailwind compilation)
 
 ## Django Apps Structure
 
@@ -128,10 +129,14 @@ components/
 ### Phase 1: Project Bootstrap ⏳
 1. Create venv, install Django
 2. Create Django project `ecotrade`
-3. Install & configure django-tailwind
-4. Setup static files
-5. Create base template with TailwindCSS
-6. Initial git commit
+3. Install django-tailwind-4[reload]
+4. Configure settings (INSTALLED_APPS, middleware, INTERNAL_IPS)
+5. Run `tailwind init` to create theme app
+6. Run `tailwind install` to install Node deps
+7. Configure v4 CSS (@import, @theme, @source)
+8. Create base template with `{% tailwind_css %}`
+9. Test auto-reload workflow
+10. Initial git commit
 
 ### Phase 2: User Management
 1. Create `accounts` app
@@ -173,13 +178,17 @@ components/
 5. Integration tests for flows
 6. UI refinements
 
-## TailwindCSS Setup
-- Use `django-tailwind` package
-- Create `theme` app for Tailwind
-- Configure `tailwind.config.js`
-- Base styles in `src/styles.css`
-- JIT mode enabled
-- Custom color scheme (green/eco theme)
+## TailwindCSS v4 Setup ✅
+- **Package**: `django-tailwind-4[reload]` (v4-specific fork)
+- **Auto-reload**: django-browser-reload integration
+- **Single command**: `python manage.py tailwind dev` (runs Django + Tailwind watcher)
+- **Theme app**: Created via `python manage.py tailwind init`
+- **v4 syntax**: `@import "tailwindcss"`, `@theme` directive, `@source` paths
+- **CSS source**: `theme/static_src/src/styles.css`
+- **Output**: `theme/static/css/dist/styles.css`
+- **Template tag**: `{% tailwind_css %}`
+- **Custom eco theme**: Green color scheme (#10b981, #059669, #047857)
+- **See**: `TAILWIND_SETUP.md` for complete guide
 
 ## Security Considerations
 - CSRF protection (Django default)
