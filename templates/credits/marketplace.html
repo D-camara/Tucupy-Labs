@@ -1,0 +1,53 @@
+<!doctype html>
+<!--
+  Página do marketplace de créditos.
+  Lista apenas as listagens ativas (CreditListing.is_active=True)
+  cujos créditos estão com status LISTED. Inclui paginação.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Marketplace de Créditos</title>
+    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}.card{border:1px solid #e5e7eb;border-radius:.5rem;padding:1rem;margin-bottom:1rem}</style>
+  </head>
+  <body>
+    <h1>Marketplace</h1>
+    <div style="margin:1rem 0">
+      <a href="{% url 'credit_create' %}">Cadastrar novo crédito</a>
+      <!-- Link rápido para criar um novo crédito (apenas fará sentido para produtores) -->
+    </div>
+
+    {% if listings %}
+      {% for item in listings %}
+        <div class="card">
+          <!-- Card de uma listagem ativa no marketplace -->
+          <div><strong>Crédito #{{ item.credit.id }}</strong> · {{ item.credit.amount }} {{ item.credit.unit }}</div>
+          <div>Origem: {{ item.credit.origin }} · Gerado em: {{ item.credit.generation_date }}</div>
+          <div>Preço por unidade: R$ {{ item.price_per_unit }}</div>
+          <div>Dono: {{ item.credit.owner.username }}</div>
+          <div style="margin-top:.5rem">
+            <a href="{% url 'credit_detail' item.credit.id %}">Ver detalhes</a>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div style="margin-top:1rem">
+        {% if is_paginated %}
+          <div>
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
+            {% endif %}
+            <!-- Controles de paginação básicos -->
+          </div>
+        {% endif %}
+      </div>
+    {% else %}
+      <p>Não há listagens ativas no momento.</p>
+    {% endif %}
+  </body>
+</html>

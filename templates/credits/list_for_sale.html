@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Listar Crédito #{{ credit.id }}</title>
+    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}label{display:block;margin-top:1rem}</style>
+  </head>
+  <body>
+    <!--
+      Tela de listagem de um crédito específico para venda.
+      Exibe um form simples com o preço por unidade.
+      Mostra erros de validação quando o crédito não está disponível
+      ou já existe uma listagem ativa.
+    -->
+    <a href="{% url 'credit_detail' credit.id %}">← Voltar</a>
+    <h1>Listar Crédito #{{ credit.id }}</h1>
+    <!-- Formulário para definir o preço e criar a listagem ativa -->
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div style="color:#b91c1c">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <label>Preço por unidade
+        {{ form.price_per_unit }}
+      </label>
+      {% if form.price_per_unit.errors %}
+        <div style="color:#b91c1c">{{ form.price_per_unit.errors|striptags }}</div>
+      {% endif %}
+      <div style="margin-top:1rem">
+        <button type="submit">Listar</button>
+        <a href="{% url 'credit_detail' credit.id %}">Cancelar</a>
+      </div>
+    </form>
+  </body>
+</html>
