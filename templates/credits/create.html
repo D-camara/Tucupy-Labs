@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastrar Crédito</title>
+    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}label{display:block;margin-top:1rem}input,select{padding:.5rem;margin-top:.25rem;width:100%;max-width:320px}</style>
+  </head>
+  <body>
+    <!--
+      Página de criação de crédito (apenas produtores).
+      Usa o form CarbonCreditForm e envia via POST para criar o registro.
+      Após criar, redireciona para o detalhe do crédito.
+    -->
+    <h1>Novo Crédito</h1>
+    <!-- Formulário de criação de crédito -->
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div style="color:#b91c1c">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+        <label>
+          <!-- Campo do formulário com exibição de erros -->
+          {{ field.label }}
+          {{ field }}
+          {% if field.errors %}
+            <div style="color:#b91c1c">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </label>
+      {% endfor %}
+      <div style="margin-top:1rem">
+        <button type="submit">Salvar</button>
+        <a href="{% url 'credits_marketplace' %}">Cancelar</a>
+      </div>
+    </form>
+  </body>
+</html>
