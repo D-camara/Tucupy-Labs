@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
@@ -14,6 +16,15 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.COMPANY)
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+
+    # Helpers para RBAC simples
+    @property
+    def is_producer(self) -> bool:
+        return self.role == self.Roles.PRODUCER
+
+    @property
+    def is_company(self) -> bool:
+        return self.role == self.Roles.COMPANY
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return self.username
@@ -30,3 +41,12 @@ class Profile(models.Model):
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"Profile<{self.user.username}>"
 
+
+# Criação automática de Profile para cada User
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance: User, created: bool, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    else:
+        # garante que o perfil exista
+        Profile.objects.get_or_create(user=instance)
