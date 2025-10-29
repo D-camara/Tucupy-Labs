@@ -1,5 +1,4 @@
 # Byte-compiled / optimized / DLL files
-*.sqlite
 __pycache__/
 *.pyc
 *.pyo
@@ -10,3 +9,7 @@ __pycache__/
 env/
 .venv/
 venv/
+
+# SQLite database files
+*.sqlite
+*.sqlite3
