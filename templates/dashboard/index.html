@@ -1,19 +1,103 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard · EcoTrade{% endblock %}
+{% load tailwind_tags %}
 
 {% block content %}
-  <h1 class="text-2xl font-semibold">Welcome to EcoTrade</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-    <div class="card">
-      <h2 class="text-lg font-medium">Getting Started</h2>
-      <p class="mt-2 text-gray-700">This dashboard now uses TailwindCSS v4 via the theme app.</p>
-      <div class="mt-4">
-        <a href="/credits/" class="btn-primary">Browse Marketplace</a>
-      </div>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+
+    <!-- Card Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Carteira -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Minha Carteira</h3>
+            <p class="text-3xl font-bold text-green-600">{{ my_credits }} tCO₂</p>
+            <p class="text-sm text-gray-600 mt-2">Créditos disponíveis</p>
+        </div>
+
+        {% if user.role == 'PRODUCER' %}
+            <!-- Cards específicos do Produtor -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Créditos Listados</h3>
+                <p class="text-3xl font-bold text-blue-600">{{ listed_credits }}</p>
+                <p class="text-sm text-gray-600 mt-2">Ativos no marketplace</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Total de Vendas</h3>
+                <p class="text-3xl font-bold text-green-600">R$ {{ total_sales|floatformat:2 }}</p>
+                <p class="text-sm text-gray-600 mt-2">Em transações completadas</p>
+            </div>
+
+        {% elif user.role == 'COMPANY' %}
+            <!-- Cards específicos da Empresa -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Créditos Disponíveis</h3>
+                <p class="text-3xl font-bold text-blue-600">{{ available_credits }}</p>
+                <p class="text-sm text-gray-600 mt-2">No marketplace</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Adquirido</h3>
+                <p class="text-3xl font-bold text-green-600">{{ total_purchased }} tCO₂</p>
+                <p class="text-sm text-gray-600 mt-2">Em transações completadas</p>
+            </div>
+        {% endif %}
     </div>
-    <div class="card">
-      <h2 class="text-lg font-medium">Example Credit</h2>
-      {% include 'components/credit_card.html' with title='Sample Credit' amount='10 tCO₂e' price='$12.00/t' generation_date='2025-01-15' %}
+
+    <!-- Últimas Transações -->
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">Últimas Transações</h2>
+
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantidade</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200">
+                    {% for tx in recent_transactions %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ tx.timestamp|date:"d/m/Y H:i" }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {% if tx.buyer == user %}Compra{% else %}Venda{% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ tx.amount }} tCO₂
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                R$ {{ tx.total_price|floatformat:2 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                    {% if tx.status == 'COMPLETED' %} bg-green-100 text-green-800
+                                    {% elif tx.status == 'PENDING' %} bg-yellow-100 text-yellow-800
+                                    {% else %} bg-red-100 text-red-800{% endif %}">
+                                    {{ tx.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                                Nenhuma transação encontrada
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+    <div class="mt-6">
+    <a href="/credits/" class="btn-primary">Browse Marketplace</a>
+    </div>
+</div>
 {% endblock %}
