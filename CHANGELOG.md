@@ -4,6 +4,14 @@ All notable changes to the EcoTrade platform.
 
 ## [Unreleased]
 
+### 2025-10-29 - Dashboard e Testes
+- Implementado dashboard com métricas por papel (PRODUCER/COMPANY)
+- Adicionadas métricas: carteira, créditos listados, total de vendas/compras
+- Implementada visualização de últimas transações
+- Configurado admin para todos os models com list_display útil
+- Adicionados testes e2e para o fluxo completo de créditos
+- Adicionados testes de model para transações
+
 ### 2025-10-29 - Tailwind CSS v4 Setup Plan
 - Researched django-tailwind v4 compatibility
 - Selected django-tailwind-4[reload] package for v4 support

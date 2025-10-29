@@ -22,8 +22,8 @@
 
 @layer components {
   .btn { @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors; }
-  .btn-primary { @apply btn bg-eco-primary text-white hover:bg-eco-dark; }
-  .btn-secondary { @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300; }
+  .btn-primary { @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors bg-eco-primary text-white hover:bg-eco-dark; }
+  .btn-secondary { @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors bg-gray-200 text-gray-800 hover:bg-gray-300; }
   .card { @apply bg-white rounded-xl shadow-md p-6; }
   .stat-box { @apply bg-gradient-to-br from-eco-light to-eco-primary text-white p-6 rounded-lg; }
 }
