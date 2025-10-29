@@ -13,7 +13,7 @@ This file is intentionally practical and scoped to this project’s stack and go
 ## Quick Project Facts
 
 - Name: EcoTrade – regional carbon credit marketplace
-- Stack: Django 5.x, Python 3.11+, TailwindCSS 3.x (via django-tailwind), SQLite (dev)
+- Stack: Django 5.x, Python 3.11+, TailwindCSS 4.x (via django-tailwind-4[reload]), SQLite (dev)
 - Apps: accounts, credits, transactions, dashboard (see CLAUDE.md and PLAN.md)
 - Roles: PRODUCER, COMPANY, ADMIN with role-based access throughout
 
@@ -41,6 +41,9 @@ pip install -r requirements.txt
 python manage.py runserver
 
 # Tailwind
+# Recommended single-command dev (Django + Tailwind + reload)
+python manage.py tailwind dev
+# Alternative split workflow
 python manage.py tailwind install
 python manage.py tailwind start
 
@@ -105,11 +108,12 @@ Business flow (high level):
 
 ## TailwindCSS
 
-- Use `django-tailwind` to create a `theme` app.
-- Configure at `theme/static_src/tailwind.config.js`.
-- Styles in `theme/static_src/src/styles.css`.
-- JIT mode enabled; eco/green color scheme.
-- Use semantic HTML and accessible components (labels, focus states, contrast).
+- Use `django-tailwind-4[reload]` to create a `theme` app.
+- v4 CSS authored in `theme/static_src/src/styles.css` using `@import "tailwindcss"`, `@theme`, and `@source`.
+- Content scanning via `@source` in CSS (optional: `theme/static_src/tailwind.config.js`).
+- Load CSS in templates with `{% load tailwind_tags %}` and `{% tailwind_css %}`.
+- Auto-reload via `django-browser-reload`; prefer `python manage.py tailwind dev` during development.
+- Eco/green color scheme; semantic HTML with accessible components (labels, focus states, contrast).
 
 ## Testing
 
@@ -157,4 +161,3 @@ State/Status Changes (e.g., purchase)
 - [ ] Idempotency considered for repeat submissions
 - [ ] User feedback via messages
 - [ ] Tests cover edge cases
-

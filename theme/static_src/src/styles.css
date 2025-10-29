@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* Tailwind v4: tell it where to scan for classes */
+@source "../../templates/**/*.html";         /* theme templates */
+@source "../../../templates/**/*.html";       /* project templates */
+@source "../../../**/templates/**/*.html";    /* app templates */
+
+/* EcoTrade theme variables */
+@theme {
+  --color-eco-primary: #10b981;   /* green-500 */
+  --color-eco-secondary: #059669; /* green-600 */
+  --color-eco-dark: #047857;      /* green-700 */
+  --color-eco-light: #34d399;     /* green-400 */
+
+  --spacing-18: 4.5rem;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-gray-50 text-gray-900; }
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors; }
+  .btn-primary { @apply btn bg-eco-primary text-white hover:bg-eco-dark; }
+  .btn-secondary { @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300; }
+  .card { @apply bg-white rounded-xl shadow-md p-6; }
+  .stat-box { @apply bg-gradient-to-br from-eco-light to-eco-primary text-white p-6 rounded-lg; }
+}
+
