@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crédito #{{ credit.id }}</title>
+    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}.card{border:1px solid #e5e7eb;border-radius:.5rem;padding:1rem;margin-bottom:1rem}</style>
+  </head>
+  <body>
+    <a href="{% url 'credits_marketplace' %}">← Voltar ao Marketplace</a>
+    <!--
+      Página de detalhe de um crédito.
+      Exibe os dados do crédito, listagens ativas e, se o usuário for o dono
+      produtor e o crédito estiver AVAILABLE, mostra o formulário para listar.
+    -->
+    <h1>Crédito #{{ credit.id }}</h1>
+
+    <div class="card">
+      <div><strong>Quantidade:</strong> {{ credit.amount }} {{ credit.unit }}</div>
+      <div><strong>Origem:</strong> {{ credit.origin }}</div>
+      <div><strong>Geração:</strong> {{ credit.generation_date }}</div>
+      <div><strong>Status:</strong> {{ credit.status }}</div>
+      <div><strong>Dono:</strong> {{ credit.owner.username }}</div>
+    </div>
+
+    {% if user.is_authenticated and user.id == credit.owner_id and user.role == 'PRODUCER' and credit.status == 'AVAILABLE' %}
+      <div class="card">
+        <h3>Listar para venda</h3>
+        <!-- Formulário para criar uma listagem (anúncio) deste crédito -->
+        <form action="{% url 'credit_list_for_sale' credit.id %}" method="post">
+          {% csrf_token %}
+          {{ listing_form.non_field_errors }}
+          <label>Preço por unidade
+            {{ listing_form.price_per_unit }}
+          </label>
+          {% if listing_form.price_per_unit.errors %}
+            <div style="color:#b91c1c">{{ listing_form.price_per_unit.errors|striptags }}</div>
+          {% endif %}
+          <div style="margin-top:1rem"><button type="submit">Listar</button></div>
+        </form>
+      </div>
+    {% endif %}
+
+    <div class="card">
+      <h3>Listagens ativas</h3>
+      <!-- Lista todas as listagens ativas vinculadas a este crédito -->
+      {% if active_listings %}
+        <ul>
+          {% for l in active_listings %}
+            <li>#{{ l.id }} · R$ {{ l.price_per_unit }} · desde {{ l.listed_at }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Nenhuma listagem ativa.</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
