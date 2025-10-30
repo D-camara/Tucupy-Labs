@@ -2,6 +2,26 @@
 
 ## 2025-10-30
 
+### Added
+- **Public Real-Time Transactions Page**: Live transparency feed for marketplace activity
+  - New public page (`/transactions/public/`) - no auth required
+  - Server-Sent Events (SSE) for real-time updates
+  - Shows last 10 COMPLETED transactions with auto-refresh
+  - Anonymized data: only participant roles (Company/Producer), no personal info
+  - **Session-based reconnection system**:
+    - Unique session ID generated per connection, stored in localStorage
+    - Reconnections within 60s bypass rate limit (allows page refresh)
+    - Session auto-refreshed every 10s while active
+    - Auto-cleanup when user leaves (not just refresh)
+  - Smart rate limiting: 5s initial timeout, auto-refreshes to 30s while connected
+  - Immediate connection confirmation (fast "Live" status update)
+  - Connection status indicator with auto-reconnect (3s cooldown)
+  - Relative timestamps ("2 mins ago")
+  - Main nav link added for visibility
+  - Features: live updates, privacy protection, full transparency, seamless reconnection
+
+## 2025-10-30
+
 ### Changed
 - **Tailwind v4 Theme Migration**: Migrated theme config from JS to CSS for v4 compatibility
   - Moved all theme extensions from `tailwind.config.js` to `styles.css` using `@theme` directive
