@@ -11,6 +11,7 @@ class User(AbstractUser):
     class Roles(models.TextChoices):
         PRODUCER = "PRODUCER", _("Producer")
         COMPANY = "COMPANY", _("Company")
+        AUDITOR = "AUDITOR", _("Auditor")
         ADMIN = "ADMIN", _("Admin")
 
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.COMPANY)

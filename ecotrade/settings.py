@@ -1,8 +1,5 @@
 from pathlib import Path
 import os
-import django_stubs_ext
-
-django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -112,3 +109,17 @@ INTERNAL_IPS = [
 
 # caminho de exemplo no Windows — ajuste conforme seu ambiente
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
+# Email Configuration (Gmail SMTP)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tucupilabs@gmail.com'
+EMAIL_HOST_PASSWORD = 'zqme vtjq beda fgue'  # Senha de app do Gmail
+DEFAULT_FROM_EMAIL = 'Tucupi Labs <tucupilabs@gmail.com>'
+SERVER_EMAIL = 'tucupilabs@gmail.com'
+
+# Media files (upload de certificados, etc)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
