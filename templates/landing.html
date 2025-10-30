@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tucupi Labs · Marketplace de Créditos de Carbono{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden -mt-8">
+  <!-- Animated background elements -->
+  <div class="absolute inset-0">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-tucupi-green-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+    <div class="absolute top-40 right-10 w-72 h-72 bg-tucupi-accent rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+    <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-tucupi-green-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <!-- Logo/Badge -->
+    <div class="flex justify-center mb-8 animate-fade-in">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-tucupi-green-500/30">
+        <i data-lucide="sprout" class="w-5 h-5 text-tucupi-green-500"></i>
+        <span class="text-sm font-medium text-tucupi-green-500">Créditos de Carbono Regionais</span>
+      </div>
+    </div>
+
+    <!-- Main Heading -->
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up">
+      Conectando 
+      <span class="text-gradient">Sustentabilidade</span>
+      <br />ao Mercado Regional
+    </h1>
+
+    <!-- Subheading -->
+    <p class="text-xl sm:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto animate-slide-up delay-200">
+      Marketplace transparente onde produtores rurais vendem créditos de carbono 
+      e empresas compensam suas emissões com impacto local verificável.
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-slide-up delay-300">
+      <a href="{% url 'accounts:register' %}" 
+         class="group px-8 py-4 bg-tucupi-green-500 text-white rounded-lg font-semibold text-lg hover-glow flex items-center gap-2 transition-all">
+        Começar Agora
+        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+      <a href="#como-funciona" 
+         class="px-8 py-4 glass border border-tucupi-green-500/30 text-white rounded-lg font-semibold text-lg hover:border-tucupi-green-500 transition-all flex items-center gap-2">
+        <i data-lucide="play-circle" class="w-5 h-5"></i>
+        Como Funciona
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto animate-fade-in delay-500">
+      <div class="glass rounded-lg p-6 hover-glow">
+        <div class="text-3xl sm:text-4xl font-bold text-tucupi-green-500 mb-2">
+          {{ total_co2|floatformat:0 }}+
+        </div>
+        <div class="text-sm text-gray-400">Toneladas CO₂e</div>
+      </div>
+      <div class="glass rounded-lg p-6 hover-glow">
+        <div class="text-3xl sm:text-4xl font-bold text-tucupi-green-500 mb-2">
+          {{ total_credits }}+
+        </div>
+        <div class="text-sm text-gray-400">Créditos Registrados</div>
+      </div>
+      <div class="glass rounded-lg p-6 hover-glow">
+        <div class="text-3xl sm:text-4xl font-bold text-tucupi-green-500 mb-2">
+          {{ total_listings }}+
+        </div>
+        <div class="text-sm text-gray-400">Listagens Ativas</div>
+      </div>
+      <div class="glass rounded-lg p-6 hover-glow">
+        <div class="text-3xl sm:text-4xl font-bold text-tucupi-green-500 mb-2">
+          {{ total_transactions }}+
+        </div>
+        <div class="text-sm text-gray-400">Transações Completas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <i data-lucide="chevron-down" class="w-8 h-8 text-tucupi-green-500"></i>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-24 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl sm:text-5xl font-bold mb-4">
+        Por que escolher a <span class="text-gradient">Tucupi Labs?</span>
+      </h2>
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+        Tecnologia, transparência e impacto regional em uma única plataforma
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="shield-check" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Verificação Transparente</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Histórico imutável de propriedade estilo blockchain. 
+          Cada crédito tem sua origem rastreável desde a criação até o consumo final.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="zap" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Transações em Tempo Real</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Compre e venda créditos instantaneamente com sistema de saldo virtual. 
+          Acompanhe todas as transações em tempo real com feed público.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="map-pin" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Impacto Regional</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Conecte-se com produtores locais da Amazônia, Cerrado e outras regiões brasileiras. 
+          Seu investimento fica na comunidade.
+        </p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="trending-up" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Dashboard Inteligente</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Acompanhe seu portfólio, vendas, compras e métricas em tempo real. 
+          Dashboards personalizados para produtores e empresas.
+        </p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="lock" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Seguro e Confiável</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Transações atômicas, sistema de saldo virtual e proteção contra fraudes. 
+          Seus dados e investimentos estão seguros.
+        </p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="glass rounded-xl p-8 hover-glow group">
+        <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+          <i data-lucide="users" class="w-8 h-8 text-tucupi-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Comunidade Ativa</h3>
+        <p class="text-gray-400 leading-relaxed">
+          Faça parte de uma rede crescente de produtores rurais e empresas conscientes 
+          comprometidas com a sustentabilidade.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Como Funciona Section -->
+<section id="como-funciona" class="py-24 relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl sm:text-5xl font-bold mb-4">
+        Como <span class="text-gradient">Funciona?</span>
+      </h2>
+      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+        Três passos simples para começar a compensar ou monetizar carbono
+      </p>
+    </div>
+
+    <!-- Steps -->
+    <div class="relative">
+      <!-- Connection line -->
+      <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-tucupi-green-500/0 via-tucupi-green-500/50 to-tucupi-green-500/0 transform -translate-y-1/2"></div>
+
+      <div class="grid lg:grid-cols-3 gap-12 relative">
+        <!-- Step 1 - Para Produtores -->
+        <div class="relative">
+          <div class="glass rounded-xl p-8 hover-glow">
+            <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
+              1
+            </div>
+            <div class="text-center">
+              <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+                <i data-lucide="user-plus" class="w-6 h-6 text-tucupi-green-500"></i>
+                Cadastre-se
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Crie sua conta como Produtor ou Empresa. 
+                Adicione informações sobre sua fazenda ou empresa em minutos.
+              </p>
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                Gratuito e rápido
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 - Marketplace -->
+        <div class="relative">
+          <div class="glass rounded-xl p-8 hover-glow">
+            <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
+              2
+            </div>
+            <div class="text-center">
+              <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+                <i data-lucide="store" class="w-6 h-6 text-tucupi-green-500"></i>
+                Liste ou Compre
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Produtores listam créditos no marketplace. 
+                Empresas navegam, comparam preços e adicionam saldo virtual.
+              </p>
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                Preços competitivos
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 - Transação -->
+        <div class="relative">
+          <div class="glass rounded-xl p-8 hover-glow">
+            <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
+              3
+            </div>
+            <div class="text-center">
+              <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+                <i data-lucide="arrow-right-left" class="w-6 h-6 text-tucupi-green-500"></i>
+                Transacione
+              </h3>
+              <p class="text-gray-400 mb-6">
+                Compra instantânea com transferência automática de propriedade. 
+                Histórico completo e transparente de todas as transações.
+              </p>
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+                <i data-lucide="shield" class="w-4 h-4"></i>
+                100% seguro
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Type Cards -->
+    <div class="grid md:grid-cols-2 gap-8 mt-16">
+      <!-- Para Produtores -->
+      <div class="glass rounded-xl p-8 border-2 border-tucupi-green-500/30 hover:border-tucupi-green-500 transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="sprout" class="w-8 h-8 text-tucupi-green-500"></i>
+          <h3 class="text-2xl font-bold">Para Produtores</h3>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-green-500 mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Registre créditos de suas práticas sustentáveis</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-green-500 mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Defina seu próprio preço por tonelada de CO₂e</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-green-500 mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Receba pagamento instantâneo após venda</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-green-500 mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Acompanhe histórico completo de vendas</span>
+          </li>
+        </ul>
+        <a href="{% url 'accounts:register' %}" class="mt-6 inline-flex items-center gap-2 text-tucupi-green-500 hover:text-tucupi-green-400 font-semibold transition-colors">
+          Começar como Produtor
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Para Empresas -->
+      <div class="glass rounded-xl p-8 border-2 border-tucupi-accent/30 hover:border-tucupi-accent transition-all">
+        <div class="flex items-center gap-3 mb-6">
+          <i data-lucide="building-2" class="w-8 h-8 text-tucupi-accent"></i>
+          <h3 class="text-2xl font-bold">Para Empresas</h3>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-accent mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Compense emissões com créditos verificados</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-accent mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Escolha produtores regionais para impacto local</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-accent mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Sistema de saldo virtual simples e seguro</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i data-lucide="check" class="w-5 h-5 text-tucupi-accent mt-0.5 flex-shrink-0"></i>
+            <span class="text-gray-300">Relatórios e certificados para ESG</span>
+          </li>
+        </ul>
+        <a href="{% url 'accounts:register' %}" class="mt-6 inline-flex items-center gap-2 text-tucupi-accent hover:text-tucupi-accent/80 font-semibold transition-colors">
+          Começar como Empresa
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final Section -->
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-tucupi-green-500/10 to-tucupi-accent/10"></div>
+  
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-4xl sm:text-5xl font-bold mb-6">
+      Pronto para fazer a <span class="text-gradient">diferença?</span>
+    </h2>
+    <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+      Junte-se a produtores e empresas que já estão transformando 
+      sustentabilidade em oportunidade real.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <a href="{% url 'accounts:register' %}" 
+         class="group px-8 py-4 bg-tucupi-green-500 text-white rounded-lg font-semibold text-lg hover-glow flex items-center gap-2 transition-all">
+        Criar Conta Gratuita
+        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+      <a href="{% url 'credits_marketplace' %}" 
+         class="px-8 py-4 glass border border-tucupi-green-500/30 text-white rounded-lg font-semibold text-lg hover:border-tucupi-green-500 transition-all flex items-center gap-2">
+        <i data-lucide="store" class="w-5 h-5"></i>
+        Ver Marketplace
+      </a>
+    </div>
+
+    <!-- Trust badges -->
+    <div class="mt-12 flex flex-wrap justify-center items-center gap-8 opacity-60">
+      <div class="flex items-center gap-2">
+        <i data-lucide="shield-check" class="w-5 h-5 text-tucupi-green-500"></i>
+        <span class="text-sm">Verificado</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i data-lucide="lock" class="w-5 h-5 text-tucupi-green-500"></i>
+        <span class="text-sm">Seguro</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i data-lucide="zap" class="w-5 h-5 text-tucupi-green-500"></i>
+        <span class="text-sm">Instantâneo</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <i data-lucide="globe" class="w-5 h-5 text-tucupi-green-500"></i>
+        <span class="text-sm">Regional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 1s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.8s ease-out;
+  }
+  
+  .delay-200 {
+    animation-delay: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  
+  .delay-300 {
+    animation-delay: 0.3s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  
+  .delay-500 {
+    animation-delay: 0.5s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+  
+  .delay-2000 {
+    animation-delay: 2s;
+  }
+</style>
+
+<script>
+  // Inicializar ícones Lucide
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  
+  // Smooth scroll para âncoras
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}

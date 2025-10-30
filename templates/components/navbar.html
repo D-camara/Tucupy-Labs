@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4 py-4">
     <div class="flex items-center justify-between">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-3 group">
+      <a href="{% url 'dashboard:landing' %}" class="flex items-center gap-3 group">
         <div class="relative">
           <div class="absolute inset-0 bg-tucupi-green-500 opacity-20 blur-lg group-hover:opacity-40 transition"></div>
           <div class="relative w-10 h-10 rounded-lg flex items-center justify-center">
@@ -17,14 +17,16 @@
       
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center gap-6">
-        <a href="/" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
+        {% if user.is_authenticated %}
+        <a href="{% url 'dashboard:index' %}" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
           <svg class="w-4 h-4 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
           </svg>
           Dashboard
         </a>
+        {% endif %}
         
-        <a href="/credits/" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
+        <a href="{% url 'credits_marketplace' %}" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
           <svg class="w-4 h-4 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
@@ -74,10 +76,12 @@
     
     <!-- Mobile Navigation -->
     <nav id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-2 border-t border-white/10 pt-4">
-      <a href="/" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
+      {% if user.is_authenticated %}
+      <a href="{% url 'dashboard:index' %}" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
         Dashboard
       </a>
-      <a href="/credits/" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
+      {% endif %}
+      <a href="{% url 'credits_marketplace' %}" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
         Marketplace
       </a>
       <a href="{% url 'public_transactions' %}" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
