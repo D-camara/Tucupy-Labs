@@ -46,6 +46,37 @@ class AuthenticationTests(TestCase):
         self.assertTrue(resp.wsgi_request.user.is_authenticated)
         self.assertEqual(resp.wsgi_request.user.username, "testproducer")
 
+    def test_admin_role_not_available_in_public_registration(self):
+        """Papel ADMIN não está disponível no registro público."""
+        # Tentar registrar como ADMIN não deve funcionar
+        data = {
+            "username": "adminuser",
+            "email": "admin@test.com",
+            "role": User.Roles.ADMIN,  # Tentar forçar ADMIN
+            "password1": "TestPass123!",
+            "password2": "TestPass123!",
+        }
+        resp = self.client.post(reverse("accounts:register"), data)
+        
+        # Form deve rejeitar (ADMIN não está nas choices)
+        self.assertEqual(resp.status_code, 200)  # Volta ao form com erro
+        self.assertContains(resp, "Select a valid choice")
+        
+        # Usuário não foi criado
+        self.assertFalse(User.objects.filter(username="adminuser").exists())
+        
+    def test_only_producer_and_company_roles_available(self):
+        """Apenas roles PRODUCER e COMPANY estão disponíveis no formulário público."""
+        resp = self.client.get(reverse("accounts:register"))
+        content = resp.content.decode()
+        
+        # Deve conter opções de Produtor e Empresa
+        self.assertIn("Produtor", content)
+        self.assertIn("Empresa", content)
+        
+        # Não deve mencionar Admin como opção
+        self.assertNotIn("Acesso administrativo", content)
+
     def test_register_company_user(self):
         """Registrar usuário com papel COMPANY."""
         data = {
@@ -94,8 +125,8 @@ class AuthenticationTests(TestCase):
         )
         self.assertEqual(resp.status_code, 200)
         self.assertFalse(resp.wsgi_request.user.is_authenticated)
-        # Formulário deve mostrar erro (Django LoginView usa mensagem)
-        self.assertContains(resp, "Please enter a correct username and password")
+        # Formulário deve mostrar erro personalizado
+        self.assertContains(resp, "Nome de usuário ou senha incorretos")
 
     def test_logout_logs_out_user(self):
         """Logout desautentica o usuário."""

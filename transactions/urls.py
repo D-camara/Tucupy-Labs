@@ -1,8 +1,11 @@
+"""URLs do app de transações."""
+
 from django.urls import path
+
 from . import views
 
-
 urlpatterns = [
-    path("_health/", views.placeholder, name="transactions_health"),
+    # Histórico de transações (compras e vendas do usuário)
+    path("", views.transaction_history, name="transaction_history"),
 ]
 

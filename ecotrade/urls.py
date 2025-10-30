@@ -17,6 +17,6 @@ urlpatterns = [
     # Marketplace e créditos
     path("credits/", include("credits.urls")),
 
-    # Compras/transferências (a implementar)
-    # path("transactions/", include("transactions.urls")),
+    # Histórico de transações
+    path("transactions/", include("transactions.urls")),
 ]

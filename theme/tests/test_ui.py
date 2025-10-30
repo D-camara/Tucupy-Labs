@@ -27,7 +27,7 @@ class TailwindRenderingTests(TestCase):
     def test_base_template_loads_tailwind(self):
         """Template base.html carrega o CSS do Tailwind."""
         self.client.force_login(self.user)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         # Verifica que o CSS foi injetado
         self.assertContains(resp, "/static/css/dist/styles.css")
@@ -35,35 +35,34 @@ class TailwindRenderingTests(TestCase):
     def test_navbar_component_renders(self):
         """Componente navbar.html é incluído e renderiza corretamente."""
         self.client.force_login(self.user)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         # Verifica presença do navbar
-        self.assertContains(resp, "EcoTrade")
+        self.assertContains(resp, "Tucupi Labs")
         self.assertContains(resp, "Dashboard")
         self.assertContains(resp, "Marketplace")
-        self.assertContains(resp, "Transactions")
 
     def test_dashboard_uses_base_template(self):
         """Dashboard utiliza o template base.html."""
         self.client.force_login(self.user)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         # Verifica estrutura HTML do base.html
-        self.assertContains(resp, '<html lang="en">')
-        self.assertContains(resp, 'class="min-h-screen bg-gray-50 text-gray-900"')
+        self.assertContains(resp, '<html lang="pt-BR"')
+        self.assertContains(resp, 'class="min-h-screen bg-tucupi-black text-white')
         self.assertContains(resp, '<main class="container mx-auto px-4 py-8">')
 
     def test_custom_css_classes_available(self):
         """Classes CSS personalizadas estão disponíveis (btn-primary, card, etc)."""
         self.client.force_login(self.user)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         # Verifica uso de classes personalizadas no dashboard
         content = resp.content.decode()
         # Dashboard usa classes do Tailwind
-        self.assertIn("bg-white", content)
+        self.assertIn("glass", content)
         self.assertIn("rounded-lg", content)
-        self.assertIn("shadow", content)
+        self.assertIn("tucupi-green", content)
 
     def test_marketplace_loads_with_tailwind(self):
         """Página do marketplace renderiza com Tailwind."""
@@ -72,7 +71,7 @@ class TailwindRenderingTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         # Verifica que usa base.html
         self.assertContains(resp, "/static/css/dist/styles.css")
-        self.assertContains(resp, "EcoTrade")
+        self.assertContains(resp, "Tucupi Labs")
 
     def test_login_page_uses_tailwind_styles(self):
         """Página de login usa estilos do Tailwind."""
@@ -86,11 +85,11 @@ class TailwindRenderingTests(TestCase):
     def test_eco_theme_colors_configured(self):
         """Cores personalizadas eco-primary/secondary estão configuradas."""
         self.client.force_login(self.user)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         # Verifica uso de cores verdes (tema eco)
         content = resp.content.decode()
-        self.assertIn("green-", content)  # Classes do Tailwind para verde
+        self.assertIn("tucupi-green", content)  # Classes personalizadas Tucupi Labs
 
 
 class ComponentTests(TestCase):
@@ -115,8 +114,8 @@ class ComponentTests(TestCase):
         self.assertTrue(component_path.exists(), "credit_card.html deve existir")
         
         content = component_path.read_text()
-        # Verifica elementos essenciais
-        self.assertIn("credit-card", content)
+        # Verifica elementos essenciais (usa glass ao invés de credit-card)
+        self.assertIn("glass", content)
         self.assertIn("{{ title", content)
         self.assertIn("{{ origin", content)
         self.assertIn("{{ amount", content)
@@ -132,8 +131,8 @@ class ComponentTests(TestCase):
         self.assertTrue(navbar_path.exists(), "navbar.html deve existir")
         
         content = navbar_path.read_text()
-        # Verifica links essenciais
+        # Verifica links essenciais (usa template tags ao invés de hardcoded)
         self.assertIn('href="/"', content)  # Dashboard
         self.assertIn('href="/credits/"', content)  # Marketplace
         self.assertIn('href="/transactions/"', content)  # Transactions
-        self.assertIn('href="/accounts/login/"', content)  # Login
+        self.assertIn("{% url 'accounts:login' %}", content)  # Login com template tag
