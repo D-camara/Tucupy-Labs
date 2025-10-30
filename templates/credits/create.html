@@ -1,38 +1,64 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cadastrar Crédito</title>
-    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}label{display:block;margin-top:1rem}input,select{padding:.5rem;margin-top:.25rem;width:100%;max-width:320px}</style>
-  </head>
-  <body>
-    <!--
-      Página de criação de crédito (apenas produtores).
-      Usa o form CarbonCreditForm e envia via POST para criar o registro.
-      Após criar, redireciona para o detalhe do crédito.
-    -->
-    <h1>Novo Crédito</h1>
-    <!-- Formulário de criação de crédito -->
-    <form method="post">
+{% extends 'base.html' %}
+{% block title %}Cadastrar Crédito · EcoTrade{% endblock %}
+
+{% block content %}
+<!--
+  Página de criação de crédito (apenas produtores).
+  Usa o form CarbonCreditForm e envia via POST para criar o registro.
+  Após criar, redireciona para o detalhe do crédito.
+-->
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Novo Crédito de Carbono</h1>
+  
+  <div class="card">
+    <form method="post" class="space-y-6">
       {% csrf_token %}
+      
       {% if form.non_field_errors %}
-        <div style="color:#b91c1c">{{ form.non_field_errors }}</div>
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+          {{ form.non_field_errors }}
+        </div>
       {% endif %}
+      
       {% for field in form %}
-        <label>
-          <!-- Campo do formulário com exibição de erros -->
-          {{ field.label }}
-          {{ field }}
-          {% if field.errors %}
-            <div style="color:#b91c1c">{{ field.errors|striptags }}</div>
+        <div>
+          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+            {{ field.label }}
+          </label>
+          {% if field.field.widget.input_type == 'select' %}
+            <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eco-primary focus:border-transparent">
+              {{ field }}
+            </select>
+          {% else %}
+            <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                   name="{{ field.name }}" 
+                   id="{{ field.id_for_label }}"
+                   value="{{ field.value|default:'' }}"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eco-primary focus:border-transparent"
+                   {% if field.field.required %}required{% endif %}>
           {% endif %}
-        </label>
+          
+          {% if field.help_text %}
+            <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+          {% endif %}
+          
+          {% if field.errors %}
+            <div class="mt-1 text-sm text-red-600">
+              {{ field.errors|striptags }}
+            </div>
+          {% endif %}
+        </div>
       {% endfor %}
-      <div style="margin-top:1rem">
-        <button type="submit">Salvar</button>
-        <a href="{% url 'credits_marketplace' %}">Cancelar</a>
+      
+      <div class="flex items-center gap-4 pt-4">
+        <button type="submit" class="btn-primary">
+          Salvar Crédito
+        </button>
+        <a href="{% url 'credits_marketplace' %}" class="btn-secondary">
+          Cancelar
+        </a>
       </div>
     </form>
-  </body>
-</html>
+  </div>
+</div>
+{% endblock %}

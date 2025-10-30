@@ -1,53 +1,82 @@
-<!doctype html>
+{% extends 'base.html' %}
+{% block title %}Marketplace de Créditos · EcoTrade{% endblock %}
+
+{% block content %}
 <!--
   Página do marketplace de créditos.
   Lista apenas as listagens ativas (CreditListing.is_active=True)
   cujos créditos estão com status LISTED. Inclui paginação.
 -->
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Marketplace de Créditos</title>
-    <style>body{font-family:system-ui,Segoe UI,Arial;margin:2rem}.card{border:1px solid #e5e7eb;border-radius:.5rem;padding:1rem;margin-bottom:1rem}</style>
-  </head>
-  <body>
-    <h1>Marketplace</h1>
-    <div style="margin:1rem 0">
-      <a href="{% url 'credit_create' %}">Cadastrar novo crédito</a>
-      <!-- Link rápido para criar um novo crédito (apenas fará sentido para produtores) -->
-    </div>
+<div class="mb-6 flex items-center justify-between">
+  <h1 class="text-3xl font-bold text-gray-900">Marketplace</h1>
+  <a href="{% url 'credit_create' %}" class="btn-primary">
+    Cadastrar novo crédito
+  </a>
+</div>
 
-    {% if listings %}
-      {% for item in listings %}
-        <div class="card">
-          <!-- Card de uma listagem ativa no marketplace -->
-          <div><strong>Crédito #{{ item.credit.id }}</strong> · {{ item.credit.amount }} {{ item.credit.unit }}</div>
-          <div>Origem: {{ item.credit.origin }} · Gerado em: {{ item.credit.generation_date }}</div>
-          <div>Preço por unidade: R$ {{ item.price_per_unit }}</div>
-          <div>Dono: {{ item.credit.owner.username }}</div>
-          <div style="margin-top:.5rem">
-            <a href="{% url 'credit_detail' item.credit.id %}">Ver detalhes</a>
+{% if listings %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for item in listings %}
+      <div class="card">
+        <!-- Card de uma listagem ativa no marketplace -->
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Crédito #{{ item.credit.id }}</h3>
+          <span class="text-sm text-eco-primary font-medium">DISPONÍVEL</span>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Quantidade:</span>
+            <span class="font-medium">{{ item.credit.amount }} {{ item.credit.unit }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Origem:</span>
+            <span class="font-medium">{{ item.credit.origin }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Geração:</span>
+            <span class="font-medium">{{ item.credit.generation_date }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Preço/unidade:</span>
+            <span class="font-bold text-eco-primary">R$ {{ item.price_per_unit }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Produtor:</span>
+            <span class="font-medium">{{ item.credit.owner.username }}</span>
           </div>
         </div>
-      {% endfor %}
-
-      <div style="margin-top:1rem">
-        {% if is_paginated %}
-          <div>
-            {% if page_obj.has_previous %}
-              <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-            {% endif %}
-            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
-            {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}">Próxima</a>
-            {% endif %}
-            <!-- Controles de paginação básicos -->
-          </div>
-        {% endif %}
+        <div class="mt-6">
+          <a href="{% url 'credit_detail' item.credit.id %}" class="btn-primary w-full text-center">
+            Ver detalhes
+          </a>
+        </div>
       </div>
-    {% else %}
-      <p>Não há listagens ativas no momento.</p>
-    {% endif %}
-  </body>
-</html>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <div class="mt-8 flex items-center justify-center gap-4">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn-secondary">
+          ← Anterior
+        </a>
+      {% endif %}
+      <span class="text-gray-600">
+        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+      </span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn-secondary">
+          Próxima →
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="text-center py-12">
+    <p class="text-gray-500 text-lg">Não há listagens ativas no momento.</p>
+    <a href="{% url 'credit_create' %}" class="btn-primary mt-4 inline-block">
+      Seja o primeiro a cadastrar um crédito
+    </a>
+  </div>
+{% endif %}
+{% endblock %}
