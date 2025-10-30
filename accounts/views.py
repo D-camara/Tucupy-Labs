@@ -63,7 +63,7 @@ def company_required(view_func: Callable[..., HttpResponse]):
 # =========
 
 class RegisterView(FormView):
-    template_name = "register.html"
+    template_name = "accounts/register.html"
     form_class = RegistrationForm
     success_url = reverse_lazy("accounts:profile")
 
@@ -79,7 +79,7 @@ class RegisterView(FormView):
 
 
 class LoginView(DjangoLoginView):
-    template_name = "login.html"
+    template_name = "accounts/login.html"
     form_class = CustomLoginForm
     redirect_authenticated_user = True
     
@@ -112,7 +112,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     """Editar o perfil do usuário autenticado."""
     model = Profile
     form_class = ProfileForm
-    template_name = "profile.html"
+    template_name = "accounts/profile.html"
     success_url = reverse_lazy("accounts:profile")
 
     def get_object(self, queryset=None) -> Profile:
@@ -136,18 +136,18 @@ def add_balance_view(request: HttpRequest) -> HttpResponse:
         
         if not amount_str:
             messages.error(request, "❌ Por favor, informe o valor a adicionar.")
-            return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+            return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
         
         try:
             amount = Decimal(amount_str)
             
             if amount <= 0:
                 messages.error(request, "❌ O valor deve ser maior que zero.")
-                return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+                return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
             
             if amount > Decimal("1000000"):
                 messages.error(request, "❌ Valor muito alto. Máximo permitido: R$ 1.000.000,00")
-                return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+                return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
             
             # Adicionar saldo
             old_balance = user.profile.balance
@@ -163,10 +163,10 @@ def add_balance_view(request: HttpRequest) -> HttpResponse:
             
         except (InvalidOperation, ValueError):
             messages.error(request, "❌ Valor inválido. Use apenas números (ex: 1000.50)")
-            return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+            return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
     
     # GET
-    return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+    return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
 
 
 # Healthcheck simples

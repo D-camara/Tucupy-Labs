@@ -2,6 +2,16 @@
 
 ## 2025-10-30
 
+### Changed
+- **Template Reorganization**: Moved app-specific templates to respective app directories
+  - All apps now follow Django best practice: `app/templates/app/` structure
+  - `accounts`: Moved login, register, profile, add_balance to `accounts/templates/accounts/`
+  - `credits`: Moved 5 templates (marketplace, create, detail, etc.) to `credits/templates/credits/`
+  - `dashboard`: Moved index to `dashboard/templates/dashboard/`
+  - `transactions`: Moved history to `transactions/templates/transactions/`
+  - Root `templates/` now only contains shared `components/` folder
+  - Updated all view references to use app-prefixed paths (e.g., "accounts/login.html")
+
 ### Added
 - **Blockchain-style Ownership History**: Immutable audit trail for carbon credits
   - New `CreditOwnershipHistory` model tracking all ownership transfers
