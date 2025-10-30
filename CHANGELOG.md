@@ -9,7 +9,8 @@
   - `credits`: Moved 5 templates (marketplace, create, detail, etc.) to `credits/templates/credits/`
   - `dashboard`: Moved index to `dashboard/templates/dashboard/`
   - `transactions`: Moved history to `transactions/templates/transactions/`
-  - Root `templates/` now only contains shared `components/` folder
+  - Root `templates/` now contains shared templates: `base.html` and `components/` folder
+  - Moved `base.html` from `theme/templates/` to root `templates/` (shared base template)
   - Updated all view references to use app-prefixed paths (e.g., "accounts/login.html")
 
 ### Added
