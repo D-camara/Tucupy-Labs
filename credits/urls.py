@@ -11,6 +11,8 @@ urlpatterns = [
     path("create/", views.CreditCreateView.as_view(), name="credit_create"),
     # Detalhe do crédito
     path("<int:pk>/", views.CreditDetailView.as_view(), name="credit_detail"),
+    # Histórico de propriedade (público - blockchain-style)
+    path("<int:pk>/history/", views.credit_history, name="credit_history"),
     # Ação para listar um crédito para venda (apenas dono produtor)
     path("<int:pk>/list/", views.list_for_sale, name="credit_list_for_sale"),
     # Compra de crédito (apenas empresas - Company-only)

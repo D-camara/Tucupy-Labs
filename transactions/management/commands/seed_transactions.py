@@ -96,10 +96,12 @@ class Command(BaseCommand):
             transaction.save()
 
             # If completed, transfer ownership and update status
+            # NOTE: Ownership history is automatically tracked via Django signals
+            # When credit.save() is called with new owner, a SALE history entry is created
             if status_choice == Transaction.Status.COMPLETED:
                 credit.owner = buyer
                 credit.status = CarbonCredit.Status.SOLD
-                credit.save()
+                credit.save()  # Signal creates ownership history with transaction link
 
             created_transactions.append(transaction)
 
@@ -109,9 +111,18 @@ class Command(BaseCommand):
         completed = sum(1 for t in created_transactions if t.status == Transaction.Status.COMPLETED)
         cancelled = sum(1 for t in created_transactions if t.status == Transaction.Status.CANCELLED)
 
+        # Count ownership history entries created via signals
+        from credits.models import CreditOwnershipHistory
+        completed_txn_ids = [t.id for t in created_transactions if t.status == Transaction.Status.COMPLETED]
+        sale_history_count = CreditOwnershipHistory.objects.filter(
+            transaction_id__in=completed_txn_ids,
+            transfer_type=CreditOwnershipHistory.TransferType.SALE
+        ).count()
+
         self.stdout.write(
             self.style.SUCCESS(
                 f'✓ Created {total} transactions: '
-                f'{pending} pending, {completed} completed, {cancelled} cancelled'
+                f'{pending} pending, {completed} completed, {cancelled} cancelled\n'
+                f'✓ Created {sale_history_count} SALE ownership records (via signals)'
             )
         )
