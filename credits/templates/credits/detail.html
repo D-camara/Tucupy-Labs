@@ -17,8 +17,8 @@
   <div class="mb-8 animate-slide-down">
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-4">
-        <div class="w-16 h-16 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center text-3xl">
-          🌱
+        <div class="w-16 h-16 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center">
+          <i data-lucide="sprout" class="w-8 h-8 text-white"></i>
         </div>
         <div>
           <h1 class="text-4xl font-display font-bold text-gradient">Crédito #{{ credit.id }}</h1>
@@ -263,7 +263,9 @@
       </div>
     {% else %}
       <div class="text-center py-12">
-        <div class="text-5xl mb-4">📋</div>
+        <div class="mb-4 flex justify-center">
+          <i data-lucide="clipboard-list" class="w-12 h-12 text-gray-500"></i>
+        </div>
         <p class="text-gray-400">Nenhuma listagem ativa no momento</p>
       </div>
     {% endif %}

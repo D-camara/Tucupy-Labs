@@ -3,6 +3,17 @@
 ## 2025-10-30
 
 ### Changed
+- **Tailwind v4 Theme Migration**: Migrated theme config from JS to CSS for v4 compatibility
+  - Moved all theme extensions from `tailwind.config.js` to `styles.css` using `@theme` directive
+  - Converted colors (Tucupi brand palette), fonts, animations, shadows to CSS variables
+  - Added custom keyframes (`fadeIn`, `slideUp`, `slideDown`, `scaleIn`, `glow`) as standard CSS
+  - Custom background utilities (`bg-gradient-radial`, `bg-gradient-conic`, `bg-grid-pattern`) in `@layer utilities`
+  - Retained legacy `eco-*` color aliases for backward compatibility
+- **Icon Migration**: Replaced all emojis (19 unique) with Lucide SVG icons
+  - Migrated 12 template files across all apps
+  - Added Lucide CDN to `base.html` with auto-initialization
+  - Icon mappings: 🌱→sprout, 💵→banknote, 🏢→building-2, 📊→bar-chart-3, ✓→check, 🔗→link, 🌍→globe, 📜→scroll-text, 🔒→lock, 💰→wallet, 🛒→shopping-cart, 📦→package, 🟢→circle (filled), 🌾→wheat, 👤→user, 📥→download, 📤→upload, ⏳→clock, ✗→x
+  - Benefits: better consistency, accessibility, customizability
 - **Template Reorganization**: Moved app-specific templates to respective app directories
   - All apps now follow Django best practice: `app/templates/app/` structure
   - `accounts`: Moved login, register, profile, add_balance to `accounts/templates/accounts/`
