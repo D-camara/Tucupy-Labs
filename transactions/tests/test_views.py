@@ -28,6 +28,8 @@ class BuyCreditViewTests(TestCase):
         self.company = User.objects.create_user(
             username="company", password="pass123", role=User.Roles.COMPANY
         )
+        # Adicionar saldo suficiente para comprar
+        self.company.profile.add_balance(Decimal("10000.00"))
 
         # Criar crédito
         self.credit = CarbonCredit.objects.create(

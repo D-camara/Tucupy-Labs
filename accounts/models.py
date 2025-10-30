@@ -37,6 +37,28 @@ class Profile(models.Model):
     location = models.CharField(max_length=255, blank=True)
     tax_id = models.CharField(max_length=64, blank=True)
     phone = models.CharField(max_length=64, blank=True)
+    balance = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2, 
+        default=0,
+        help_text="Saldo virtual para compra de créditos (R$)"
+    )
+
+    def can_buy(self, amount):
+        """Verifica se tem saldo suficiente para comprar."""
+        return self.balance >= amount
+    
+    def add_balance(self, amount):
+        """Adiciona saldo à carteira."""
+        self.balance += amount
+        self.save()
+    
+    def deduct_balance(self, amount):
+        """Deduz saldo da carteira."""
+        if not self.can_buy(amount):
+            raise ValueError("Saldo insuficiente")
+        self.balance -= amount
+        self.save()
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"Profile<{self.user.username}>"

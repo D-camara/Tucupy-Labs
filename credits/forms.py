@@ -25,6 +25,30 @@ class CarbonCreditForm(forms.ModelForm):
             "generation_date",
             "unit",
         ]
+        widgets = {
+            "amount": forms.NumberInput(attrs={
+                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
+                "placeholder": "100.00"
+            }),
+            "origin": forms.TextInput(attrs={
+                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
+                "placeholder": "Ex: Fazenda Sustentável São Paulo"
+            }),
+            "generation_date": forms.DateInput(attrs={
+                "type": "date",
+                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition"
+            }),
+            "unit": forms.TextInput(attrs={
+                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
+                "value": "tons CO2"
+            }),
+        }
+        labels = {
+            "amount": "Quantidade",
+            "origin": "Origem",
+            "generation_date": "Data de Geração",
+            "unit": "Unidade",
+        }
 
 
 class CreditListingForm(forms.ModelForm):

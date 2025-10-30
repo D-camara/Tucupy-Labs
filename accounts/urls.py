@@ -14,4 +14,7 @@ urlpatterns = [
 
     # Perfil
     path("profile/", views.ProfileView.as_view(), name="profile"),
+    
+    # Saldo (apenas para empresas)
+    path("add-balance/", views.add_balance_view, name="add_balance"),
 ]

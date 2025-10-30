@@ -1,64 +1,209 @@
 {% extends 'base.html' %}
-{% block title %}Cadastrar Crédito · EcoTrade{% endblock %}
+{% block title %}Registrar Créditos de Carbono · Tucupi Labs{% endblock %}
 
 {% block content %}
-<!--
-  Página de criação de crédito (apenas produtores).
-  Usa o form CarbonCreditForm e envia via POST para criar o registro.
-  Após criar, redireciona para o detalhe do crédito.
--->
-<div class="max-w-2xl mx-auto">
-  <h1 class="text-3xl font-bold text-gray-900 mb-6">Novo Crédito de Carbono</h1>
-  
-  <div class="card">
-    <form method="post" class="space-y-6">
-      {% csrf_token %}
-      
-      {% if form.non_field_errors %}
-        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-          {{ form.non_field_errors }}
+<div class="max-w-5xl mx-auto animate-fade-in">
+  <!-- Header com Tutorial -->
+  <div class="text-center mb-8 animate-slide-down">
+    <div class="inline-block relative mb-4">
+      <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-2xl"></div>
+      <div class="relative text-6xl">🌱</div>
+    </div>
+    <h1 class="text-4xl font-display font-bold text-gradient mb-2">Registrar Créditos de Carbono</h1>
+    <p class="text-gray-400 text-lg">Cadastre seus créditos gerados por práticas sustentáveis</p>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Tutorial Lateral -->
+    <div class="lg:col-span-1 space-y-4 animate-slide-up">
+      <div class="glass rounded-2xl p-6 border border-white/10 sticky top-24">
+        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <svg class="w-6 h-6 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Como funciona?
+        </h3>
+        
+        <div class="space-y-4 text-sm">
+          <!-- Passo 1 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center text-tucupi-black font-bold">
+              1
+            </div>
+            <div>
+              <h4 class="font-semibold text-white mb-1">Quantidade</h4>
+              <p class="text-gray-400 text-xs">Informe quantas toneladas de CO₂ foram compensadas pela sua atividade sustentável.</p>
+            </div>
+          </div>
+
+          <!-- Passo 2 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center text-tucupi-black font-bold">
+              2
+            </div>
+            <div>
+              <h4 class="font-semibold text-white mb-1">Origem</h4>
+              <p class="text-gray-400 text-xs">De onde vem o crédito? Ex: "Fazenda Solar Norte", "Reflorestamento Amazônia", etc.</p>
+            </div>
+          </div>
+
+          <!-- Passo 3 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center text-tucupi-black font-bold">
+              3
+            </div>
+            <div>
+              <h4 class="font-semibold text-white mb-1">Data de Geração</h4>
+              <p class="text-gray-400 text-xs">Quando o crédito foi gerado? Escolha o mês/ano da atividade sustentável.</p>
+            </div>
+          </div>
+
+          <!-- Passo 4 -->
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center text-tucupi-black font-bold">
+              4
+            </div>
+            <div>
+              <h4 class="font-semibold text-white mb-1">Unidade</h4>
+              <p class="text-gray-400 text-xs">Padrão: "tons CO2" (toneladas de dióxido de carbono equivalente).</p>
+            </div>
+          </div>
         </div>
-      {% endif %}
-      
-      {% for field in form %}
-        <div>
-          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
-            {{ field.label }}
-          </label>
-          {% if field.field.widget.input_type == 'select' %}
-            <select name="{{ field.name }}" id="{{ field.id_for_label }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eco-primary focus:border-transparent">
-              {{ field }}
-            </select>
-          {% else %}
-            <input type="{{ field.field.widget.input_type|default:'text' }}" 
-                   name="{{ field.name }}" 
-                   id="{{ field.id_for_label }}"
-                   value="{{ field.value|default:'' }}"
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-eco-primary focus:border-transparent"
-                   {% if field.field.required %}required{% endif %}>
-          {% endif %}
+
+        <div class="mt-6 p-4 bg-tucupi-green-500/10 border border-tucupi-green-500/30 rounded-lg">
+          <p class="text-xs text-tucupi-green-400 flex items-start gap-2">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Após cadastrar, você poderá listar seus créditos no marketplace para venda.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="lg:col-span-2 animate-slide-up" style="animation-delay: 0.1s;">
+      <div class="glass rounded-2xl p-8 border border-white/10">
+        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+          <svg class="w-7 h-7 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          Dados do Crédito
+        </h2>
+        
+        <form method="post" class="space-y-6">
+          {% csrf_token %}
           
-          {% if field.help_text %}
-            <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
-          {% endif %}
-          
-          {% if field.errors %}
-            <div class="mt-1 text-sm text-red-600">
-              {{ field.errors|striptags }}
+          {% if form.non_field_errors %}
+            <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
+              {{ form.non_field_errors }}
             </div>
           {% endif %}
-        </div>
-      {% endfor %}
-      
-      <div class="flex items-center gap-4 pt-4">
-        <button type="submit" class="btn-primary">
-          Salvar Crédito
-        </button>
-        <a href="{% url 'credits_marketplace' %}" class="btn-secondary">
-          Cancelar
-        </a>
+          
+          <!-- Amount -->
+          <div>
+            <label for="{{ form.amount.id_for_label }}" class="block text-sm font-bold text-gray-300 mb-2 flex items-center gap-2">
+              <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+              </svg>
+              Quantidade (tCO₂e)
+            </label>
+            {{ form.amount }}
+            <p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Exemplo: 100 (para 100 toneladas de CO₂ compensadas)
+            </p>
+            {% if form.amount.errors %}
+              <p class="mt-2 text-sm text-red-400">{{ form.amount.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Origin -->
+          <div>
+            <label for="{{ form.origin.id_for_label }}" class="block text-sm font-bold text-gray-300 mb-2 flex items-center gap-2">
+              <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              Origem do Crédito
+            </label>
+            {{ form.origin }}
+            <p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Exemplo: "Fazenda Sustentável São Paulo", "Projeto Reflorestamento"
+            </p>
+            {% if form.origin.errors %}
+              <p class="mt-2 text-sm text-red-400">{{ form.origin.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Generation Date -->
+          <div>
+            <label for="{{ form.generation_date.id_for_label }}" class="block text-sm font-bold text-gray-300 mb-2 flex items-center gap-2">
+              <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              Data de Geração
+            </label>
+            {{ form.generation_date }}
+            <p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Quando o crédito foi gerado? (mês/ano da atividade sustentável)
+            </p>
+            {% if form.generation_date.errors %}
+              <p class="mt-2 text-sm text-red-400">{{ form.generation_date.errors.0 }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Unit -->
+          <div>
+            <label for="{{ form.unit.id_for_label }}" class="block text-sm font-bold text-gray-300 mb-2 flex items-center gap-2">
+              <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+              </svg>
+              Unidade de Medida
+            </label>
+            {{ form.unit }}
+            <p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Padrão internacional: "tons CO2" (toneladas de CO₂ equivalente)
+            </p>
+            {% if form.unit.errors %}
+              <p class="mt-2 text-sm text-red-400">{{ form.unit.errors.0 }}</p>
+            {% endif %}
+          </div>
+          
+          <!-- Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-white/10">
+            <button type="submit" class="flex-1 group relative px-6 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+              <span class="relative z-10 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Registrar Crédito
+              </span>
+            </button>
+            <a href="{% url 'credits_marketplace' %}" class="flex-1 px-6 py-4 glass border border-white/10 hover:border-red-500/50 text-center text-gray-300 hover:text-red-400 font-semibold rounded-lg transition">
+              <span class="flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Cancelar
+              </span>
+            </a>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -26,57 +26,81 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
     
     Fluxo:
     1. Valida que o crédito existe e está LISTED
-    2. Cria transação com status COMPLETED
-    3. Transfere propriedade do crédito
-    4. Atualiza status do crédito para SOLD
-    5. Desativa o listing
+    2. Verifica saldo suficiente
+    3. Cria transação com status COMPLETED
+    4. Deduz saldo do comprador
+    5. Adiciona saldo ao vendedor
+    6. Transfere propriedade do crédito
+    7. Atualiza status do crédito para SOLD
+    8. Desativa o listing
     
-    Tudo em transação atômica para garantir consistência.
+    Tudo em transação atômica para garantir consistência e evitar race conditions.
     """
-    credit = get_object_or_404(CarbonCredit, pk=pk)
-    
-    # Validações
-    if credit.status != CarbonCredit.Status.LISTED:
-        messages.error(request, "Este crédito não está disponível para compra.")
-        return redirect("credit_detail", pk=pk)
-    
-    # Buscar listing ativo
-    try:
-        listing = CreditListing.objects.get(credit=credit, is_active=True)
-    except CreditListing.DoesNotExist:
-        messages.error(request, "Não foi encontrada uma listagem ativa para este crédito.")
-        return redirect("credit_detail", pk=pk)
-    
-    # Validar que o comprador não é o dono
-    if credit.owner == request.user:
-        messages.error(request, "Você não pode comprar seu próprio crédito.")
-        return redirect("credit_detail", pk=pk)
-    
-    # Executar compra em transação atômica
+    # Executar tudo em transação atômica com SELECT FOR UPDATE
     with transaction.atomic():
+        # SELECT FOR UPDATE previne race conditions
+        credit = get_object_or_404(
+            CarbonCredit.objects.select_for_update(),
+            pk=pk
+        )
+        
+        # Validações
+        if credit.status != CarbonCredit.Status.LISTED:
+            messages.error(request, "Este crédito não está disponível para compra.")
+            return redirect("credit_detail", pk=pk)
+        
+        # Buscar listing ativo
+        try:
+            listing = CreditListing.objects.get(credit=credit, is_active=True)
+        except CreditListing.DoesNotExist:
+            messages.error(request, "Não foi encontrada uma listagem ativa para este crédito.")
+            return redirect("credit_detail", pk=pk)
+        
+        # Validar que o comprador não é o dono
+        if credit.owner == request.user:
+            messages.error(request, "Você não pode comprar seu próprio crédito.")
+            return redirect("credit_detail", pk=pk)
+        
+        # Calcular valor total
+        total_price = credit.amount * listing.price_per_unit
+        
+        # Verificar saldo do comprador
+        buyer_profile = request.user.profile
+        if not buyer_profile.can_buy(total_price):
+            messages.error(
+                request, 
+                f"Saldo insuficiente. Você tem R$ {buyer_profile.balance:.2f}, "
+                f"mas precisa de R$ {total_price:.2f}."
+            )
+            return redirect("credit_detail", pk=pk)
+        
         # Criar transação
         txn = TransactionModel.objects.create(
             buyer=request.user,
             seller=credit.owner,
             credit=credit,
             amount=credit.amount,
-            total_price=credit.amount * listing.price_per_unit,
+            total_price=total_price,
             status=TransactionModel.Status.COMPLETED,
         )
+        
+        # Desativar listing ANTES de mudar status (validação não permite salvar listing de crédito SOLD)
+        listing.is_active = False
+        listing.save()
+        
+        # Processar pagamento (deduzir do comprador, adicionar ao vendedor)
+        buyer_profile.deduct_balance(total_price)
+        credit.owner.profile.add_balance(total_price)
         
         # Transferir propriedade
         credit.owner = request.user
         credit.status = CarbonCredit.Status.SOLD
         credit.save()
-        
-        # Desativar listing
-        listing.is_active = False
-        listing.save()
     
     messages.success(
         request,
-        f"Crédito adquirido com sucesso! Transação #{txn.id} concluída. "
-        f"Total: R$ {txn.total_price:.2f}"
+        f"✅ Crédito adquirido com sucesso! Transação #{txn.id} concluída. "
+        f"Total: R$ {txn.total_price:.2f} | Saldo restante: R$ {request.user.profile.balance:.2f}"
     )
     return redirect("transaction_history")
 

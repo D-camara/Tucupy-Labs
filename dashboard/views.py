@@ -9,6 +9,9 @@ def index(request):
     user = request.user
     context = {}
     
+    # Saldo virtual
+    context['balance'] = user.profile.balance
+    
     # Carteira (comum a todos os usuários)
     context['my_credits'] = CarbonCredit.objects.filter(
         owner=user, 

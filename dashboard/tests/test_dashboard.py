@@ -53,14 +53,14 @@ class DashboardViewTests(TestCase):
 
     def test_dashboard_requires_login(self):
         """Dashboard redireciona usuários não autenticados."""
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 302)
         self.assertIn("/accounts/login/", resp.url)
 
     def test_dashboard_loads_for_authenticated_user(self):
         """Dashboard carrega para usuário autenticado."""
         self.client.force_login(self.producer)
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Dashboard")
 
@@ -85,7 +85,7 @@ class DashboardViewTests(TestCase):
             status="COMPLETED",
         )
         
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         
         # Verifica contexto
@@ -120,7 +120,7 @@ class DashboardViewTests(TestCase):
             status="COMPLETED",
         )
         
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         
         # Verifica contexto
@@ -142,7 +142,7 @@ class DashboardViewTests(TestCase):
                 status="PENDING",
             )
         
-        resp = self.client.get(reverse("dashboard_index"))
+        resp = self.client.get(reverse("dashboard:index"))
         self.assertEqual(resp.status_code, 200)
         
         # Deve mostrar apenas 5 transações

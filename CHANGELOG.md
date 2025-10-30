@@ -4,6 +4,67 @@ All notable changes to the EcoTrade platform.
 
 ## [Unreleased]
 
+### 2025-10-30 - Add Balance Interface for Companies 💳✨
+**Interface frontend para empresas adicionarem saldo à carteira**
+
+#### Nova Funcionalidade
+- **View add_balance_view:** View exclusiva para empresas (@company_required)
+- **Template add_balance.html:** Interface Tucupi Labs com design glass morphism
+- **Validações:** Valor > 0, máximo R$ 1.000.000,00, validação de formato decimal
+- **Valores rápidos:** Botões para R$ 100, 500, 1.000 e 5.000
+- **Mensagens detalhadas:** Feedback de sucesso mostra saldo anterior, valor adicionado e novo saldo
+- **Botão no Dashboard:** Link "+ Adicionar Saldo" no card de saldo (apenas para empresas)
+- **URL:** `/accounts/add-balance/` (requer login + role COMPANY)
+
+#### Arquivos Alterados
+- `accounts/views.py`: Adicionada view add_balance_view com validações
+- `accounts/urls.py`: Adicionada rota "add_balance"
+- `templates/add_balance.html`: Template completo com design Tucupi Labs
+- `templates/dashboard/index.html`: Botão "+ Adicionar Saldo" no card (COMPANY only)
+
+---
+
+### 2025-10-30 - Critical Security & Business Logic Improvements 🔐💰
+**Validações de negócio, saldo virtual, proteção contra race conditions e verificação de créditos**
+
+#### Validações de Negócio
+- **CarbonCredit.clean():** Validação de quantidade > 0 e data de geração não pode ser no futuro
+- **CreditListing.clean():** Validação de preço > 0 e não pode listar crédito SOLD
+- **save() override:** Chamada automática de clean() antes de salvar
+
+#### Sistema de Saldo Virtual 💵
+- **Profile.balance:** Campo DecimalField para saldo em R$
+- **Profile.can_buy(amount):** Verifica se tem saldo suficiente
+- **Profile.add_balance(amount):** Adiciona saldo à carteira
+- **Profile.deduct_balance(amount):** Deduz saldo com validação
+- **Dashboard:** Card de "Saldo Disponível" adicionado
+- **Management command:** `python manage.py add_balance <username> <amount>` para adicionar saldo
+
+#### Proteção contra Race Conditions ⚠️
+- **buy_credit() view:** Usa `select_for_update()` para lock pessimista
+- **Transação atômica:** Garante consistência em compras simultâneas
+- **Validação de saldo:** Verifica saldo antes de processar compra
+- **Mensagem de erro:** Informa saldo atual e necessário
+
+#### Verificação de Créditos ✅
+- **CarbonCredit.is_verified:** Campo boolean para aprovação de admin
+- **Preparação para fluxo:** DRAFT → PENDING_APPROVAL → APPROVED → LISTED (futuro)
+
+#### Melhorias na Compra
+- **Validação de saldo:** Bloqueia compra se saldo insuficiente
+- **Processamento de pagamento:**
+  - Deduz saldo do comprador
+  - Adiciona saldo ao vendedor
+  - Atualizado em transação atômica
+- **Mensagem de sucesso:** Mostra saldo restante após compra
+
+#### Migrations
+- `accounts/migrations/0002_profile_balance.py` - Adiciona campo balance
+- `credits/migrations/0002_carboncredit_is_verified.py` - Adiciona campo is_verified
+- `transactions/migrations/0002_*` - Melhorias em verbose_name
+
+**Result:** Sistema mais seguro, com validações de negócio e proteção contra problemas de concorrência ✅
+
 ### 2025-10-29 - UX Improvements: Login/Logout Enhancements 🔐
 **Melhorias na experiência de autenticação com validação em tempo real e mensagens personalizadas**
 

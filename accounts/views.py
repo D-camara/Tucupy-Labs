@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from typing import Optional, Callable, cast
+from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -121,6 +123,50 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form: forms.ModelForm) -> HttpResponse:
         messages.success(self.request, "Perfil atualizado com sucesso.")
         return super().form_valid(form)
+
+
+@login_required
+@company_required
+def add_balance_view(request: HttpRequest) -> HttpResponse:
+    """View para empresas adicionarem saldo à conta."""
+    user = cast(User, request.user)
+    
+    if request.method == "POST":
+        amount_str = request.POST.get("amount", "").strip()
+        
+        if not amount_str:
+            messages.error(request, "❌ Por favor, informe o valor a adicionar.")
+            return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+        
+        try:
+            amount = Decimal(amount_str)
+            
+            if amount <= 0:
+                messages.error(request, "❌ O valor deve ser maior que zero.")
+                return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+            
+            if amount > Decimal("1000000"):
+                messages.error(request, "❌ Valor muito alto. Máximo permitido: R$ 1.000.000,00")
+                return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+            
+            # Adicionar saldo
+            old_balance = user.profile.balance
+            user.profile.add_balance(amount)
+            new_balance = user.profile.balance
+            
+            messages.success(
+                request,
+                f"✅ Saldo adicionado com sucesso! "
+                f"R$ {old_balance:.2f} + R$ {amount:.2f} = R$ {new_balance:.2f}"
+            )
+            return redirect("dashboard:index")
+            
+        except (InvalidOperation, ValueError):
+            messages.error(request, "❌ Valor inválido. Use apenas números (ex: 1000.50)")
+            return render(request, "add_balance.html", {"current_balance": user.profile.balance})
+    
+    # GET
+    return render(request, "add_balance.html", {"current_balance": user.profile.balance})
 
 
 # Healthcheck simples
