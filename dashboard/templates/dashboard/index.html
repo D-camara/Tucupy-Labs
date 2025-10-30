@@ -12,7 +12,9 @@
             <div class="mb-8 flex justify-center">
                 <div class="relative">
                     <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-3xl animate-pulse-slow"></div>
-                    <div class="relative text-8xl animate-scale-in">🌱</div>
+                    <div class="relative animate-scale-in flex justify-center">
+                        <i data-lucide="sprout" class="w-20 h-20 text-tucupi-green-400"></i>
+                    </div>
                 </div>
             </div>
             
@@ -49,40 +51,49 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-16">
                 <!-- Produtor -->
                 <div class="group glass rounded-2xl p-8 border border-tucupi-green-500/30 hover:border-tucupi-green-500/60 transition-all hover-glow animate-slide-up" style="animation-delay: 0.4s;">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🌱</div>
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="sprout" class="w-12 h-12 text-tucupi-green-400"></i>
+                    </div>
                     <h3 class="text-2xl font-bold text-tucupi-green-400 mb-3">Para Produtores</h3>
                     <p class="text-gray-400 leading-relaxed">
-                        Registre seus créditos de carbono e coloque no marketplace. 
+                        Registre seus créditos de carbono e coloque no marketplace.
                         Monetize suas práticas sustentáveis e seja recompensado.
                     </p>
-                    <div class="mt-4 pt-4 border-t border-white/10">
-                        <span class="text-sm text-tucupi-accent font-semibold">✓ Registro fácil</span>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-accent"></i>
+                        <span class="text-sm text-tucupi-accent font-semibold">Registro fácil</span>
                     </div>
                 </div>
                 
                 <!-- Empresa -->
                 <div class="group glass rounded-2xl p-8 border border-blue-500/30 hover:border-blue-500/60 transition-all hover-glow animate-slide-up" style="animation-delay: 0.5s;">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🏢</div>
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="building-2" class="w-12 h-12 text-blue-400"></i>
+                    </div>
                     <h3 class="text-2xl font-bold text-blue-400 mb-3">Para Empresas</h3>
                     <p class="text-gray-400 leading-relaxed">
-                        Compre créditos para compensar emissões de CO₂. 
+                        Compre créditos para compensar emissões de CO₂.
                         Demonstre seu compromisso ambiental de forma transparente.
                     </p>
-                    <div class="mt-4 pt-4 border-t border-white/10">
-                        <span class="text-sm text-blue-400 font-semibold">✓ Compra segura</span>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-blue-400"></i>
+                        <span class="text-sm text-blue-400 font-semibold">Compra segura</span>
                     </div>
                 </div>
                 
                 <!-- Transparência -->
                 <div class="group glass rounded-2xl p-8 border border-purple-500/30 hover:border-purple-500/60 transition-all hover-glow animate-slide-up md:col-span-2 lg:col-span-1" style="animation-delay: 0.6s;">
-                    <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🔒</div>
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="lock" class="w-12 h-12 text-purple-400"></i>
+                    </div>
                     <h3 class="text-2xl font-bold text-purple-400 mb-3">100% Transparente</h3>
                     <p class="text-gray-400 leading-relaxed">
-                        Todas as transações rastreáveis. Histórico completo e verificável. 
+                        Todas as transações rastreáveis. Histórico completo e verificável.
                         Confiança através da tecnologia.
                     </p>
-                    <div class="mt-4 pt-4 border-t border-white/10">
-                        <span class="text-sm text-purple-400 font-semibold">✓ Blockchain ready</span>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-purple-400"></i>
+                        <span class="text-sm text-purple-400 font-semibold">Blockchain ready</span>
                     </div>
                 </div>
             </div>
@@ -101,7 +112,7 @@
             <div class="group glass rounded-2xl p-6 border border-yellow-500/30 hover:border-yellow-500/60 transition-all hover-glow">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Saldo Disponível</h3>
-                    <span class="text-2xl">💵</span>
+                    <i data-lucide="banknote" class="w-6 h-6 text-yellow-400"></i>
                 </div>
                 <p class="text-4xl font-bold text-yellow-400 mb-2">R$ {{ balance|floatformat:2 }}</p>
                 <p class="text-sm text-gray-500">Para comprar créditos</p>
@@ -120,7 +131,7 @@
             <div class="group glass rounded-2xl p-6 border border-tucupi-green-500/30 hover:border-tucupi-green-500/60 transition-all hover-glow">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Minha Carteira</h3>
-                    <span class="text-2xl">💰</span>
+                    <i data-lucide="wallet" class="w-6 h-6 text-tucupi-green-400"></i>
                 </div>
                 <p class="text-4xl font-bold text-gradient mb-2">{{ my_credits }} <span class="text-xl">tCO₂</span></p>
                 <p class="text-sm text-gray-500">Créditos disponíveis</p>
@@ -132,7 +143,7 @@
                 <div class="group glass rounded-2xl p-6 border border-blue-500/30 hover:border-blue-500/60 transition-all hover-glow">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Créditos Listados</h3>
-                        <span class="text-2xl">📊</span>
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-blue-400"></i>
                     </div>
                     <p class="text-4xl font-bold text-blue-400 mb-2">{{ listed_credits }}</p>
                     <p class="text-sm text-gray-500">Ativos no marketplace</p>
@@ -142,7 +153,7 @@
                 <div class="group glass rounded-2xl p-6 border border-yellow-500/30 hover:border-yellow-500/60 transition-all hover-glow">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Total de Vendas</h3>
-                        <span class="text-2xl">💵</span>
+                        <i data-lucide="banknote" class="w-6 h-6 text-yellow-400"></i>
                     </div>
                     <p class="text-4xl font-bold text-yellow-400 mb-2">R$ {{ total_sales|floatformat:2 }}</p>
                     <p class="text-sm text-gray-500">Em transações completadas</p>
@@ -154,7 +165,7 @@
                 <div class="group glass rounded-2xl p-6 border border-purple-500/30 hover:border-purple-500/60 transition-all hover-glow">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Créditos Disponíveis</h3>
-                        <span class="text-2xl">🛒</span>
+                        <i data-lucide="shopping-cart" class="w-6 h-6 text-purple-400"></i>
                     </div>
                     <p class="text-4xl font-bold text-purple-400 mb-2">{{ available_credits }}</p>
                     <p class="text-sm text-gray-500">No marketplace</p>
@@ -164,7 +175,7 @@
                 <div class="group glass rounded-2xl p-6 border border-pink-500/30 hover:border-pink-500/60 transition-all hover-glow">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Total Adquirido</h3>
-                        <span class="text-2xl">📦</span>
+                        <i data-lucide="package" class="w-6 h-6 text-pink-400"></i>
                     </div>
                     <p class="text-4xl font-bold text-pink-400 mb-2">{{ total_purchased }} <span class="text-xl">tCO₂</span></p>
                     <p class="text-sm text-gray-500">Em transações completadas</p>

@@ -37,7 +37,10 @@
       </div>
       <div class="glass rounded-xl p-4 border border-white/10">
         <div class="text-sm text-gray-400 mb-1">Status</div>
-        <div class="text-2xl font-bold text-tucupi-accent">🟢 Ativo</div>
+        <div class="text-2xl font-bold text-tucupi-accent flex items-center gap-2">
+          <i data-lucide="circle" class="w-4 h-4 fill-tucupi-green-400 text-tucupi-green-400"></i>
+          Ativo
+        </div>
       </div>
     </div>
     
@@ -49,7 +52,7 @@
           <div class="flex items-start justify-between mb-6">
             <div>
               <div class="flex items-center gap-2 mb-2">
-                <span class="text-2xl">🌱</span>
+                <i data-lucide="sprout" class="w-6 h-6 text-tucupi-green-400"></i>
                 <h3 class="text-xl font-bold text-white">Crédito #{{ item.credit.id }}</h3>
               </div>
               <span class="px-3 py-1 text-xs font-bold rounded-full bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50">
@@ -128,7 +131,9 @@
   {% else %}
     <!-- Empty state -->
     <div class="text-center py-20 animate-scale-in">
-      <div class="text-7xl mb-6">🌾</div>
+      <div class="mb-6 flex justify-center">
+        <i data-lucide="wheat" class="w-20 h-20 text-gray-500"></i>
+      </div>
       <h3 class="text-2xl font-bold text-white mb-3">Nenhum crédito disponível</h3>
       <p class="text-gray-400 mb-8 max-w-md mx-auto">
         Não há listagens ativas no momento. Seja o primeiro a cadastrar um crédito!

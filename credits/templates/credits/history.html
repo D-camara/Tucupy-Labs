@@ -16,12 +16,12 @@
   <!-- Header -->
   <div class="mb-8 animate-slide-down">
     <div class="flex items-center gap-4 mb-3">
-      <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-3xl">
-        🔗
+      <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <i data-lucide="link" class="w-8 h-8 text-white"></i>
       </div>
       <div>
         <h1 class="text-4xl font-display font-bold text-gradient">Histórico de Propriedade</h1>
-        <p class="text-gray-400">Blockchain-style audit trail · Crédito #{{ credit.id }}</p>
+        <p class="text-gray-400">Crédito #{{ credit.id }}</p>
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@
               <!-- Transfer Type Icon -->
               <div class="w-12 h-12 {% if entry.transfer_type == 'CREATION' %}bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent{% elif entry.transfer_type == 'SALE' %}bg-gradient-to-br from-blue-500 to-blue-600{% else %}bg-gradient-to-br from-purple-500 to-purple-600{% endif %} rounded-xl flex items-center justify-center">
                 {% if entry.transfer_type == 'CREATION' %}
-                  <span class="text-2xl">🌱</span>
+                  <i data-lucide="sprout" class="w-6 h-6 text-white"></i>
                 {% elif entry.transfer_type == 'SALE' %}
                   <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -127,7 +127,7 @@
                   <span class="font-semibold text-white">{{ entry.from_owner.username }}</span>
                 {% else %}
                   <div class="w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center">
-                    <span class="text-lg">🌍</span>
+                    <i data-lucide="globe" class="w-5 h-5 text-white"></i>
                   </div>
                   <span class="font-semibold text-tucupi-green-400">GENESIS</span>
                 {% endif %}
@@ -177,7 +177,9 @@
       </div>
     {% empty %}
       <div class="glass rounded-2xl p-12 border border-white/10 text-center">
-        <div class="text-6xl mb-4">📜</div>
+        <div class="mb-4 flex justify-center">
+          <i data-lucide="scroll-text" class="w-16 h-16 text-gray-500"></i>
+        </div>
         <p class="text-xl text-gray-400">Nenhum histórico disponível</p>
       </div>
     {% endfor %}
@@ -185,8 +187,9 @@
 
   <!-- Footer Info -->
   <div class="mt-12 p-6 glass rounded-xl border border-white/10 text-center animate-slide-up" style="animation-delay: 0.4s;">
-    <p class="text-sm text-gray-400">
-      ✅ Todas as transferências são registradas de forma permanente e transparente
+    <p class="text-sm text-gray-400 flex items-center justify-center gap-2">
+      <i data-lucide="check-circle-2" class="w-5 h-5 text-tucupi-green-400"></i>
+      Todas as transferências são registradas de forma permanente e transparente
     </p>
   </div>
 </div>
