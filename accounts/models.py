@@ -9,9 +9,9 @@ from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
     class Roles(models.TextChoices):
-        PRODUCER = "PRODUCER", _("Producer")
-        COMPANY = "COMPANY", _("Company")
-        ADMIN = "ADMIN", _("Admin")
+        PRODUCER = "PRODUCER", _("Produtor")
+        COMPANY = "COMPANY", _("Empresa")
+        ADMIN = "ADMIN", _("Administrador")
 
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.COMPANY)
     created_at = models.DateTimeField(auto_now_add=True)
