@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+# Import da view de compra
+from transactions.views import buy_credit
 
 
 urlpatterns = [
@@ -11,5 +13,7 @@ urlpatterns = [
     path("<int:pk>/", views.CreditDetailView.as_view(), name="credit_detail"),
     # Ação para listar um crédito para venda (apenas dono produtor)
     path("<int:pk>/list/", views.list_for_sale, name="credit_list_for_sale"),
+    # Compra de crédito (apenas empresas - Company-only)
+    path("<int:pk>/buy/", buy_credit, name="credit_buy"),
 ]
 

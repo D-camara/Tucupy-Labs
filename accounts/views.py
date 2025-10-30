@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django import forms  # usado apenas para tipagem no form_valid
 
 from .models import User, Profile
-from .forms import RegistrationForm, ProfileForm
+from .forms import RegistrationForm, ProfileForm, CustomLoginForm
 
 
 # =========================
@@ -68,17 +68,42 @@ class RegisterView(FormView):
     def form_valid(self, form: RegistrationForm) -> HttpResponse:
         user = form.save()
         login(self.request, user)
-        messages.success(self.request, "Conta criada com sucesso. Bem-vindo(a) ao EcoTrade!")
+        role_name = "Produtor" if user.role == User.Roles.PRODUCER else "Empresa"
+        messages.success(
+            self.request, 
+            f"🎉 Conta criada com sucesso! Bem-vindo(a) ao Tucupi Labs, {user.username}! Você está registrado como {role_name}."
+        )
         return super().form_valid(form)
 
 
 class LoginView(DjangoLoginView):
     template_name = "login.html"
+    form_class = CustomLoginForm
     redirect_authenticated_user = True
+    
+    def form_invalid(self, form):
+        """Adiciona mensagem de erro amigável."""
+        messages.error(self.request, "Nome de usuário ou senha incorretos. Verifique e tente novamente.")
+        return super().form_invalid(form)
 
 
 class LogoutView(DjangoLogoutView):
-    next_page = reverse_lazy("accounts:login")
+    """View de logout que aceita GET e POST."""
+    next_page = reverse_lazy("dashboard:index")
+    http_method_names = ['get', 'post', 'options']
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Adiciona mensagem de logout antes de deslogar."""
+        if request.user.is_authenticated:
+            username = request.user.username
+            response = super().dispatch(request, *args, **kwargs)
+            messages.success(request, f"👋 Até logo, {username}! Você saiu da sua conta com sucesso.")
+            return response
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        """Permite logout via GET (mais user-friendly)."""
+        return self.post(request, *args, **kwargs)
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
