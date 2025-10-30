@@ -68,7 +68,7 @@
     {% for entry in history %}
       <div class="relative pl-20 animate-slide-up" style="animation-delay: {{ forloop.counter|add:2|floatformat:1 }}00ms;">
         <!-- Timeline dot -->
-        <div class="absolute left-5 w-6 h-6 rounded-full border-4 {% if entry.transfer_type == 'CREATION' %}bg-tucupi-green-500 border-tucupi-green-400 shadow-glow-green{% elif entry.transfer_type == 'SALE' %}bg-blue-500 border-blue-400{% else %}bg-purple-500 border-purple-400{% endif %} animate-pulse-slow"></div>
+        <div class="absolute left-5 w-6 h-6 rounded-full border-4 {% if entry.transfer_type == 'CREATION' %}bg-tucupi-green-500 border-tucupi-green-400 shadow-glow-green{% elif entry.transfer_type == 'SALE' %}bg-blue-500 border-blue-400{% else %}bg-purple-500 border-purple-400{% endif %}"></div>
 
         <!-- Card -->
         <div class="glass rounded-xl p-6 border {% if entry.transfer_type == 'CREATION' %}border-tucupi-green-500/50 bg-tucupi-green-500/5{% elif entry.transfer_type == 'SALE' %}border-blue-500/50 bg-blue-500/5{% else %}border-purple-500/50 bg-purple-500/5{% endif %} hover-glow transition-all">
