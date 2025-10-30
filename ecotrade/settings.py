@@ -111,4 +111,4 @@ INTERNAL_IPS = [
 ]
 
 # caminho de exemplo no Windows — ajuste conforme seu ambiente
-NPM_BIN_PATH = r"/Users/sandragreidinger/.local/share/mise/installs/node/22.21.0/bin/npm"
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
