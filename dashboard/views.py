@@ -4,6 +4,19 @@ from credits.models import CarbonCredit, CreditListing
 from transactions.models import Transaction
 from django.db.models import Sum
 
+
+def landing_page(request):
+    """Landing page pública para visitantes não autenticados."""
+    # Estatísticas públicas
+    context = {
+        'total_credits': CarbonCredit.objects.count(),
+        'total_listings': CreditListing.objects.filter(is_active=True).count(),
+        'total_transactions': Transaction.objects.filter(status='COMPLETED').count(),
+        'total_co2': CarbonCredit.objects.aggregate(total=Sum('amount'))['total'] or 0,
+    }
+    return render(request, "landing.html", context)
+
+
 @login_required
 def index(request):
     user = request.user

@@ -3,6 +3,18 @@
 ## 2025-10-30
 
 ### Added
+- **Landing Page**: Página inicial pública moderna e atraente
+  - Hero section com animações e estatísticas em tempo real
+  - Seção de features destacando 6 principais diferenciais (verificação transparente, tempo real, impacto regional, etc.)
+  - Seção "Como Funciona" com 3 passos simples (Cadastro → Marketplace → Transação)
+  - Cards diferenciados para Produtores e Empresas com benefícios específicos
+  - CTA final com múltiplos pontos de conversão
+  - Totalmente responsivo com animações suaves
+  - Integração com estatísticas reais do banco de dados
+  - Ícones Lucide SVG para melhor consistência visual
+  - URL: `/` (raiz do site) - view pública sem necessidade de login
+  - Dashboard movido para `/dashboard/` (apenas usuários autenticados)
+
 - **Public Real-Time Transactions Page**: Live transparency feed for marketplace activity
   - New public page (`/transactions/public/`) - no auth required
   - Server-Sent Events (SSE) for real-time updates
