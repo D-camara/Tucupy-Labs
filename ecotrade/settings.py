@@ -1,9 +1,10 @@
 from pathlib import Path
 import os
+import django_stubs_ext
 
+django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # WARNING: Replace for production via environment variable
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key-change-me")
