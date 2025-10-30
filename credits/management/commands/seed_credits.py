@@ -84,10 +84,18 @@ class Command(BaseCommand):
         sold = sum(1 for c in created_credits if c.status == CarbonCredit.Status.SOLD)
         verified = sum(1 for c in created_credits if c.is_verified)
 
+        # Count ownership history entries created by signals
+        from credits.models import CreditOwnershipHistory
+        history_count = CreditOwnershipHistory.objects.filter(
+            credit__in=created_credits,
+            transfer_type=CreditOwnershipHistory.TransferType.CREATION
+        ).count()
+
         self.stdout.write(
             self.style.SUCCESS(
                 f'✓ Created {total} credits: '
                 f'{available} available, {listed} listed, {sold} sold '
-                f'({verified} verified)'
+                f'({verified} verified)\n'
+                f'✓ Created {history_count} GENESIS ownership records (via signals)'
             )
         )

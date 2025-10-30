@@ -87,6 +87,27 @@ python manage.py test accounts
 python manage.py test accounts.tests.TestUserModel.test_role_assignment
 ```
 
+### Seeding Data
+```bash
+# Basic seeding (run in order)
+python manage.py seed_users --count 20        # Creates users (producers/companies/admins)
+python manage.py seed_credits --count 30      # Creates carbon credits with GENESIS history
+python manage.py seed_listings --count 15     # Creates marketplace listings
+python manage.py seed_transactions --count 10 # Creates transactions with SALE history
+
+# Advanced: Multi-hop ownership chains (blockchain demo)
+python manage.py seed_ownership_transfers --chains 5 --depth 4
+# Creates credits that change hands multiple times
+# Perfect for demonstrating blockchain-style history
+
+# View ownership statistics
+python manage.py show_ownership_stats
+# Shows: total history entries, transfers, most-transferred credits
+
+# NOTE: All ownership changes are automatically tracked via Django signals
+# View any credit history at: /credits/<id>/history/
+```
+
 ## TailwindCSS v4 Integration
 
 - **Package**: django-tailwind-4[reload] (v4-specific fork)

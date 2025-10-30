@@ -132,3 +132,26 @@ def list_for_sale(request, pk: int):
     return render(request, "credits/list_for_sale.html", {"form": form, "credit": credit})
 
 
+def credit_history(request, pk: int):
+    """
+    View pública do histórico de propriedade (blockchain-style).
+
+    Mostra timeline completa de ownership desde a criação até o estado atual.
+    Acessível por qualquer usuário (não requer autenticação) para transparência.
+    """
+    credit = get_object_or_404(CarbonCredit, pk=pk)
+
+    # Buscar todo o histórico ordenado por timestamp
+    history = credit.ownership_history.select_related(
+        'from_owner', 'to_owner', 'transaction'
+    ).all()
+
+    context = {
+        'credit': credit,
+        'history': history,
+        'total_transfers': history.count(),
+    }
+
+    return render(request, "credits/history.html", context)
+
+

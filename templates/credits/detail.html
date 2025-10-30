@@ -15,14 +15,23 @@
 
   <!-- Header -->
   <div class="mb-8 animate-slide-down">
-    <div class="flex items-center gap-4 mb-3">
-      <div class="w-16 h-16 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center text-3xl">
-        🌱
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center text-3xl">
+          🌱
+        </div>
+        <div>
+          <h1 class="text-4xl font-display font-bold text-gradient">Crédito #{{ credit.id }}</h1>
+          <p class="text-gray-400">Detalhes completos do crédito de carbono</p>
+        </div>
       </div>
-      <div>
-        <h1 class="text-4xl font-display font-bold text-gradient">Crédito #{{ credit.id }}</h1>
-        <p class="text-gray-400">Detalhes completos do crédito de carbono</p>
-      </div>
+      <!-- History Link Button -->
+      <a href="{% url 'credit_history' credit.id %}" class="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:scale-105 transition-all shadow-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Ver Histórico
+      </a>
     </div>
   </div>
 
