@@ -4,6 +4,62 @@ All notable changes to the EcoTrade platform.
 
 ## [Unreleased]
 
+### 2025-10-30 - Database Seeding Scripts 🌱
+**4 management commands for seeding database with realistic test data using Faker**
+
+#### Commands Created
+- **seed_users** - 35 users (60% COMPANY, 35% PRODUCER, 5% ADMIN)
+  - Companies: balance, company_name, CNPJ, pt_BR data
+  - Producers: farm_name, CPF, locations
+  - Admins: superuser access
+- **seed_credits** - 45 carbon credits
+  - Brazilian regions (Amazônia, Cerrado, Pantanal, etc)
+  - Generation dates within past 2 years
+  - Status distribution: 60% AVAILABLE, 30% LISTED, 10% SOLD
+  - 80% verified
+- **seed_listings** - 30 marketplace listings
+  - Price R$50-200/ton with pt_BR decimal formatting
+  - 80% with expiration dates (30-180 days ahead)
+  - Updates credit status to LISTED
+- **seed_transactions** - 35 transactions
+  - Buyer (COMPANY) ↔ Seller (PRODUCER) relationships
+  - Status: 40% PENDING, 50% COMPLETED, 10% CANCELLED
+  - COMPLETED transactions transfer ownership and update credit status to SOLD
+  - Timestamps distributed over past 6 months
+
+#### Features
+- **Append-only mode**: No data clearing, safe to run multiple times
+- **Custom counts**: `--count N` flag for each command
+- **pt_BR locale**: Brazilian names, addresses, CPF/CNPJ, phone numbers
+- **Dependencies checked**: Commands validate prerequisites before running
+- **Progress feedback**: Console output with summaries and stats
+- **Realistic data**: Faker generates believable Brazilian business data
+
+#### Files
+- `requirements.txt`: Added Faker==33.1.0
+- `accounts/management/commands/seed_users.py`
+- `credits/management/commands/seed_credits.py`
+- `credits/management/commands/seed_listings.py`
+- `transactions/management/commands/seed_transactions.py`
+- `PLAN.md`: Added "Database Seeding" section with usage guide
+
+#### Usage
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run in order (dependencies required)
+python manage.py seed_users
+python manage.py seed_credits
+python manage.py seed_listings
+python manage.py seed_transactions
+
+# Custom counts
+python manage.py seed_users --count 50
+```
+
+---
+
 ### 2025-10-30 - Add Balance Interface for Companies 💳✨
 **Interface frontend para empresas adicionarem saldo à carteira**
 

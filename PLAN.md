@@ -193,6 +193,56 @@ components/
 - **Custom eco theme**: Green color scheme (#10b981, #059669, #047857)
 - **See**: `TAILWIND_SETUP.md` for complete guide
 
+## Database Seeding ✅
+- **Library**: Faker (pt_BR locale)
+- **Command structure**: Separate per model for granular control
+- **Mode**: Append-only (no data clearing)
+- **Dataset size**: Medium (20-50 records per model)
+
+### Available Commands
+1. **`python manage.py seed_users`** - Creates 35 users by default
+   - 60% COMPANY (with balance, company_name, CNPJ)
+   - 35% PRODUCER (with farm_name, CPF)
+   - 5% ADMIN (superuser)
+   - Custom count: `--count N`
+
+2. **`python manage.py seed_credits`** - Creates 45 credits by default
+   - Assigned to random PRODUCER users
+   - Brazilian regions (Amazônia, Cerrado, Pantanal, etc.)
+   - Generation dates: past 2 years
+   - Status: 60% AVAILABLE, 30% LISTED, 10% SOLD
+   - 80% verified by admin
+
+3. **`python manage.py seed_listings`** - Creates 30 listings by default
+   - Only for AVAILABLE/LISTED credits
+   - Price: R$50-200/ton
+   - 80% with expiration date (30-180 days ahead)
+   - 90% active
+   - Updates credit status to LISTED
+
+4. **`python manage.py seed_transactions`** - Creates 35 transactions by default
+   - Buyer: random COMPANY users
+   - Seller: credit owner (PRODUCER)
+   - Status: 40% PENDING, 50% COMPLETED, 10% CANCELLED
+   - Timestamp: past 6 months
+   - COMPLETED transactions transfer ownership
+
+### Usage
+```bash
+# Seed all data (run in order)
+python manage.py seed_users
+python manage.py seed_credits
+python manage.py seed_listings
+python manage.py seed_transactions
+
+# Custom counts
+python manage.py seed_users --count 50
+python manage.py seed_credits --count 100
+
+# Dependencies
+pip install -r requirements.txt  # installs Faker==33.1.0
+```
+
 ## Security Considerations
 - CSRF protection (Django default)
 - Password validation
