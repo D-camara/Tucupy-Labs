@@ -30,7 +30,12 @@
           </svg>
           Marketplace
         </a>
-        
+
+        <a href="{% url 'public_transactions' %}" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
+          <i data-lucide="activity" class="w-4 h-4 group-hover:scale-110 transition"></i>
+          Transactions
+        </a>
+
         {% if user.is_authenticated %}
           <a href="/transactions/" class="text-sm font-medium text-gray-300 hover:text-tucupi-green-400 transition flex items-center gap-2 group">
             <svg class="w-4 h-4 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,6 +79,9 @@
       </a>
       <a href="/credits/" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
         Marketplace
+      </a>
+      <a href="{% url 'public_transactions' %}" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">
+        Transactions
       </a>
       {% if user.is_authenticated %}
         <a href="/transactions/" class="block px-4 py-2 text-sm font-medium text-gray-300 hover:bg-tucupi-green-500/10 hover:text-tucupi-green-400 rounded-lg transition">

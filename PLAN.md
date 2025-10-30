@@ -100,6 +100,8 @@
 /credits/<id>/              → credit detail
 /credits/<id>/buy/          → purchase credit (company)
 /transactions/              → transaction history
+/transactions/public/       → public real-time transactions (no auth)
+/transactions/public/stream/ → SSE endpoint for real-time updates
 /admin/                     → Django admin
 ```
 
@@ -118,6 +120,7 @@ credits/
   detail.html               → single credit view
 transactions/
   history.html              → user transaction list
+  public_transactions.html  → public real-time transactions feed
 components/
   navbar.html
   credit_card.html
@@ -243,6 +246,25 @@ python manage.py seed_credits --count 100
 pip install -r requirements.txt  # installs Faker==33.1.0
 ```
 
+## Real-Time Features ✅
+- **Server-Sent Events (SSE)** for public transactions feed
+  - Endpoint: `/transactions/public/stream/`
+  - One-way server push (efficient for this use case)
+  - Immediate connection confirmation (triggers "Live" status quickly)
+  - Heartbeat every 30s to keep connection alive
+  - DB polling every 2s for new COMPLETED transactions
+  - **Session-based reconnection system**:
+    - Server generates UUID session ID on first connection
+    - Client stores session ID in localStorage (60s validity)
+    - Reconnections with valid session bypass rate limit
+    - Server validates session ID + IP match
+    - Session auto-refreshed every 10s on both client and server
+    - Auto-cleanup: localStorage cleared when user leaves (not refresh)
+  - Smart rate limiting: 5s initial timeout, refreshed to 30s every 10s while active
+  - Auto-reconnect on disconnect (3s cooldown prevents spam)
+  - Connection status indicator in UI
+  - Anonymized data: only roles, no personal info
+
 ## Security Considerations
 - CSRF protection (Django default)
 - Password validation
@@ -250,6 +272,8 @@ pip install -r requirements.txt  # installs Faker==33.1.0
 - SQL injection protection (Django ORM)
 - XSS protection (template escaping)
 - Environment variables for secrets
+- Rate limiting on SSE endpoint (1 connection per IP)
+- Data anonymization on public endpoints
 
 ## Future Enhancements (out of scope)
 - Payment gateway integration
