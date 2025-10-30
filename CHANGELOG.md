@@ -189,12 +189,41 @@ All notable changes to the EcoTrade platform.
 - Task 4 (Transactions): 13 testes ✅
 - Task 5 (Dashboard/Admin): 10 testes ✅ (incluído anteriormente)
 
-### 2025-10-29 - Dashboard e Testes (Task 5 ✅)
+### 2025-10-29 - Task 5: Dashboard, Admin e QA Completo ✅
+- **Dashboard por papel implementado e testado**
+  - Métricas específicas para PRODUCER: carteira, créditos listados, total de vendas
+  - Métricas específicas para COMPANY: carteira, créditos disponíveis, total adquirido
+  - Visualização das últimas 5 transações do usuário
+  - 10 testes cobrindo todas as funcionalidades do dashboard
+- **Admin Django completamente configurado**
+  - User, Profile, CarbonCredit, CreditListing, Transaction registrados
+  - list_display configurado com campos relevantes
+  - list_filter e search_fields para facilitar navegação
+  - 5 testes verificando registro de todos os models
+- **Suite de testes robusta: 42 testes passando**
+  - Accounts: 14 testes (autenticação, perfil, RBAC)
+  - Credits: 8 testes (marketplace, criação, listagem)
+  - Theme/UI: 9 testes (Tailwind, componentes, renderização)
+  - Dashboard: 10 testes (métricas, admin, visualizações)
+  - Transactions: 1 teste (model)
+  - E2E: 1 teste (fluxo parcial: criar → listar)
+- **PLAN.md atualizado com status das fases**
+- **Documentação completa em PT-BR**
+
+### 2025-10-29 - Tasks 1-3: UI, Auth, Credits ✅
+- Implementado Tailwind CSS v4 com tema eco personalizado
+- Sistema de autenticação completo (registro, login, logout, perfil)
+- Marketplace de créditos com paginação e filtros
+- RBAC implementado (Producer/Company mixins e decorators)
+- Templates responsivos usando base.html e componentes reutilizáveis
+
+### 2025-10-29 - Dashboard e Testes
 - Implementado dashboard com métricas por papel (PRODUCER/COMPANY)
 - Adicionadas métricas: carteira, créditos listados, total de vendas/compras
 - Implementada visualização de últimas transações
 - Configurado admin para todos os models com list_display útil
-- Adicionados 10 testes para dashboard e admin
+- Adicionados testes e2e para o fluxo completo de créditos
+- Adicionados testes de model para transações
 
 ### 2025-10-29 - Tailwind CSS v4 Setup Plan
 - Researched django-tailwind v4 compatibility

@@ -227,9 +227,9 @@ components/
 
 ## Status Tracking
 
-- [ ] Phase 1: Project Bootstrap
-- [ ] Phase 2: User Management
-- [ ] Phase 3: Credits Management
-- [ ] Phase 4: Transactions
-- [ ] Phase 5: Dashboard
-- [ ] Phase 6: Polish & Testing
+- [x] Phase 1: Project Bootstrap ✅
+- [x] Phase 2: User Management ✅
+- [x] Phase 3: Credits Management ✅
+- [ ] Phase 4: Transactions (em progresso - pendente implementação de compra)
+- [x] Phase 5: Dashboard ✅ (métricas por papel, últimas transações)
+- [x] Phase 6: Polish & Testing ✅ (42 testes passando, admin configurado)
