@@ -2,6 +2,77 @@
 
 ## 2025-10-31
 
+### Fixed - UI Polish and Consistency
+- **Glass Effect Enhancement** (`theme/static_src/src/styles.css`):
+  - Changed `.glass` background to use `--color-tucupi-dark` (#1a1a1a) at 80% opacity
+  - More visible and consistent with brand color scheme
+
+- **Hover Glow Effect Reduction**:
+  - Reduced glow spread from `20px/40px` to `10px/20px`
+  - Maintained opacity at `0.6/0.4` for visibility
+  - Subtler, more professional hover feedback
+
+- **Landing Page Improvements** (`templates/landing.html`):
+  - Fixed "Como Funciona" step cards height inconsistency using flexbox
+  - Simplified API section card styling for consistency
+  - Removed complex backgrounds from "O que você pode consultar?" card
+  - Added color diversity to "Por que é útil?" icons (cyan, green, yellow, purple)
+  - Matched styling between both API section cards
+
+- **Dashboard Fixes** (`dashboard/templates/dashboard/index.html`):
+  - Fixed duplicate table header in transactions section
+  - Updated "Explorar Marketplace" button to "Explorar Mercado"
+  - Replaced raw SVG with Lucide `shopping-bag` icon
+  - Changed button text color to white for better visibility
+
+- **Marketplace Template Migration** (`credits/templates/credits/marketplace.html`):
+  - Replaced all SVGs with Lucide icons:
+    - `plus` (add credit)
+    - `check-circle`, `loader-2`, `clock`, `x-circle` (status badges)
+    - `user` (producer icon)
+    - `arrow-right` (button arrows)
+    - `chevron-left`, `chevron-right` (pagination)
+  - Unified "Ver Detalhes" button styling:
+    - Always `bg-tucupi-green-500` with white text
+    - Removed duplicate logic for approved/non-approved states
+    - Cleaner, more consistent CTA presentation
+
+## 2025-10-31
+
+### Changed - Navbar Refactor: User Dropdown Menu
+- **Problem**: Navbar cluttered with 7-8 links for authenticated users, duplicate transaction links ("Transactions" + "Transações")
+- **Solution**: Consolidated user-specific actions into dropdown menu
+
+**Structure (Authenticated):**
+- Main navbar: Logo → Dashboard → Marketplace → Public Transactions → **User Dropdown**
+- User dropdown (icon + username trigger):
+  - My Transactions (private /transactions/)
+  - Profile
+  - Admin Panel (if is_admin)
+  - Auditor Dashboard (if is_auditor)
+  - Logout
+
+**Structure (Unauthenticated):**
+- Main navbar: Logo → Marketplace → Public Transactions → Login → Register
+
+**Implementation:**
+- Dropdown trigger: `user-circle` icon + username + `chevron-down`
+- Dropdown menu: Glass effect, absolute positioned, z-50
+- JavaScript: Toggle on click, click-outside handler, chevron rotation
+- Mobile: Inline user section with divider, same structure
+- Icons: All Lucide (`user-circle`, `file-text`, `user`, `shield-check`, `log-out`, `layout-dashboard`, `shopping-bag`)
+
+**Files Modified:**
+- `templates/components/navbar.html` - Complete restructure (desktop + mobile + JS)
+
+**UX Improvements:**
+- Reduced navbar clutter from 7-8 links to 4 main links
+- Clear visual hierarchy for user actions
+- Eliminated duplicate transaction links
+- Better mobile UX with organized user section
+
+## 2025-10-31
+
 ### Added - Icon Usage Guidelines (Lucide over Emojis)
 - **AGENTS.md**: Added comprehensive "Icons & Visual Elements" section
   - Explicit rule: Use Lucide icons, NOT emojis in web templates

@@ -17,64 +17,6 @@
 
     {% tailwind_css %}
     
-    <style>
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #1A1A1A;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #10B981;
-        border-radius: 5px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #059669;
-      }
-      
-      /* Grid background pattern */
-      .grid-bg {
-        background-color: #0A0A0A;
-        background-image: 
-          linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-        background-size: 50px 50px;
-      }
-      
-      /* Gradient text */
-      .text-gradient {
-        background: linear-gradient(135deg, #10B981 0%, #00FF88 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      .text-gradient-blue {
-        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      /* Glass morphism */
-      .glass {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      /* Hover glow effect */
-      .hover-glow {
-        transition: all 0.3s ease;
-      }
-      .hover-glow:hover {
-        box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 40px rgba(16, 185, 129, 0.4);
-        transform: translateY(-2px);
-      }
-    </style>
-    
     {% block extra_head %}{% endblock %}
   </head>
   <body class="min-h-screen bg-tucupi-black text-white font-sans antialiased">
