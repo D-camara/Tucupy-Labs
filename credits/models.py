@@ -16,6 +16,12 @@ class CarbonCredit(models.Model):
         AVAILABLE = "AVAILABLE", "Available"
         LISTED = "LISTED", "Listed"
         SOLD = "SOLD", "Sold"
+    
+    class ValidationStatus(models.TextChoices):
+        PENDING = "PENDING", "Aguardando Validação"
+        UNDER_REVIEW = "UNDER_REVIEW", "Em Análise"
+        APPROVED = "APPROVED", "Aprovado"
+        REJECTED = "REJECTED", "Rejeitado"
 
     owner = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="credits")
     amount = models.DecimalField(max_digits=12, decimal_places=2)
@@ -24,6 +30,33 @@ class CarbonCredit(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.AVAILABLE)
     unit = models.CharField(max_length=32, default="tons CO2")
+    
+    # Campos de validação
+    validation_status = models.CharField(
+        max_length=20,
+        choices=ValidationStatus.choices,
+        default=ValidationStatus.PENDING,
+        help_text="Status de validação pelo auditor"
+    )
+    validated_by = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="validated_credits",
+        help_text="Auditor que validou o crédito"
+    )
+    validated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Data da validação"
+    )
+    auditor_notes = models.TextField(
+        blank=True,
+        help_text="Observações do auditor sobre a validação"
+    )
+    
+    # Campos legados (manter compatibilidade)
     is_verified = models.BooleanField(default=False, help_text="Crédito verificado por administrador")
     is_deleted = models.BooleanField(default=False, help_text="Soft delete - crédito imutável")
 
@@ -58,6 +91,62 @@ class CarbonCredit(models.Model):
     def hard_delete(self):
         """Deleção real (apenas para admin se necessário)."""
         super().delete()
+    
+    def approve_validation(self, auditor, notes: str = "") -> None:
+        """
+        Aprova a validação do crédito.
+        
+        Args:
+            auditor: User com role AUDITOR que está aprovando
+            notes: Observações do auditor
+        """
+        self.validation_status = self.ValidationStatus.APPROVED
+        self.validated_by = auditor
+        self.validated_at = timezone.now()
+        self.auditor_notes = notes
+        self.is_verified = True  # Marca como verificado (legado)
+        self.save()
+    
+    def reject_validation(self, auditor, notes: str) -> None:
+        """
+        Rejeita a validação do crédito.
+        
+        Args:
+            auditor: User com role AUDITOR que está rejeitando
+            notes: Observações do auditor (obrigatório)
+        """
+        self.validation_status = self.ValidationStatus.REJECTED
+        self.validated_by = auditor
+        self.validated_at = timezone.now()
+        self.auditor_notes = notes
+        self.is_verified = False
+        self.save()
+    
+    def start_review(self, auditor) -> None:
+        """
+        Marca o crédito como em análise por um auditor.
+        
+        Args:
+            auditor: User com role AUDITOR que está revisando
+        """
+        self.validation_status = self.ValidationStatus.UNDER_REVIEW
+        self.validated_by = auditor
+        self.save()
+    
+    @property
+    def can_be_listed(self) -> bool:
+        """Crédito só pode ser listado se estiver aprovado."""
+        return self.validation_status == self.ValidationStatus.APPROVED
+    
+    @property
+    def is_pending_validation(self) -> bool:
+        """Verifica se o crédito está aguardando validação."""
+        return self.validation_status == self.ValidationStatus.PENDING
+    
+    @property
+    def is_approved(self) -> bool:
+        """Verifica se o crédito foi aprovado."""
+        return self.validation_status == self.ValidationStatus.APPROVED
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"Credit<{self.id}> {self.amount} {self.unit}"

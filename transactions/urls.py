@@ -4,6 +4,8 @@ from django.urls import path
 
 from . import views
 
+app_name = "transactions"
+
 urlpatterns = [
     # Histórico de transações (compras e vendas do usuário)
     path("", views.transaction_history, name="transaction_history"),

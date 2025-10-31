@@ -272,8 +272,8 @@
         // Tenta usar ID de sessão existente para reconexão
         const sessionId = getStoredSessionId();
         const url = sessionId
-            ? '{% url "public_transactions_sse" %}?session_id=' + sessionId
-            : '{% url "public_transactions_sse" %}';
+            ? '{% url "transactions:public_transactions_sse" %}?session_id=' + sessionId
+            : '{% url "transactions:public_transactions_sse" %}';
 
         eventSource = new EventSource(url);
 

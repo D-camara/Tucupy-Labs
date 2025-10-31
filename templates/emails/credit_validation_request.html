@@ -1,0 +1,34 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Novo Crédito para Validação 🔍</h2>
+
+<p>Olá <strong>{{ auditor_name }}</strong>,</p>
+
+<p>Um novo crédito de carbono foi submetido e aguarda sua validação na plataforma EcoTrade.</p>
+
+<div class="info-box">
+    <p style="margin: 0;"><strong>📋 Detalhes do Crédito:</strong></p>
+    <ul style="margin: 10px 0 0 20px;">
+        <li><strong>ID:</strong> #{{ credit_id }}</li>
+        <li><strong>Título:</strong> {{ credit_title }}</li>
+        <li><strong>Produtor:</strong> {{ producer_name }}</li>
+    </ul>
+</div>
+
+<p><strong>Como auditor, você pode:</strong></p>
+<ul style="margin-left: 20px; color: #555555;">
+    <li>Revisar a documentação e evidências fornecidas</li>
+    <li>Aprovar o crédito se estiver em conformidade</li>
+    <li>Rejeitar com observações caso identifique problemas</li>
+</ul>
+
+<a href="http://localhost:8000/dashboard/" class="email-button">
+    Revisar Crédito
+</a>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

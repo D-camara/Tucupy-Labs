@@ -1,100 +1,133 @@
-# accounts/admin.py
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.utils import timezone
+from django.utils.html import format_html
 
-from .models import User, AuditorProfile
+from .models import AuditorApplication, AuditorProfile, Profile, User
 
-# ----- Actions -----
-@admin.action(description="Aprovar usuários selecionados (liberar acesso)")
-def approve_users(modeladmin, request, queryset):
-    updated = 0
-    for user in queryset:
-        if not user.is_active:
-            user.is_active = True
-            user.approved_at = timezone.now()
-            user.save(update_fields=["is_active", "approved_at"])
-            updated += 1
-    modeladmin.message_user(request, f"{updated} usuário(s) aprovado(s).")
 
-@admin.action(description="Desativar usuários selecionados (remover acesso)")
-def deactivate_users(modeladmin, request, queryset):
-    updated = queryset.update(is_active=False)
-    modeladmin.message_user(request, f"{updated} usuário(s) desativado(s).")
-
-# ----- User Admin -----
 @admin.register(User)
-class UserAdmin(DjangoUserAdmin):
-    """
-    Admin para o User customizado (AUTH_USER_MODEL = accounts.User).
-    Mantém a UI padrão do Django e adiciona campos/ações do EcoTrade.
-    """
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "email", "role", "is_active", "is_staff", "created_at")
+    list_filter = ("role", "is_active", "is_staff")
+    search_fields = ("username", "email")
 
-    # Colunas na listagem
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "company_name", "farm_name", "location")
+    search_fields = ("user__username", "company_name", "farm_name", "location")
+
+
+@admin.register(AuditorApplication)
+class AuditorApplicationAdmin(admin.ModelAdmin):
     list_display = (
-        "username",
-        "email",
-        "role",
-        "is_active",
-        "is_verified",
-        "approved_at",
-        "date_joined",
-        "last_login",
+        "user",
+        "status_badge",
+        "created_at",
+        "reviewed_at",
+        "reviewed_by"
     )
-    list_filter = ("role", "is_active", "is_verified", "is_staff", "is_superuser")
-    search_fields = ("username", "email", "first_name", "last_name")
-    ordering = ("-date_joined",)
-    # Campos somente leitura
-    readonly_fields = ("last_login", "date_joined", "approved_at")
-
-    # Fieldsets: base do Django + seção EcoTrade
+    list_filter = ("status", "created_at", "reviewed_at")
+    search_fields = ("user__username", "user__email", "justification")
+    readonly_fields = ("created_at", "reviewed_at", "reviewed_by")
+    
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
-        ("Informações pessoais", {"fields": ("first_name", "last_name", "email")}),
-        (
-            "Permissões",
-            {
-                "fields": (
-                    "is_active",
-                    "is_verified",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
+        ("Candidato", {
+            "fields": ("user", "justification")
+        }),
+        ("Status", {
+            "fields": ("status", "rejection_reason")
+        }),
+        ("Revisão", {
+            "fields": ("reviewed_at", "reviewed_by"),
+            "classes": ("collapse",)
+        }),
+    )
+    
+    def status_badge(self, obj):
+        """Exibe badge colorido do status."""
+        colors = {
+            "PENDING": "#fbbf24",    # amarelo
+            "APPROVED": "#10b981",   # verde
+            "REJECTED": "#ef4444",   # vermelho
+        }
+        color = colors.get(obj.status, "#6b7280")
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 10px; '
+            'border-radius: 4px; font-weight: 600;">{}</span>',
+            color,
+            obj.get_status_display()
+        )
+    status_badge.short_description = "Status"
+    
+    actions = ["approve_applications", "reject_applications"]
+    
+    def approve_applications(self, request, queryset):
+        """Action para aprovar candidaturas selecionadas."""
+        from accounts.emails import send_auditor_approval_notification
+        
+        count = 0
+        for application in queryset.filter(status=AuditorApplication.Status.PENDING):
+            application.approve(request.user)
+            
+            # Envia email de aprovação
+            try:
+                send_auditor_approval_notification(
+                    user_email=application.user.email,
+                    user_name=application.user.get_full_name() or application.user.username
                 )
-            },
-        ),
-        ("Datas importantes", {"fields": ("last_login", "date_joined", "approved_at")}),
-        ("EcoTrade", {"fields": ("role",)}),
-    )
+            except Exception as e:
+                self.message_user(
+                    request,
+                    f"Erro ao enviar email para {application.user.username}: {str(e)}",
+                    level="warning"
+                )
+            
+            count += 1
+        
+        self.message_user(
+            request,
+            f"{count} candidatura(s) aprovada(s) com sucesso!",
+            level="success"
+        )
+    approve_applications.short_description = "✅ Aprovar candidaturas selecionadas"
+    
+    def reject_applications(self, request, queryset):
+        """Action para rejeitar candidaturas selecionadas."""
+        from accounts.emails import send_auditor_rejection_notification
+        
+        count = 0
+        for application in queryset.filter(status=AuditorApplication.Status.PENDING):
+            reason = "Sua candidatura não foi aprovada neste momento."
+            application.reject(request.user, reason)
+            
+            # Envia email de rejeição
+            try:
+                send_auditor_rejection_notification(
+                    user_email=application.user.email,
+                    user_name=application.user.get_full_name() or application.user.username,
+                    reason=reason
+                )
+            except Exception as e:
+                self.message_user(
+                    request,
+                    f"Erro ao enviar email para {application.user.username}: {str(e)}",
+                    level="warning"
+                )
+            
+            count += 1
+        
+        self.message_user(
+            request,
+            f"{count} candidatura(s) rejeitada(s).",
+            level="success"
+        )
+    reject_applications.short_description = "❌ Rejeitar candidaturas selecionadas"
 
-    # Form de criação
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": ("username", "email", "password1", "password2", "role"),
-            },
-        ),
-    )
 
-    actions = [approve_users, deactivate_users]
-
-# ----- Auditor Profile Admin -----
 @admin.register(AuditorProfile)
 class AuditorProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "full_name", "organization", "document_id", "phone")
-    search_fields = (
-        "user__username",
-        "user__email",
-        "full_name",
-        "organization",
-        "document_id",
-        "phone",
-    )
-    list_select_related = ("user",)
-
-
-
+    search_fields = ("user__username", "full_name", "organization", "document_id")
+    list_filter = ("organization",)
+    readonly_fields = ("user",)
 

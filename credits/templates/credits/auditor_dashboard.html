@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_tags %}
+
+{% block title %}Dashboard de Auditoria - EcoTrade{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Dashboard de Auditoria</h1>
+                    <p class="text-gray-400">Valide créditos de carbono e garanta a qualidade da plataforma</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Pendentes</span>
+                    <div class="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ pending_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Aguardando validação</p>
+            </div>
+
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Em Análise</span>
+                    <div class="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ under_review_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Por você e outros auditores</p>
+            </div>
+
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Aprovados</span>
+                    <div class="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ approved_by_me_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Validados por você</p>
+            </div>
+
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Rejeitados</span>
+                    <div class="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ rejected_by_me_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Não aprovados por você</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-t-xl border-b border-gray-700">
+            <nav class="flex gap-4 px-6" aria-label="Tabs">
+                <a href="?tab=pending" class="{% if current_tab == 'pending' %}border-blue-500 text-blue-500{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition">
+                    Pendentes ({{ pending_count }})
+                </a>
+                <a href="?tab=under_review" class="{% if current_tab == 'under_review' %}border-blue-500 text-blue-500{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition">
+                    Em Análise ({{ under_review_count }})
+                </a>
+                <a href="?tab=history" class="{% if current_tab == 'history' %}border-blue-500 text-blue-500{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition">
+                    Histórico
+                </a>
+            </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-b-xl border border-gray-700 border-t-0 p-6">
+            
+            {% if credits %}
+                <div class="space-y-4">
+                    {% for credit in credits %}
+                    <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <!-- Header -->
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="text-xl font-bold text-white">Crédito #{{ credit.id }}</div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                        {% if credit.validation_status == 'PENDING' %}bg-yellow-500/10 text-yellow-500
+                                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-blue-500/10 text-blue-500
+                                        {% elif credit.validation_status == 'APPROVED' %}bg-green-500/10 text-green-500
+                                        {% else %}bg-red-500/10 text-red-500{% endif %}">
+                                        {{ credit.get_validation_status_display }}
+                                    </span>
+                                    {% if credit.is_verified %}
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-500">
+                                            ✓ Verificado
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Info Grid -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Proprietário</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.owner.username }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Quantidade</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.amount }} {{ credit.unit }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Origem</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.origin }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Data de Geração</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.generation_date|date:"d/m/Y" }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Observações do auditor (se houver) -->
+                                {% if credit.auditor_notes %}
+                                <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                                    <div class="text-xs text-gray-500 mb-2">Observações do Auditor:</div>
+                                    <div class="text-sm text-gray-300">{{ credit.auditor_notes }}</div>
+                                    {% if credit.validated_by %}
+                                        <div class="text-xs text-gray-500 mt-2">
+                                            Por: {{ credit.validated_by.username }} em {{ credit.validated_at|date:"d/m/Y H:i" }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Ações -->
+                                <div class="flex gap-3">
+                                    {% if credit.validation_status == 'PENDING' %}
+                                        <a href="{% url 'credits:review_credit' credit.id %}" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium text-sm transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Revisar Crédito
+                                        </a>
+                                    {% elif credit.validation_status == 'UNDER_REVIEW' and credit.validated_by == request.user %}
+                                        <a href="{% url 'credits:review_credit' credit.id %}" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium text-sm transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                            Continuar Análise
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'credits:view_credit' credit.id %}" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium text-sm transition">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Ver Detalhes
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-700 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Nenhum crédito encontrado</h3>
+                    <p class="text-gray-400">
+                        {% if current_tab == 'pending' %}
+                            Não há créditos aguardando validação no momento.
+                        {% elif current_tab == 'under_review' %}
+                            Não há créditos em análise no momento.
+                        {% else %}
+                            Você ainda não validou nenhum crédito.
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

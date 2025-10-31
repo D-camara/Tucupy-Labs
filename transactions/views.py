@@ -53,19 +53,19 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
         # Validações
         if credit.status != CarbonCredit.Status.LISTED:
             messages.error(request, "Este crédito não está disponível para compra.")
-            return redirect("credit_detail", pk=pk)
+            return redirect("credits:credit_detail", pk=pk)
         
         # Buscar listing ativo
         try:
             listing = CreditListing.objects.get(credit=credit, is_active=True)
         except CreditListing.DoesNotExist:
             messages.error(request, "Não foi encontrada uma listagem ativa para este crédito.")
-            return redirect("credit_detail", pk=pk)
+            return redirect("credits:credit_detail", pk=pk)
         
         # Validar que o comprador não é o dono
         if credit.owner == request.user:
             messages.error(request, "Você não pode comprar seu próprio crédito.")
-            return redirect("credit_detail", pk=pk)
+            return redirect("credits:credit_detail", pk=pk)
         
         # Calcular valor total
         total_price = credit.amount * listing.price_per_unit
@@ -78,7 +78,7 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
                 f"Saldo insuficiente. Você tem R$ {buyer_profile.balance:.2f}, "
                 f"mas precisa de R$ {total_price:.2f}."
             )
-            return redirect("credit_detail", pk=pk)
+            return redirect("credits:credit_detail", pk=pk)
         
         # Criar transação
         txn = TransactionModel.objects.create(
@@ -108,7 +108,7 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
         f"✅ Crédito adquirido com sucesso! Transação #{txn.id} concluída. "
         f"Total: R$ {txn.total_price:.2f} | Saldo restante: R$ {request.user.profile.balance:.2f}"
     )
-    return redirect("transaction_history")
+    return redirect("transactions:transaction_history")
 
 
 @login_required

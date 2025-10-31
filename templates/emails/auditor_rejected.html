@@ -1,0 +1,34 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Sobre sua Candidatura</h2>
+
+<p>Olá <strong>{{ user_name }}</strong>,</p>
+
+<p>Agradecemos seu interesse em se tornar um auditor na plataforma EcoTrade.</p>
+
+<div class="warning-box">
+    <p style="margin: 0;"><strong>Status da Candidatura</strong></p>
+    <p style="margin: 5px 0 0 0;">
+        Infelizmente, não pudemos aprovar sua candidatura neste momento.
+    </p>
+</div>
+
+{% if reason %}
+<p><strong>Motivo:</strong></p>
+<p style="margin-left: 20px; color: #555555;">{{ reason }}</p>
+{% endif %}
+
+<p>Você poderá submeter uma nova candidatura no futuro caso sua situação mude ou adquira novas qualificações.</p>
+
+<p>Agradecemos novamente pelo seu interesse em contribuir com a EcoTrade!</p>
+
+<a href="http://localhost:8000/" class="email-button" style="background-color: #6b7280;">
+    Voltar à Plataforma
+</a>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

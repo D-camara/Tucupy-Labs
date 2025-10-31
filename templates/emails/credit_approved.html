@@ -1,0 +1,35 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Crédito Aprovado! ✅</h2>
+
+<p>Olá <strong>{{ producer_name }}</strong>,</p>
+
+<p>Temos uma ótima notícia! Seu crédito de carbono foi <strong style="color: #10b981;">APROVADO</strong> por nossos auditores!</p>
+
+<div class="info-box">
+    <p style="margin: 0;"><strong>✨ Crédito Validado:</strong></p>
+    <p style="margin: 5px 0 0 0;"><strong>{{ credit_title }}</strong></p>
+</div>
+
+{% if auditor_notes %}
+<p><strong>Observações do Auditor:</strong></p>
+<p style="margin-left: 20px; color: #555555; font-style: italic;">{{ auditor_notes }}</p>
+{% endif %}
+
+<p><strong>Próximos passos:</strong></p>
+<ul style="margin-left: 20px; color: #555555;">
+    <li>✅ Seu crédito agora está disponível para listagem</li>
+    <li>💼 Você pode criar uma oferta no marketplace</li>
+    <li>🌱 Empresas poderão visualizar e comprar seu crédito</li>
+</ul>
+
+<a href="http://localhost:8000/dashboard/" class="email-button">
+    Ver Meus Créditos
+</a>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

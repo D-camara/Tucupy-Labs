@@ -159,6 +159,65 @@
                     <p class="text-sm text-gray-500">Em transações completadas</p>
                     <div class="mt-4 h-1 bg-gradient-to-r from-yellow-500 to-yellow-300 rounded-full"></div>
                 </div>
+        </div>
+
+        <!-- Lista de Créditos do Produtor -->
+        {% if producer_credits %}
+        <div class="mt-12 animate-slide-up" style="animation-delay: 0.15s;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-display font-bold text-white">Meus Créditos</h2>
+                <a href="{% url 'credits:create' %}" 
+                   class="px-4 py-2 bg-gradient-to-r from-tucupi-green-600 to-tucupi-green-500 hover:from-tucupi-green-500 hover:to-tucupi-green-400 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-tucupi-green-500/50">
+                    + Criar Crédito
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for credit in producer_credits %}
+                <a href="{% url 'credits:credit_detail' credit.pk %}" 
+                   class="group glass rounded-xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition-all hover-glow block">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-1">{{ credit.amount }} {{ credit.unit }}</h3>
+                            <p class="text-sm text-gray-400">{{ credit.origin }}</p>
+                        </div>
+                        {% if credit.validation_status == 'APPROVED' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-green-500/10 text-green-500 rounded-full">✅ Aprovado</span>
+                        {% elif credit.validation_status == 'PENDING' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-yellow-500/10 text-yellow-500 rounded-full animate-pulse">🟡 Pendente</span>
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-blue-500/10 text-blue-500 rounded-full animate-pulse">🔵 Em Análise</span>
+                        {% elif credit.validation_status == 'REJECTED' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-red-500/10 text-red-500 rounded-full">❌ Rejeitado</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-gray-400">
+                            <span>Status:</span>
+                            <span class="font-medium text-white">{{ credit.get_status_display }}</span>
+                        </div>
+                        {% if credit.validated_by %}
+                        <div class="flex justify-between text-gray-400">
+                            <span>Auditor:</span>
+                            <span class="font-medium text-white">{{ credit.validated_by.username }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="flex justify-between text-gray-400">
+                            <span>Criado:</span>
+                            <span class="font-medium text-white">{{ credit.created_at|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-gray-500">ID: #{{ credit.id }}</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-tucupi-green-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
             {% elif user.role == 'COMPANY' %}
                 <!-- Cards específicos da Empresa -->
@@ -183,6 +242,21 @@
                 </div>
             {% endif %}
         </div>
+
+        <!-- Últimas Transações -->
+        <div class="mt-12 animate-slide-up" style="animation-delay: 0.2s;">
+            <h2 class="text-2xl font-display font-bold text-white mb-6">Últimas Transações</h2>
+
+            <div class="glass rounded-2xl overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Data</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Quantidade</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Valor</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Status</th>
 
         <!-- Últimas Transações -->
         <div class="mt-12 animate-slide-up" style="animation-delay: 0.2s;">

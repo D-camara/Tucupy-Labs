@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_tags %}
+
+{% block title %}Crédito #{{ credit.id }} - EcoTrade{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-6">
+            <a href="javascript:history.back()" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Voltar
+            </a>
+            
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-white">Crédito de Carbono #{{ credit.id }}</h1>
+                    <p class="text-gray-400">Detalhes e histórico de validação</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400 mb-1">Status de Validação</p>
+                        <span class="inline-flex px-4 py-2 rounded-full text-sm font-semibold
+                            {% if credit.validation_status == 'PENDING' %}bg-yellow-500/10 text-yellow-500
+                            {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-blue-500/10 text-blue-500
+                            {% elif credit.validation_status == 'APPROVED' %}bg-green-500/10 text-green-500
+                            {% else %}bg-red-500/10 text-red-500{% endif %}">
+                            {{ credit.get_validation_status_display }}
+                        </span>
+                    </div>
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center
+                        {% if credit.validation_status == 'PENDING' %}bg-yellow-500/20
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-blue-500/20
+                        {% elif credit.validation_status == 'APPROVED' %}bg-green-500/20
+                        {% else %}bg-red-500/20{% endif %}">
+                        {% if credit.validation_status == 'APPROVED' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        {% elif credit.validation_status == 'REJECTED' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-400 mb-1">Status de Listagem</p>
+                        <span class="inline-flex px-4 py-2 rounded-full text-sm font-semibold
+                            {% if credit.status == 'AVAILABLE' %}bg-gray-600 text-gray-200
+                            {% elif credit.status == 'LISTED' %}bg-blue-500/10 text-blue-400
+                            {% else %}bg-green-500/10 text-green-400{% endif %}">
+                            {{ credit.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações Principais -->
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 mb-6">
+            <div class="px-6 py-4 border-b border-gray-700">
+                <h2 class="text-xl font-bold text-white">Informações do Crédito</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm text-gray-400 mb-2">Proprietário</label>
+                        <div class="flex items-center gap-3 bg-gray-900/50 rounded-lg p-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-white font-semibold text-lg">{{ credit.owner.username }}</div>
+                                <div class="text-sm text-gray-400">{{ credit.owner.email }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Quantidade</label>
+                        <div class="bg-gray-900/50 rounded-lg p-4">
+                            <div class="text-3xl font-bold text-green-400">
+                                {{ credit.amount }}
+                                <span class="text-lg text-gray-400 font-normal">{{ credit.unit }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Origem</label>
+                        <div class="bg-gray-900/50 rounded-lg p-4">
+                            <div class="text-white font-medium">{{ credit.origin }}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Data de Geração</label>
+                        <div class="bg-gray-900/50 rounded-lg p-4">
+                            <div class="text-white font-medium">{{ credit.generation_date|date:"d/m/Y" }}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Data de Criação</label>
+                        <div class="bg-gray-900/50 rounded-lg p-4">
+                            <div class="text-white font-medium">{{ credit.created_at|date:"d/m/Y H:i" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Histórico de Validação -->
+        {% if credit.validated_by %}
+        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 mb-6">
+            <div class="px-6 py-4 border-b border-gray-700">
+                <h2 class="text-xl font-bold text-white">Histórico de Validação</h2>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
+                            {% if credit.validation_status == 'APPROVED' %}bg-green-500/20
+                            {% else %}bg-red-500/20{% endif %}">
+                            {% if credit.validation_status == 'APPROVED' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-white font-semibold">{{ credit.validated_by.username }}</span>
+                                <span class="px-2 py-1 bg-blue-500/10 text-blue-400 rounded text-xs font-medium">Auditor</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-3">{{ credit.validated_at|date:"d/m/Y H:i" }}</div>
+                            {% if credit.auditor_notes %}
+                            <div class="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                                <h4 class="text-sm font-semibold text-gray-300 mb-2">Observações do Auditor:</h4>
+                                <p class="text-gray-300 whitespace-pre-wrap">{{ credit.auditor_notes }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-yellow-900/20 backdrop-blur-sm rounded-xl border border-yellow-700/50 p-6 mb-6">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-1">Aguardando Validação</h3>
+                    <p class="text-gray-300 text-sm">Este crédito ainda não foi analisado por um auditor.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Informações Adicionais -->
+        <div class="bg-green-900/10 backdrop-blur-sm rounded-xl border border-green-700/30 p-6">
+            <h3 class="text-lg font-bold text-green-400 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Sobre Créditos de Carbono
+            </h3>
+            <div class="text-sm text-gray-300 space-y-2">
+                <p>
+                    Os créditos de carbono representam a redução ou remoção de gases de efeito estufa da atmosfera.
+                    Cada crédito equivale a uma tonelada de CO₂ ou seu equivalente em outros gases.
+                </p>
+                <p>
+                    O processo de validação garante que os créditos sejam legítimos, verificáveis e cumpram
+                    padrões ambientais rigorosos.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
