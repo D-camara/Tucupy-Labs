@@ -4,8 +4,9 @@
 {% block title %}Tucupi Labs · Marketplace de Créditos de Carbono{% endblock %}
 
 {% block content %}
+<main class="overflow-hidden">
 <!-- Hero Section -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden -mt-8">
+<section class="landing-section relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 -mt-8">
   <!-- Animated background elements -->
   <div class="absolute inset-0">
     <div class="absolute top-20 left-10 w-72 h-72 bg-tucupi-green-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -13,7 +14,7 @@
     <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-tucupi-green-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
   </div>
 
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <div class="relative z-10 max-w-5xl mx-auto text-center pt-20 pb-24">
     <!-- Logo/Badge -->
     <div class="flex justify-center mb-8 animate-fade-in">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-tucupi-green-500/30">
@@ -23,10 +24,9 @@
     </div>
 
     <!-- Main Heading -->
-    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up">
-      Conectando 
-      <span class="text-gradient">Sustentabilidade</span>
-      <br />ao Mercado Regional
+    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6 animate-slide-up">
+      Conectando <span class="text-gradient">Sustentabilidade</span>
+      <br class="hidden sm:block"/>ao Mercado Regional
     </h1>
 
     <!-- Subheading -->
@@ -50,7 +50,7 @@
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto animate-fade-in delay-500">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto animate-fade-in delay-500">
       <div class="glass rounded-lg p-6 hover-glow">
         <div class="text-3xl sm:text-4xl font-bold text-tucupi-green-500 mb-2">
           {{ total_co2|floatformat:0 }}+
@@ -85,8 +85,8 @@
 </section>
 
 <!-- Features Section -->
-<section class="py-24 relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="landing-section py-24 relative px-4 sm:px-6 lg:px-8 js-reveal">
+  <div class="max-w-6xl mx-auto">
     <!-- Section Header -->
     <div class="text-center mb-16">
       <h2 class="text-4xl sm:text-5xl font-bold mb-4">
@@ -98,7 +98,7 @@
     </div>
 
     <!-- Features Grid -->
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
       <!-- Feature 1 -->
       <div class="glass rounded-xl p-8 hover-glow group">
         <div class="w-14 h-14 bg-tucupi-green-500/20 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -175,8 +175,8 @@
 </section>
 
 <!-- Como Funciona Section -->
-<section id="como-funciona" class="py-24 relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section id="como-funciona" class="landing-section py-24 relative px-4 sm:px-6 lg:px-8 js-reveal">
+  <div class="max-w-6xl mx-auto">
     <!-- Section Header -->
     <div class="text-center mb-16">
       <h2 class="text-4xl sm:text-5xl font-bold mb-4">
@@ -192,14 +192,14 @@
       <!-- Connection line -->
       <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-tucupi-green-500/0 via-tucupi-green-500/50 to-tucupi-green-500/0 transform -translate-y-1/2"></div>
 
-      <div class="grid lg:grid-cols-3 gap-12 relative">
+      <div class="grid lg:grid-cols-3 gap-8 sm:gap-12 relative items-stretch steps-grid">
         <!-- Step 1 - Para Produtores -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative h-full">
+          <div class="glass rounded-xl p-8 hover-glow flex h-full flex-col step-card">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               1
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col items-center flex-1 step-content">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="user-plus" class="w-6 h-6 text-tucupi-green-500"></i>
                 Cadastre-se
@@ -208,7 +208,7 @@
                 Crie sua conta como Produtor ou Empresa. 
                 Adicione informações sobre sua fazenda ou empresa em minutos.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 step-meta">
                 <i data-lucide="check-circle" class="w-4 h-4"></i>
                 Gratuito e rápido
               </div>
@@ -217,12 +217,12 @@
         </div>
 
         <!-- Step 2 - Marketplace -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative h-full">
+          <div class="glass rounded-xl p-8 hover-glow flex h-full flex-col step-card">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               2
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col items-center flex-1 step-content">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="store" class="w-6 h-6 text-tucupi-green-500"></i>
                 Liste ou Compre
@@ -231,7 +231,7 @@
                 Produtores listam créditos no marketplace. 
                 Empresas navegam, comparam preços e adicionam saldo virtual.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 step-meta">
                 <i data-lucide="trending-up" class="w-4 h-4"></i>
                 Preços competitivos
               </div>
@@ -240,12 +240,12 @@
         </div>
 
         <!-- Step 3 - Transação -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative h-full">
+          <div class="glass rounded-xl p-8 hover-glow flex h-full flex-col step-card">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               3
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col items-center flex-1 step-content">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="arrow-right-left" class="w-6 h-6 text-tucupi-green-500"></i>
                 Transacione
@@ -254,7 +254,7 @@
                 Compra instantânea com transferência automática de propriedade. 
                 Histórico completo e transparente de todas as transações.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 step-meta">
                 <i data-lucide="shield" class="w-4 h-4"></i>
                 100% seguro
               </div>
@@ -265,7 +265,7 @@
     </div>
 
     <!-- User Type Cards -->
-    <div class="grid md:grid-cols-2 gap-8 mt-16">
+  <div class="grid md:grid-cols-2 gap-6 sm:gap-8 mt-16">
       <!-- Para Produtores -->
       <div class="glass rounded-xl p-8 border-2 border-tucupi-green-500/30 hover:border-tucupi-green-500 transition-all">
         <div class="flex items-center gap-3 mb-6">
@@ -330,14 +330,14 @@
 </section>
 
 <!-- CTA Final Section -->
-<section class="py-24 relative overflow-hidden">
+<section class="landing-section py-24 relative overflow-hidden px-4 sm:px-6 lg:px-8 js-reveal">
   <div class="absolute inset-0 bg-gradient-to-br from-tucupi-green-500/10 to-tucupi-accent/10"></div>
   
-  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+  <div class="relative max-w-4xl mx-auto text-center">
     <h2 class="text-4xl sm:text-5xl font-bold mb-6">
       Pronto para fazer a <span class="text-gradient">diferença?</span>
     </h2>
-    <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+    <p class="text-xl text-gray-300 mb-124 max-w-2xl mx-auto">
       Junte-se a produtores e empresas que já estão transformando 
       sustentabilidade em oportunidade real.
     </p>
@@ -377,6 +377,8 @@
   </div>
 </section>
 
+</main>
+
 <style>
   @keyframes fade-in {
     from { opacity: 0; }
@@ -402,37 +404,115 @@
     animation: slide-up 0.8s ease-out;
   }
   
+  .js-enabled .js-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .js-enabled .js-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .delay-200 {
     animation-delay: 0.2s;
     opacity: 0;
     animation-fill-mode: forwards;
   }
   
-  .delay-300 {
-    animation-delay: 0.3s;
-    opacity: 0;
-    animation-fill-mode: forwards;
-  }
-  
+  .delay-200,
+  .delay-300,
   .delay-500 {
-    animation-delay: 0.5s;
     opacity: 0;
     animation-fill-mode: forwards;
   }
   
-  .delay-1000 {
-    animation-delay: 1s;
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-500 { animation-delay: 0.5s; }
+
+  /* Forces step cards to align visually even when copy length differs */
+  .steps-grid {
+    align-items: stretch;
+  }
+  .steps-grid .step-card {
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .steps-grid .step-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .steps-grid .step-meta {
+    margin-top: auto;
   }
   
-  .delay-2000 {
-    animation-delay: 2s;
+  @media (max-width: 640px) {
+    .animate-slide-up {
+      line-height: 1.2;
+    }
+
+    .landing-section + .landing-section {
+      margin-top: 4rem;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in,
+    .animate-slide-up,
+    .delay-200,
+    .delay-300,
+    .delay-500,
+    .delay-1000,
+    .delay-2000 {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+    .js-enabled .js-reveal,
+    .js-enabled .js-reveal.is-visible {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  .landing-section + .landing-section {
+    margin-top: clamp(5.5rem, 10vw, 9rem);
   }
 </style>
 
 <script>
+  document.documentElement.classList.add('js-enabled');
+
   // Inicializar ícones Lucide
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
+  }
+
+  // Revelar seções ao rolar
+  const revealTargets = document.querySelectorAll('.js-reveal');
+  if (revealTargets.length) {
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      revealTargets.forEach(target => revealObserver.observe(target));
+    } else {
+      revealTargets.forEach(target => target.classList.add('is-visible'));
+    }
   }
   
   // Smooth scroll para âncoras

@@ -134,7 +134,7 @@
   <!-- Botão de Compra (para empresas) -->
   {% if user.is_authenticated and user.role == 'COMPANY' and credit.status == 'LISTED' and credit.owner != user %}
     <div class="glass rounded-2xl p-8 border-2 border-tucupi-green-500 bg-tucupi-green-500/10 mb-6 animate-scale-in">
-      <div class="flex items-center gap-3 mb-6">
+      <div class="flex items-center gap-3 mb-8">
         <div class="w-12 h-12 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center">
           <svg class="w-7 h-7 text-tucupi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -142,36 +142,125 @@
         </div>
         <h3 class="text-2xl font-bold text-white">Comprar este crédito</h3>
       </div>
-      
       {% if active_listings %}
         {% with listing=active_listings.0 %}
-          <div class="grid md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white/5 rounded-xl p-6 border border-white/10">
-              <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Preço por unidade</p>
-              <p class="text-3xl font-bold text-gradient">R$ {{ listing.price_per_unit }}</p>
-              <p class="text-xs text-gray-500 mt-1">por {{ credit.unit }}</p>
-            </div>
-            <div class="bg-white/5 rounded-xl p-6 border border-white/10">
-              <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Valor Total</p>
-              <p class="text-3xl font-bold text-gradient">
-                R$ {% widthratio credit.amount 1 listing.price_per_unit %}
-              </p>
-              <p class="text-xs text-gray-500 mt-1">{{ credit.amount }} {{ credit.unit }}</p>
-            </div>
-          </div>
-          
-          <form action="{% url 'credit_buy' credit.id %}" method="post">
+          <form action="{% url 'credit_buy' credit.id %}" method="post" class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" id="purchase-form" data-price="{{ listing.price_per_unit }}">
             {% csrf_token %}
-            <button type="submit" class="group relative w-full px-8 py-5 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold text-xl rounded-xl overflow-hidden transition-all hover:scale-105 shadow-glow-green">
-              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
-              <span class="relative z-10 flex items-center justify-center gap-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                </svg>
-                Comprar Agora
-              </span>
-            </button>
+            <!-- Resumo do crédito -->
+            <div class="space-y-6">
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+                  <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Preço por unidade</p>
+                  <p class="text-3xl font-bold text-gradient">R$ {{ listing.price_per_unit }}</p>
+                  <p class="text-xs text-gray-500 mt-1">por {{ credit.unit }}</p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+                  <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Quantidade disponível</p>
+                  <p class="text-3xl font-bold text-white" id="purchase-available">{{ credit.amount }}</p>
+                  <p class="text-xs text-gray-500 mt-1">{{ credit.unit }}</p>
+                </div>
+                <div class="bg-white/5 rounded-xl p-5 border border-white/10 sm:col-span-2 lg:col-span-1">
+                  <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Valor do lote atual</p>
+                  <p class="text-3xl font-bold text-gradient">R$ {% widthratio credit.amount 1 listing.price_per_unit %}</p>
+                  <p class="text-xs text-gray-500 mt-1">{{ credit.amount }} × R$ {{ listing.price_per_unit }}</p>
+                </div>
+              </div>
+
+              <div class="bg-white/5 rounded-xl p-5 border border-white/10 space-y-3">
+                <label for="purchase-quantity" class="text-sm font-semibold text-gray-200 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  Quantidade desejada
+                </label>
+                <input
+                  type="number"
+                  name="quantity"
+                  id="purchase-quantity"
+                  step="0.01"
+                  min="0.01"
+                  max="{{ credit.amount }}"
+                  value="{{ credit.amount }}"
+                  class="w-full rounded-lg bg-white/10 border border-white/15 px-4 py-3 text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/40 focus:outline-none"
+                  required
+                >
+                <p class="text-xs text-gray-400">Disponível: {{ credit.amount }} {{ credit.unit }} · mínimo de 0,01.</p>
+              </div>
+
+              <div class="bg-white/5 rounded-xl p-5 border border-white/10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-xs text-gray-400 uppercase tracking-wider">Produtor</p>
+                  <p class="text-lg font-semibold text-white">{{ credit.owner.username }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="h-10 w-10 rounded-full bg-tucupi-green-500/20 flex items-center justify-center text-tucupi-green-400">
+                    <i data-lucide="leaf" class="w-5 h-5"></i>
+                  </div>
+                  <p class="text-sm text-gray-400 max-w-xs">Compra direta com transferência automática de propriedade e histórico auditável.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Caixa de checkout -->
+            <div class="bg-white/5 rounded-xl border border-white/10 p-6 flex flex-col justify-between">
+              <div class="space-y-4">
+                <h4 class="text-xl font-semibold text-white">Resumo da compra</h4>
+                <dl class="space-y-3 text-sm text-gray-300">
+                  <div class="flex items-center justify-between">
+                    <dt class="text-gray-400">Subtotal</dt>
+                    <dd id="purchase-subtotal">R$ {% widthratio credit.amount 1 listing.price_per_unit %}</dd>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <dt class="text-gray-400">Taxas</dt>
+                    <dd class="text-gray-500">Inclusas</dd>
+                  </div>
+                  <div class="flex items-center justify-between text-base font-semibold text-white pt-2 border-t border-white/10">
+                    <dt>Total</dt>
+                    <dd id="purchase-total">R$ {% widthratio credit.amount 1 listing.price_per_unit %}</dd>
+                  </div>
+                </dl>
+
+                <div class="rounded-lg border border-tucupi-green-500/40 bg-tucupi-green-500/10 px-4 py-3 text-xs text-tucupi-green-200">
+                  <p>Saldo atual: <span class="font-semibold text-white">R$ {{ user.profile.balance|floatformat:2 }}</span></p>
+                  <p class="mt-1 text-tucupi-green-100/80">O valor será debitado automaticamente ao confirmar a compra.</p>
+                </div>
+              </div>
+
+              <button type="submit" class="mt-6 group relative w-full px-6 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold text-lg rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+                <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                  Confirmar compra
+                </span>
+              </button>
+
+              <p class="mt-3 text-[11px] text-gray-500">Ao confirmar você concorda com os termos do marketplace e autoriza a transferência imediata do crédito para sua carteira.</p>
+            </div>
           </form>
+          <script>
+            (function() {
+              const form = document.getElementById('purchase-form');
+              if (!form) { return; }
+              const quantityInput = form.querySelector('#purchase-quantity');
+              const subtotalEl = form.querySelector('#purchase-subtotal');
+              const totalEl = form.querySelector('#purchase-total');
+              const price = parseFloat(form.dataset.price);
+              const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+              function updateTotals() {
+                const quantity = Math.max(0, parseFloat(quantityInput.value || '0'));
+                const subtotal = quantity * price;
+                const display = formatter.format(isNaN(subtotal) ? 0 : subtotal);
+                subtotalEl.textContent = display;
+                totalEl.textContent = display;
+              }
+
+              quantityInput.addEventListener('input', updateTotals);
+              updateTotals();
+            })();
+          </script>
         {% endwith %}
       {% endif %}
     </div>
