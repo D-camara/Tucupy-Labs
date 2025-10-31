@@ -13,8 +13,10 @@ EcoTrade conecta produtores de créditos de carbono com empresas interessadas em
 - 🌿 **Marketplace de Créditos** com listagens ativas
 - ✅ **Sistema de Validação por Auditores** antes da listagem
 - 💰 **Transações Seguras** com histórico completo
-- 📧 **Notificações por Email** para eventos importantes
-- 🎨 **Interface Moderna** com TailwindCSS 4.x
+- � **API Pública de Transparência** com dados anonimizados
+- 📡 **Transações em Tempo Real** via Server-Sent Events (SSE)
+- 🔒 **Privacidade Protegida** - dados pessoais nunca são expostos publicamente
+- 🎨 **Interface Moderna** com TailwindCSS 4.x e Lucide Icons
 - 📱 **Design Responsivo** para todos os dispositivos
 
 ## 🚀 Stack Tecnológica
@@ -32,13 +34,11 @@ EcoTrade conecta produtores de créditos de carbono com empresas interessadas em
 ecotrade/
 ├── accounts/          # Autenticação, usuários, auditores
 ├── credits/           # Créditos de carbono, marketplace
-├── transactions/      # Compras e histórico
-├── dashboard/         # Dashboard personalizado
-├── theme/             # TailwindCSS configuração
-├── templates/         # Templates globais
-├── docs/              # Documentação adicional
-│   ├── setup/        # Guias de configuração
-│   └── testing/      # Planos de teste
+├── transactions/      # Compras e histórico (público + privado)
+├── dashboard/         # Dashboard personalizado + Landing page
+├── api/               # API pública de transparência (REST)
+├── theme/             # TailwindCSS 4.x configuração
+├── templates/         # Templates globais (base, landing, API docs)
 └── ecotrade/          # Configuração Django
 ```
 
@@ -173,18 +173,66 @@ python manage.py test dashboard
 2. **Auditor revisa** → Status: `UNDER_REVIEW`
 3. **Auditor aprova** → Status: `APPROVED`
 4. **Produtor lista no marketplace** → Status: `LISTED`
-5. **Empresa compra** → Transação criada
+5. **Empresa compra** → Transação criada (visível publicamente em tempo real)
 6. **Transferência de propriedade** → Status: `SOLD`
+
+## 🔓 API Pública de Transparência
+
+O sistema oferece uma API REST pública (sem autenticação) para transparência total do mercado de créditos:
+
+### Endpoints Disponíveis
+
+```bash
+# Estatísticas gerais
+GET /api/stats/
+
+# Lista de créditos aprovados
+GET /api/credits/
+GET /api/credits/?status=LISTED
+GET /api/credits/?validation_status=APPROVED
+GET /api/credits/?limit=50&offset=0
+
+# Detalhes de um crédito
+GET /api/credits/{id}/
+```
+
+### Dados Anonimizados
+
+Por questões de privacidade, a API **nunca expõe**:
+- ❌ Nomes de produtores ou empresas
+- ❌ Nomes de fazendas ou localização específica
+- ❌ Emails ou informações de contato
+- ❌ Notas internas de auditoria
+
+**Dados públicos incluem apenas**:
+- ✅ Quantidade de créditos e unidade
+- ✅ Status e validação
+- ✅ Tipo de dono (PRODUCER/COMPANY)
+- ✅ Datas de criação e atualização
+- ✅ Estatísticas agregadas do mercado
+
+### Documentação Interativa
+
+Acesse `/api/docs/` para ver a documentação interativa com exemplos testáveis em tempo real.
+
+## 📡 Transações em Tempo Real
+
+O sistema oferece uma visualização pública de transações em tempo real usando **Server-Sent Events (SSE)**:
+
+- **URL**: `/transactions/public/`
+- **Tecnologia**: SSE para atualizações automáticas
+- **Dados**: Anonimizados (sem nomes, fazendas ou info pessoal)
+- **Diferenciação**: Interface mostra diferença entre dados públicos e privados
+
+Usuários logados veem detalhes completos em `/transactions/` (área privada).
 
 ## 📧 Configuração de Email
 
 O sistema envia emails para:
-- Confirmação de registro
 - Candidatura de auditor recebida
-- Aprovação/Rejeição de candidatura
-- Validação de crédito (aprovado/rejeitado)
+- Aprovação/Rejeição de candidatura de auditor
 
-Ver: `docs/setup/EMAIL_SETUP.md` para configuração detalhada.
+**Nota**: Emails de validação de créditos foram desabilitados por padrão para simplificar o desenvolvimento local.
 
 ## 🎨 Customização Visual
 
@@ -257,16 +305,19 @@ python manage.py seed_transactions             # Criar transações de teste
 
 ## 📊 Status do Projeto
 
-- ✅ Autenticação e RBAC
-- ✅ Dashboard personalizado
-- ✅ Marketplace de créditos
+- ✅ Autenticação e RBAC completo
+- ✅ Dashboard personalizado por role
+- ✅ Marketplace de créditos com filtros
 - ✅ Sistema de validação por auditores
-- ✅ Transações e histórico
-- ✅ Notificações por email
-- ✅ Interface moderna com Tailwind
-- ⏳ Relatórios e análises (futuro)
-- ⏳ API REST (futuro)
-- ⏳ Integração com blockchain (futuro)
+- ✅ Transações e histórico completo
+- ✅ **API Pública REST** com dados anonimizados
+- ✅ **Transações em tempo real** (SSE)
+- ✅ Landing page pública com transparência
+- ✅ Sistema de candidatura para auditores
+- ✅ Notificações por email (auditores)
+- ✅ Interface moderna com TailwindCSS 4.x + Lucide Icons
+- ✅ Privacidade e anonimização de dados públicos
+- ✅ Documentação interativa da API
 
 ## 📄 Licença
 
@@ -276,8 +327,3 @@ Este projeto está sob a licença MIT. Ver arquivo LICENSE para mais detalhes.
 
 **Tucupy Labs**  
 Marketplace Regional de Créditos de Carbono
-
----
-
-**Branch Atual**: `Validação-de-créditos`  
-**Última Atualização**: Outubro 2025
