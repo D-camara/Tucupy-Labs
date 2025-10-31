@@ -7,12 +7,17 @@ from django.db.models import Sum
 
 def landing_page(request):
     """Landing page pública para visitantes não autenticados."""
+    from accounts.models import User
+    
     # Estatísticas públicas
     context = {
         'total_credits': CarbonCredit.objects.count(),
         'total_listings': CreditListing.objects.filter(is_active=True).count(),
         'total_transactions': Transaction.objects.filter(status='COMPLETED').count(),
         'total_co2': CarbonCredit.objects.aggregate(total=Sum('amount'))['total'] or 0,
+        # Estatísticas de auditores
+        'auditor_count': User.objects.filter(role=User.Roles.AUDITOR, is_active=True).count(),
+        'validated_count': CarbonCredit.objects.filter(validation_status='APPROVED').count(),
     }
     return render(request, "landing.html", context)
 
@@ -28,7 +33,8 @@ def index(request):
     # Carteira (comum a todos os usuários)
     context['my_credits'] = CarbonCredit.objects.filter(
         owner=user, 
-        status='AVAILABLE'
+        status='AVAILABLE',
+        is_deleted=False
     ).aggregate(
         total_amount=Sum('amount')
     )['total_amount'] or 0
@@ -50,6 +56,11 @@ def index(request):
         ).aggregate(
             total=Sum('total_price')
         )['total'] or 0
+        # Lista de todos os créditos do produtor (incluindo não deletados)
+        context['producer_credits'] = CarbonCredit.objects.filter(
+            owner=user,
+            is_deleted=False
+        ).order_by('-created_at')
         
     elif user.role == 'COMPANY':
         # Dados específicos da empresa

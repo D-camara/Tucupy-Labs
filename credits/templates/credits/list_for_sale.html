@@ -13,7 +13,7 @@
       Mostra erros de validação quando o crédito não está disponível
       ou já existe uma listagem ativa.
     -->
-    <a href="{% url 'credit_detail' credit.id %}">← Voltar</a>
+    <a href="{% url 'credits:credit_detail' credit.id %}">← Voltar</a>
     <h1>Listar Crédito #{{ credit.id }}</h1>
     <!-- Formulário para definir o preço e criar a listagem ativa -->
     <form method="post">
@@ -29,7 +29,7 @@
       {% endif %}
       <div style="margin-top:1rem">
         <button type="submit">Listar</button>
-        <a href="{% url 'credit_detail' credit.id %}">Cancelar</a>
+        <a href="{% url 'credits:credit_detail' credit.id %}">Cancelar</a>
       </div>
     </form>
   </body>

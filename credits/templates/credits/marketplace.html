@@ -10,7 +10,7 @@
       <p class="text-gray-400">Explore e adquira créditos de carbono verificados</p>
     </div>
     {% if user.is_authenticated and user.role == 'PRODUCER' %}
-      <a href="{% url 'credit_create' %}" class="group relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+      <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
         <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
         <span class="relative z-10 flex items-center gap-2">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
           </div>
           
           <!-- CTA -->
-          <a href="{% url 'credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
             <span class="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition"></span>
             <span class="relative z-10 flex items-center gap-2">
               Ver Detalhes
@@ -139,7 +139,7 @@
         Não há listagens ativas no momento. Seja o primeiro a cadastrar um crédito!
       </p>
       {% if user.is_authenticated and user.role == 'PRODUCER' %}
-        <a href="{% url 'credit_create' %}" class="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+        <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
           <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
           <span class="relative z-10 flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

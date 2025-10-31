@@ -209,17 +209,49 @@ class RBACTests(TestCase):
     def test_producer_can_create_credit(self):
         """Producer consegue acessar tela de criar crédito."""
         self.client.force_login(self.producer)
-        resp = self.client.get(reverse("credit_create"))
+        resp = self.client.get(reverse("credits:credit_create"))
         self.assertEqual(resp.status_code, 200)
 
     def test_company_cannot_create_credit(self):
         """Company recebe 403 ao tentar criar crédito."""
         self.client.force_login(self.company)
-        resp = self.client.get(reverse("credit_create"))
+        resp = self.client.get(reverse("credits:credit_create"))
         self.assertEqual(resp.status_code, 403)
 
     def test_unauthenticated_cannot_create_credit(self):
         """Usuário não autenticado recebe 403 ou redirecionamento ao tentar criar crédito."""
-        resp = self.client.get(reverse("credit_create"))
+        resp = self.client.get(reverse("credits:credit_create"))
         # Pode ser 403 (PermissionDenied) ou 302 (redirecionamento para LoginRequired)
         self.assertIn(resp.status_code, [302, 403])
+
+
+class AdminAccessTests(TestCase):
+    """Testes da propriedade is_admin e acesso ao dashboard."""
+
+    def test_superuser_is_admin(self):
+        """Superuser deve ter is_admin=True."""
+        superuser = User.objects.create_superuser(
+            username="super", password="pass123", email="super@test.com"
+        )
+        self.assertTrue(superuser.is_admin)
+        # Signal deve ter atribuído role ADMIN automaticamente
+        superuser.refresh_from_db()
+        self.assertEqual(superuser.role, User.Roles.ADMIN)
+
+    def test_admin_role_is_admin(self):
+        """Usuário com role ADMIN deve ter is_admin=True."""
+        admin = User.objects.create_user(
+            username="admin", password="pass123", role=User.Roles.ADMIN
+        )
+        self.assertTrue(admin.is_admin)
+
+    def test_regular_user_not_admin(self):
+        """Usuário comum (producer/company) não deve ter is_admin=True."""
+        producer = User.objects.create_user(
+            username="producer", password="pass123", role=User.Roles.PRODUCER
+        )
+        company = User.objects.create_user(
+            username="company", password="pass123", role=User.Roles.COMPANY
+        )
+        self.assertFalse(producer.is_admin)
+        self.assertFalse(company.is_admin)

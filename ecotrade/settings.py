@@ -1,6 +1,10 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 import django_stubs_ext
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
 
 django_stubs_ext.monkeypatch()
 
@@ -97,6 +101,10 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Media files (uploads)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -112,3 +120,37 @@ INTERNAL_IPS = [
 
 # caminho de exemplo no Windows — ajuste conforme seu ambiente
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
+
+# ==============================================================================
+# EMAIL CONFIGURATION
+# ==============================================================================
+
+# Email backend - SMTP real (Gmail) para envio local
+# Nota: Projeto funciona 100% localmente, emails serão enviados de verdade
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend"  # SMTP real por padrão
+    # "django.core.mail.backends.console.EmailBackend"  # Descomente para debug (imprime no terminal)
+)
+
+# Configurações SMTP (Gmail)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "False") == "True"
+
+# Credenciais (usar variáveis de ambiente em produção)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "tucupilabs@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")  # Senha de app do Gmail
+
+# Email padrão para envio
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "Tucupi Labs <tucupilabs@gmail.com>")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL  # Para emails de erro do servidor
+
+# URL do site (para links nos emails)
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000")
+SITE_NAME = "Tucupi Labs"
+
+# Timeout para conexões SMTP (em segundos)
+EMAIL_TIMEOUT = 30

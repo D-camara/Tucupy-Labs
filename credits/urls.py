@@ -3,6 +3,7 @@ from . import views
 # Import da view de compra
 from transactions.views import buy_credit
 
+app_name = "credits"
 
 urlpatterns = [
     # Página principal do marketplace (lista listagens ativas)
@@ -17,5 +18,10 @@ urlpatterns = [
     path("<int:pk>/list/", views.list_for_sale, name="credit_list_for_sale"),
     # Compra de crédito (apenas empresas - Company-only)
     path("<int:pk>/buy/", buy_credit, name="credit_buy"),
+    
+    # Auditoria (apenas auditores)
+    path("audit/dashboard/", views.auditor_dashboard, name="auditor_dashboard"),
+    path("audit/<int:pk>/review/", views.review_credit, name="review_credit"),
+    path("audit/<int:pk>/view/", views.view_credit, name="view_credit"),
 ]
 

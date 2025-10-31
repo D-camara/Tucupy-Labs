@@ -51,14 +51,14 @@ class BuyCreditViewTests(TestCase):
 
     def test_buy_credit_requires_authentication(self):
         """Compra requer autenticação."""
-        resp = self.client.post(reverse("credit_buy", kwargs={"pk": self.credit.id}))
+        resp = self.client.post(reverse("credits:credit_buy", kwargs={"pk": self.credit.id}))
         # Deve retornar 403 ou redirecionar para login
         self.assertIn(resp.status_code, [302, 403])
 
     def test_buy_credit_requires_company_role(self):
         """Apenas empresas podem comprar créditos."""
         self.client.force_login(self.producer)
-        resp = self.client.post(reverse("credit_buy", kwargs={"pk": self.credit.id}))
+        resp = self.client.post(reverse("credits:credit_buy", kwargs={"pk": self.credit.id}))
         # Pode ser 403 (PermissionDenied) ou 302 (redirect)
         self.assertIn(resp.status_code, [302, 403])
 
@@ -66,7 +66,7 @@ class BuyCreditViewTests(TestCase):
         """Empresa pode comprar crédito listado com sucesso."""
         self.client.force_login(self.company)
         resp = self.client.post(
-            reverse("credit_buy", kwargs={"pk": self.credit.id}), follow=True
+            reverse("credits:credit_buy", kwargs={"pk": self.credit.id}), follow=True
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -95,7 +95,7 @@ class BuyCreditViewTests(TestCase):
 
         self.client.force_login(self.company)
         resp = self.client.post(
-            reverse("credit_buy", kwargs={"pk": self.credit.id}), follow=True
+            reverse("credits:credit_buy", kwargs={"pk": self.credit.id}), follow=True
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -111,7 +111,7 @@ class BuyCreditViewTests(TestCase):
         self.producer.save()
 
         resp = self.client.post(
-            reverse("credit_buy", kwargs={"pk": self.credit.id}), follow=True
+            reverse("credits:credit_buy", kwargs={"pk": self.credit.id}), follow=True
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -121,7 +121,7 @@ class BuyCreditViewTests(TestCase):
     def test_buy_credit_requires_post(self):
         """Compra requer método POST."""
         self.client.force_login(self.company)
-        resp = self.client.get(reverse("credit_buy", kwargs={"pk": self.credit.id}))
+        resp = self.client.get(reverse("credits:credit_buy", kwargs={"pk": self.credit.id}))
         self.assertEqual(resp.status_code, 405)  # Method Not Allowed
 
 
@@ -170,14 +170,14 @@ class TransactionHistoryViewTests(TestCase):
 
     def test_history_requires_authentication(self):
         """Histórico requer autenticação."""
-        resp = self.client.get(reverse("transaction_history"))
+        resp = self.client.get(reverse("transactions:transaction_history"))
         self.assertEqual(resp.status_code, 302)
         self.assertIn("/accounts/login/", resp.url)
 
     def test_history_shows_user_transactions(self):
         """Histórico mostra transações do usuário."""
         self.client.force_login(self.company)
-        resp = self.client.get(reverse("transaction_history"))
+        resp = self.client.get(reverse("transactions:transaction_history"))
 
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Histórico de Transações")
@@ -188,7 +188,7 @@ class TransactionHistoryViewTests(TestCase):
     def test_history_producer_sees_sales(self):
         """Produtor vê suas vendas no histórico."""
         self.client.force_login(self.producer)
-        resp = self.client.get(reverse("transaction_history"))
+        resp = self.client.get(reverse("transactions:transaction_history"))
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.context["transactions"]), 2)
@@ -201,7 +201,7 @@ class TransactionHistoryViewTests(TestCase):
             username="newuser", password="pass123", role=User.Roles.COMPANY
         )
         self.client.force_login(new_user)
-        resp = self.client.get(reverse("transaction_history"))
+        resp = self.client.get(reverse("transactions:transaction_history"))
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.context["transactions"]), 0)

@@ -45,7 +45,7 @@ class CreditsMarketplaceTests(TestCase):
     def test_create_credit_requires_producer_role(self):
         """Somente produtor pode acessar/usar a tela de criação de crédito."""
         self.client.force_login(self.company)
-        url = reverse("credit_create")
+        url = reverse("credits:credit_create")
         # GET should be forbidden for non-producer
         resp_get = self.client.get(url)
         self.assertEqual(resp_get.status_code, 403)
@@ -64,7 +64,7 @@ class CreditsMarketplaceTests(TestCase):
     def test_create_credit_success_by_producer(self):
         """Produtor consegue criar crédito com sucesso e é redirecionado ao detalhe."""
         self.client.force_login(self.producer)
-        url = reverse("credit_create")
+        url = reverse("credits:credit_create")
         resp = self.client.post(
             url,
             {
@@ -86,7 +86,7 @@ class CreditsMarketplaceTests(TestCase):
         """Apenas o produtor dono do crédito pode listar para venda."""
         credit = self.create_credit(owner=self.producer)
         self.client.force_login(self.producer2)
-        url = reverse("credit_list_for_sale", args=[credit.pk])
+        url = reverse("credits:credit_list_for_sale", args=[credit.pk])
         resp = self.client.post(url, {"price_per_unit": 100})
         self.assertEqual(resp.status_code, 403)
 
@@ -94,7 +94,7 @@ class CreditsMarketplaceTests(TestCase):
         """Listar cria a CreditListing e atualiza status do crédito para LISTED."""
         credit = self.create_credit(owner=self.producer)
         self.client.force_login(self.producer)
-        url = reverse("credit_list_for_sale", args=[credit.pk])
+        url = reverse("credits:credit_list_for_sale", args=[credit.pk])
         resp = self.client.post(url, {"price_per_unit": 99.99}, follow=True)
         self.assertEqual(resp.status_code, 200)
         credit.refresh_from_db()
@@ -110,7 +110,7 @@ class CreditsMarketplaceTests(TestCase):
         credit.save(update_fields=["status"])
 
         self.client.force_login(self.producer)
-        url = reverse("credit_list_for_sale", args=[credit.pk])
+        url = reverse("credits:credit_list_for_sale", args=[credit.pk])
         resp = self.client.post(url, {"price_per_unit": 60})
         # Should render form with error (no redirect)
         self.assertEqual(resp.status_code, 200)
@@ -141,7 +141,7 @@ class CreditsMarketplaceTests(TestCase):
         credit3.status = CarbonCredit.Status.SOLD
         credit3.save(update_fields=["status"])
 
-        resp = self.client.get(reverse("credits_marketplace"))
+        resp = self.client.get(reverse("credits:credits_marketplace"))
         self.assertEqual(resp.status_code, 200)
         listings = list(resp.context["listings"])  # type: ignore[index]
         self.assertEqual(len(listings), 1)
@@ -155,19 +155,19 @@ class CreditsMarketplaceTests(TestCase):
             c.status = CarbonCredit.Status.LISTED
             c.save(update_fields=["status"])
 
-        resp1 = self.client.get(reverse("credits_marketplace"))
+        resp1 = self.client.get(reverse("credits:credits_marketplace"))
         self.assertEqual(resp1.status_code, 200)
         self.assertTrue(resp1.context["is_paginated"])  # type: ignore[index]
         self.assertEqual(len(resp1.context["listings"]), 10)  # type: ignore[index]
 
-        resp2 = self.client.get(reverse("credits_marketplace") + "?page=2")
+        resp2 = self.client.get(reverse("credits:credits_marketplace") + "?page=2")
         self.assertEqual(resp2.status_code, 200)
         self.assertEqual(len(resp2.context["listings"]), 1)  # type: ignore[index]
 
     def test_credit_detail_page_loads(self):
         """Página de detalhe deve renderizar e conter dados do crédito."""
         credit = self.create_credit(owner=self.producer)
-        resp = self.client.get(reverse("credit_detail", args=[credit.pk]))
+        resp = self.client.get(reverse("credits:credit_detail", args=[credit.pk]))
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, str(credit.amount))
         self.assertContains(resp, credit.origin)

@@ -17,4 +17,12 @@ urlpatterns = [
     
     # Saldo (apenas para empresas)
     path("add-balance/", views.add_balance_view, name="add_balance"),
+    
+    # Candidatura de auditor
+    path("auditor/apply/", views.auditor_application_view, name="auditor_apply"),
+    
+    # Admin dashboard
+    path("admin/dashboard/", views.admin_dashboard_view, name="admin_dashboard"),
+    path("admin/auditor/<int:pk>/approve/", views.approve_auditor_view, name="approve_auditor"),
+    path("admin/auditor/<int:pk>/reject/", views.reject_auditor_view, name="reject_auditor"),
 ]

@@ -5,7 +5,7 @@
 <div class="max-w-5xl mx-auto animate-fade-in">
   <!-- Breadcrumb -->
   <div class="mb-6 animate-slide-down">
-    <a href="{% url 'credits_marketplace' %}" class="inline-flex items-center gap-2 text-tucupi-green-400 hover:text-tucupi-accent transition group">
+    <a href="{% url 'credits:credits_marketplace' %}" class="inline-flex items-center gap-2 text-tucupi-green-400 hover:text-tucupi-accent transition group">
       <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
@@ -26,7 +26,7 @@
         </div>
       </div>
       <!-- History Link Button -->
-      <a href="{% url 'credit_history' credit.id %}" class="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:scale-105 transition-all shadow-lg">
+      <a href="{% url 'credits:credit_history' credit.id %}" class="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:scale-105 transition-all shadow-lg">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
@@ -87,6 +87,44 @@
             </span>
           {% endif %}
         </p>
+      </div>
+
+      <!-- Status de Validação -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Validação</span>
+        </div>
+        <p class="text-lg font-semibold">
+          {% if credit.validation_status == 'APPROVED' %}
+            <span class="text-green-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+              Aprovado
+            </span>
+          {% elif credit.validation_status == 'PENDING' %}
+            <span class="text-yellow-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
+              Aguardando Validação
+            </span>
+          {% elif credit.validation_status == 'UNDER_REVIEW' %}
+            <span class="text-blue-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></span>
+              Em Análise
+            </span>
+          {% elif credit.validation_status == 'REJECTED' %}
+            <span class="text-red-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+              Rejeitado
+            </span>
+          {% endif %}
+        </p>
+        {% if credit.validated_by %}
+          <p class="text-xs text-gray-500 mt-1">Por {{ credit.validated_by.username }}</p>
+        {% endif %}
       </div>
 
       <!-- Origem -->
@@ -160,7 +198,7 @@
             </div>
           </div>
           
-          <form action="{% url 'credit_buy' credit.id %}" method="post">
+          <form action="{% url 'credits:credit_buy' credit.id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="group relative w-full px-8 py-5 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold text-xl rounded-xl overflow-hidden transition-all hover:scale-105 shadow-glow-green">
               <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
@@ -187,7 +225,7 @@
         Listar para venda
       </h3>
       
-      <form action="{% url 'credit_list_for_sale' credit.id %}" method="post" class="space-y-6">
+      <form action="{% url 'credits:credit_list_for_sale' credit.id %}" method="post" class="space-y-6">
         {% csrf_token %}
         {% if listing_form.non_field_errors %}
           <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
