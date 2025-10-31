@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Pública - EcoTrade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0a1f1a 0%, #1a3329 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .endpoints {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .endpoint-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .endpoint-card:hover {
+            border-color: #4ade80;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.2);
+        }
+        
+        .endpoint-title {
+            color: #4ade80;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .endpoint-url {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #a3e635;
+            margin: 1rem 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .endpoint-url:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .copy-btn {
+            background: #4ade80;
+            color: #0a1f1a;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #22c55e;
+        }
+        
+        .test-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a1f1a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .test-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(74, 222, 128, 0.4);
+        }
+        
+        .response-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .response-box.show {
+            display: block;
+        }
+        
+        .response-box pre {
+            color: #a3e635;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .loading {
+            color: #4ade80;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #ef4444;
+        }
+        
+        .params {
+            margin-top: 1rem;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        .params code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: #a3e635;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #4ade80;
+            color: #0a1f1a;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 API Pública EcoTrade</h1>
+        <p class="subtitle">
+            API aberta para consulta de créditos de carbono registrados.<br>
+            Promovendo transparência no mercado de carbono regional.
+        </p>
+        
+        <div class="endpoints">
+            <!-- Endpoint 1: Stats -->
+            <div class="endpoint-card">
+                <div class="endpoint-title">
+                    📊 Estatísticas Gerais
+                    <span class="badge">GET</span>
+                </div>
+                <p style="color: #9ca3af; margin-bottom: 1rem;">
+                    Retorna estatísticas públicas do sistema (total de créditos, CO2, usuários, transações).
+                </p>
+                <div class="endpoint-url">
+                    <code id="url-stats">/api/stats/</code>
+                    <button class="copy-btn" onclick="copyUrl('url-stats')">📋 Copiar</button>
+                </div>
+                <button class="test-btn" onclick="testEndpoint('/api/stats/', 'response-stats')">
+                    🚀 Testar Endpoint
+                </button>
+                <div id="response-stats" class="response-box"></div>
+            </div>
+            
+            <!-- Endpoint 2: Credits List -->
+            <div class="endpoint-card">
+                <div class="endpoint-title">
+                    📋 Lista de Créditos
+                    <span class="badge">GET</span>
+                </div>
+                <p style="color: #9ca3af; margin-bottom: 1rem;">
+                    Lista todos os créditos de carbono aprovados e disponíveis publicamente.
+                </p>
+                <div class="endpoint-url">
+                    <code id="url-credits">/api/credits/</code>
+                    <button class="copy-btn" onclick="copyUrl('url-credits')">📋 Copiar</button>
+                </div>
+                <div class="params">
+                    <strong>Parâmetros opcionais:</strong><br>
+                    • <code>status</code> - Filtrar por status (AVAILABLE, LISTED, SOLD)<br>
+                    • <code>limit</code> - Número de resultados (padrão: 100, máx: 500)<br>
+                    • <code>offset</code> - Paginação (pular N resultados)<br>
+                    <br>
+                    <strong>Exemplo:</strong> <code>/api/credits/?status=LISTED&limit=5</code>
+                </div>
+                <button class="test-btn" onclick="testEndpoint('/api/credits/?limit=5', 'response-credits')">
+                    🚀 Testar Endpoint (5 resultados)
+                </button>
+                <div id="response-credits" class="response-box"></div>
+            </div>
+            
+            <!-- Endpoint 3: Credit Detail -->
+            <div class="endpoint-card">
+                <div class="endpoint-title">
+                    🔍 Detalhe de Crédito
+                    <span class="badge">GET</span>
+                </div>
+                <p style="color: #9ca3af; margin-bottom: 1rem;">
+                    Retorna informações detalhadas de um crédito específico (incluindo dados do auditor).
+                </p>
+                <div class="endpoint-url">
+                    <code id="url-detail">/api/credits/{id}/</code>
+                    <button class="copy-btn" onclick="copyUrl('url-detail')">📋 Copiar</button>
+                </div>
+                <div class="params">
+                    <strong>Parâmetro:</strong><br>
+                    • <code>id</code> - ID do crédito<br>
+                    <br>
+                    <strong>Exemplo:</strong> <code>/api/credits/1/</code>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <input 
+                        type="number" 
+                        id="credit-id" 
+                        placeholder="ID do crédito (ex: 1)" 
+                        style="width: 200px; padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(74, 222, 128, 0.3); background: rgba(0,0,0,0.3); color: #e0e0e0;"
+                    >
+                    <button class="test-btn" style="margin-left: 1rem; margin-top: 0;" onclick="testCreditDetail()">
+                        🚀 Testar
+                    </button>
+                </div>
+                <div id="response-detail" class="response-box"></div>
+            </div>
+        </div>
+        
+        <div style="background: rgba(74, 222, 128, 0.1); border-left: 4px solid #4ade80; padding: 1.5rem; border-radius: 8px;">
+            <strong style="color: #4ade80;">💡 Dica para desenvolvedores:</strong><br>
+            <p style="color: #9ca3af; margin-top: 0.5rem;">
+                Todos os endpoints retornam JSON. Use essas URLs para integrar com aplicativos externos,
+                dashboards, ou ferramentas de análise. A API não requer autenticação (pública).
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function copyUrl(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(window.location.origin + text);
+            alert('URL copiada: ' + window.location.origin + text);
+        }
+        
+        async function testEndpoint(url, responseId) {
+            const responseBox = document.getElementById(responseId);
+            responseBox.classList.add('show');
+            responseBox.innerHTML = '<p class="loading">⏳ Carregando...</p>';
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                responseBox.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                responseBox.innerHTML = '<p class="error">❌ Erro: ' + error.message + '</p>';
+            }
+        }
+        
+        function testCreditDetail() {
+            const creditId = document.getElementById('credit-id').value;
+            if (!creditId) {
+                alert('Por favor, insira um ID de crédito');
+                return;
+            }
+            testEndpoint(`/api/credits/${creditId}/`, 'response-detail');
+        }
+    </script>
+</body>
+</html>
