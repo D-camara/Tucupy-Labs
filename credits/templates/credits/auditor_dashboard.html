@@ -89,9 +89,9 @@
         <!-- Content -->
         <div class="glass rounded-b-xl border border-white/10 border-t-0 p-6 animate-slide-up" style="animation-delay: 0.3s;">
             
-            {% if credits %}
+            {% if page_obj.object_list %}
                 <div class="space-y-4">
-                    {% for credit in credits %}
+                    {% for credit in page_obj %}
                     <div class="glass rounded-xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition hover-glow">
                         <div class="flex items-start justify-between">
                             <div class="flex-1">
@@ -178,6 +178,38 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% if is_paginated %}
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pt-6 border-t border-white/5 mt-6">
+                    <div class="text-sm text-gray-400">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </div>
+                    <div class="flex items-center gap-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?tab={{ current_tab }}&page={{ page_obj.previous_page_number }}" class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/10 text-sm font-medium text-gray-200 hover:text-white hover:border-tucupi-green-500/50 rounded-lg transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            Anterior
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/5 text-sm font-medium text-gray-600 rounded-lg cursor-not-allowed">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            Anterior
+                        </span>
+                        {% endif %}
+
+                        {% if page_obj.has_next %}
+                        <a href="?tab={{ current_tab }}&page={{ page_obj.next_page_number }}" class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/10 text-sm font-medium text-gray-200 hover:text-white hover:border-tucupi-green-500/50 rounded-lg transition">
+                            Próxima
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/5 text-sm font-medium text-gray-600 rounded-lg cursor-not-allowed">
+                            Próxima
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
             {% else %}
                 <div class="text-center py-12">
                     <div class="inline-flex items-center justify-center w-16 h-16 glass rounded-full mb-4 border border-white/10">
