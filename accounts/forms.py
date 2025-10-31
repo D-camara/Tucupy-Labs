@@ -1,124 +1,45 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Profile
+from django.contrib.auth.forms import UserCreationForm
+from .models import User, AuditorProfile
 
-
-class RegistrationForm(UserCreationForm):
-    """Formulário de registro de novos usuários (com escolha de papel).
-    
-    Nota: A opção ADMIN não está disponível no registro público.
-    Administradores devem ser criados via Django admin por um superuser.
+class AuditorRegistrationForm(UserCreationForm):
     """
-    
-    # Sobrescrever campos para adicionar classes CSS
-    username = forms.CharField(
-        max_length=150,
-        widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
-            "placeholder": "seu_usuario"
-        })
-    )
-    
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
-            "placeholder": "seu@email.com"
-        })
-    )
-    
-    password1 = forms.CharField(
-        label="Senha",
-        strip=False,
-        widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
-            "placeholder": "••••••••"
-        })
-    )
-    
-    password2 = forms.CharField(
-        label="Confirmar senha",
-        strip=False,
-        widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
-            "placeholder": "••••••••"
-        })
-    )
-    
-    # Apenas PRODUCER e COMPANY disponíveis para registro público
-    role = forms.ChoiceField(
-        choices=[
-            (User.Roles.PRODUCER, 'Produtor'),
-            (User.Roles.COMPANY, 'Empresa'),
-        ],
-        label="Tipo de conta",
-        initial=User.Roles.COMPANY,
-        widget=forms.RadioSelect()
-    )
+Cadastro de Auditor:
+    - Cria User com role = AUDITOR e is_active = False (aguarda aprovação).
+    - Cria/atualiza AuditorProfile com dados do formulário.
+    """
+    email = forms.EmailInput()
+    full_name = forms.CharField(label="Nome completo", max_length=255)
+    organization = forms.CharField(label="Organização", max_length=255, required=False)
+    document_id = forms.CharField(label="Documento/Registro", max_length=100, required=False)
+    phone = forms.CharField(label="Telefone", max_length=64, required=False)
+    notes = forms.CharField(label="Observações", widget=forms.Textarea, required=False)
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("username", "email", "role")
+        fields = ("username", "email", "full_name", "organization", "document_id", "phone", "notes")
 
     def save(self, commit: bool = True) -> User:
-        """Salva o usuário e define o papel corretamente."""
         user = super().save(commit=False)
+        # Força papel e trava acesso até aprovação
+        user.role = User.Roles.AUDITOR
         user.email = self.cleaned_data.get("email", "")
-        user.role = self.cleaned_data.get("role", User.Roles.COMPANY)
+        user.is_active = False  # sem acesso até Admin liberar
         if commit:
             user.save()
+
+            profile_data = {
+                "full_name": self.cleaned_data.get("full_name"),
+                "organization": self.cleaned_data.get("organization", ""),
+                "document_id": self.cleaned_data.get("document_id", ""),
+                "phone": self.cleaned_data.get("phone", ""),
+                "notes": self.cleaned_data.get("notes", ""),
+            }
+            # Garante um perfil consistente
+            profile, _ = AuditorProfile.objects.get_or_create(user=user)
+            for k, v in profile_data.items():
+                setattr(profile, k, v)
+            profile.save()
+
         return user
 
-
-class CustomLoginForm(AuthenticationForm):
-    """Formulário de login customizado com estilos Tucupi Labs."""
-    
-    username = forms.CharField(
-        max_length=150,
-        widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-            "placeholder": "seu_usuario",
-            "autocomplete": "username"
-        })
-    )
-    
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-            "placeholder": "••••••••",
-            "autocomplete": "current-password"
-        })
-    )
-    
-    error_messages = {
-        'invalid_login': "Nome de usuário ou senha incorretos. Tente novamente.",
-        'inactive': "Esta conta está inativa.",
-    }
-
-
-class ProfileForm(forms.ModelForm):
-    """Formulário para edição do perfil do usuário."""
-    class Meta:
-        model = Profile
-        fields = ["company_name", "farm_name", "location", "tax_id", "phone"]
-        widgets = {
-            "company_name": forms.TextInput(attrs={
-                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-                "placeholder": "Nome da empresa"
-            }),
-            "farm_name": forms.TextInput(attrs={
-                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-                "placeholder": "Nome da fazenda"
-            }),
-            "location": forms.TextInput(attrs={
-                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-                "placeholder": "Cidade, Estado"
-            }),
-            "tax_id": forms.TextInput(attrs={
-                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-                "placeholder": "CPF/CNPJ"
-            }),
-            "phone": forms.TextInput(attrs={
-                "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
-                "placeholder": "(00) 00000-0000"
-            }),
-        }
