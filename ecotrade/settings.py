@@ -120,7 +120,7 @@ INTERNAL_IPS = [
 ]
 
 # caminho de exemplo no Windows — ajuste conforme seu ambiente
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+# NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 
 # ==============================================================================
