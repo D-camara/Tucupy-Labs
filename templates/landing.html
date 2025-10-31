@@ -202,21 +202,21 @@
 
       <div class="grid lg:grid-cols-3 gap-12 relative">
         <!-- Step 1 - Para Produtores -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative flex">
+          <div class="glass rounded-xl p-8 hover-glow flex flex-col w-full">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               1
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col flex-grow">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="user-plus" class="w-6 h-6 text-tucupi-green-500"></i>
                 Cadastre-se
               </h3>
-              <p class="text-gray-400 mb-6">
-                Crie sua conta como Produtor ou Empresa. 
+              <p class="text-gray-400 mb-6 flex-grow">
+                Crie sua conta como Produtor ou Empresa.
                 Adicione informações sobre sua fazenda ou empresa em minutos.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 justify-center">
                 <i data-lucide="check-circle" class="w-4 h-4"></i>
                 Gratuito e rápido
               </div>
@@ -225,21 +225,21 @@
         </div>
 
         <!-- Step 2 - Marketplace -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative flex">
+          <div class="glass rounded-xl p-8 hover-glow flex flex-col w-full">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               2
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col flex-grow">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="store" class="w-6 h-6 text-tucupi-green-500"></i>
                 Liste ou Compre
               </h3>
-              <p class="text-gray-400 mb-6">
-                Produtores listam créditos no marketplace. 
+              <p class="text-gray-400 mb-6 flex-grow">
+                Produtores listam créditos no marketplace.
                 Empresas navegam, comparam preços e adicionam saldo virtual.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 justify-center">
                 <i data-lucide="trending-up" class="w-4 h-4"></i>
                 Preços competitivos
               </div>
@@ -248,21 +248,21 @@
         </div>
 
         <!-- Step 3 - Transação -->
-        <div class="relative">
-          <div class="glass rounded-xl p-8 hover-glow">
+        <div class="relative flex">
+          <div class="glass rounded-xl p-8 hover-glow flex flex-col w-full">
             <div class="flex items-center justify-center w-16 h-16 bg-tucupi-green-500 text-white rounded-full text-2xl font-bold mb-6 mx-auto">
               3
             </div>
-            <div class="text-center">
+            <div class="text-center flex flex-col flex-grow">
               <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 <i data-lucide="arrow-right-left" class="w-6 h-6 text-tucupi-green-500"></i>
                 Transacione
               </h3>
-              <p class="text-gray-400 mb-6">
-                Compra instantânea com transferência automática de propriedade. 
+              <p class="text-gray-400 mb-6 flex-grow">
+                Compra instantânea com transferência automática de propriedade.
                 Histórico completo e transparente de todas as transações.
               </p>
-              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500">
+              <div class="inline-flex items-center gap-2 text-sm text-tucupi-green-500 justify-center">
                 <i data-lucide="shield" class="w-4 h-4"></i>
                 100% seguro
               </div>
@@ -339,7 +339,6 @@
 
 <!-- Auditor Section -->
 <section class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5"></div>
   
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="glass rounded-2xl p-12 border-2 border-blue-500/30 hover:border-blue-500/50 transition-all">
@@ -526,34 +525,28 @@
           <i data-lucide="search" class="w-6 h-6 text-blue-400"></i>
           O que você pode consultar?
         </h3>
-        
+
         <div class="space-y-4">
-          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
-            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-              <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
-            </div>
+          <div class="flex items-start gap-3">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-1"></i>
             <div>
-              <p class="font-semibold text-white mb-1">Números Gerais</p>
+              <p class="font-semibold text-white">Números Gerais</p>
               <p class="text-sm text-gray-400">Quantos créditos existem, quanto CO₂ foi compensado, número de participantes</p>
             </div>
           </div>
-          
-          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
-            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-              <i data-lucide="list" class="w-5 h-5 text-green-400"></i>
-            </div>
+
+          <div class="flex items-start gap-3">
+            <i data-lucide="list" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
             <div>
-              <p class="font-semibold text-white mb-1">Lista de Créditos</p>
+              <p class="font-semibold text-white">Lista de Créditos</p>
               <p class="text-sm text-gray-400">Veja todos os créditos aprovados com quantidade de CO₂ e status</p>
             </div>
           </div>
-          
-          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
-            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-              <i data-lucide="file-text" class="w-5 h-5 text-purple-400"></i>
-            </div>
+
+          <div class="flex items-start gap-3">
+            <i data-lucide="file-text" class="w-5 h-5 text-purple-400 flex-shrink-0 mt-1"></i>
             <div>
-              <p class="font-semibold text-white mb-1">Detalhes Completos</p>
+              <p class="font-semibold text-white">Detalhes Completos</p>
               <p class="text-sm text-gray-400">Busque informações específicas de qualquer crédito pelo número</p>
             </div>
           </div>
@@ -566,16 +559,16 @@
           <i data-lucide="sparkles" class="w-6 h-6 text-cyan-400"></i>
           Por que é útil?
         </h3>
-        
+
         <div class="space-y-4">
           <div class="flex items-start gap-3">
-            <i data-lucide="unlock" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <i data-lucide="unlock" class="w-5 h-5 text-cyan-400 flex-shrink-0 mt-1"></i>
             <div>
               <p class="font-semibold text-white">Acesso Livre</p>
               <p class="text-sm text-gray-400">Qualquer pessoa pode ver, não precisa fazer login nem cadastro</p>
             </div>
           </div>
-          
+
           <div class="flex items-start gap-3">
             <i data-lucide="shield-check" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
             <div>
@@ -583,17 +576,17 @@
               <p class="text-sm text-gray-400">Mostramos apenas créditos verificados e aprovados por especialistas</p>
             </div>
           </div>
-          
+
           <div class="flex items-start gap-3">
-            <i data-lucide="zap" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <i data-lucide="zap" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-1"></i>
             <div>
               <p class="font-semibold text-white">Sempre Atualizado</p>
               <p class="text-sm text-gray-400">Os números que você vê são os mais recentes, atualizados automaticamente</p>
             </div>
           </div>
-          
+
           <div class="flex items-start gap-3">
-            <i data-lucide="users" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <i data-lucide="users" class="w-5 h-5 text-purple-400 flex-shrink-0 mt-1"></i>
             <div>
               <p class="font-semibold text-white">Privacidade Protegida</p>
               <p class="text-sm text-gray-400">Nomes e dados pessoais não aparecem, apenas informações públicas</p>
@@ -620,8 +613,6 @@
 
 <!-- CTA Final Section -->
 <section class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-tucupi-green-500/10 to-tucupi-accent/10"></div>
-  
   <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
     <h2 class="text-4xl sm:text-5xl font-bold mb-6">
       Pronto para fazer a <span class="text-gradient">diferença?</span>

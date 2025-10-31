@@ -308,6 +308,85 @@ pip install -r requirements.txt  # installs Faker==33.1.0
 - [x] Phase 5: Dashboard ✅ (métricas por papel, últimas transações)
 - [x] Phase 6: Polish & Testing ✅ (42 testes passando, admin configurado)
 - [x] Emoji to Lucide Icon Migration ✅
+- [x] Navbar Refactor: User Dropdown Menu ✅
+
+---
+
+## Navbar Refactor: User Dropdown Menu ✅
+
+### Problem
+- Navbar cluttered with 7-8 links for authenticated users
+- Duplicate transaction links confusing ("Transactions" public + "Transações" private)
+- No clear visual hierarchy for user-specific actions
+- Poor UX for authenticated users
+
+### Solution
+Consolidated user-specific actions into a dropdown menu triggered by user icon + username.
+
+### Structure
+
+**Main Navbar (Authenticated):**
+```
+Logo | Dashboard | Marketplace | Public Transactions | [User Icon + Username ▼]
+                                                        └─ Dropdown Menu
+```
+
+**User Dropdown Menu:**
+```
+┌─────────────────────────┐
+│ My Transactions         │  /transactions/
+│ Profile                 │  accounts:profile
+│ ─────────────────────   │
+│ Admin Panel             │  (if is_admin)
+│ Auditor Dashboard       │  (if is_auditor)
+│ ─────────────────────   │
+│ Logout                  │  accounts:logout
+└─────────────────────────┘
+```
+
+**Main Navbar (Unauthenticated):**
+```
+Logo | Marketplace | Public Transactions | Login | Register
+```
+
+### Implementation Details
+
+**Desktop Dropdown:**
+- Trigger: `<button>` with `user-circle` icon + username + `chevron-down`
+- Menu: Absolutely positioned, glass effect, border, backdrop-blur
+- Z-index: 50 (appears above content)
+- Transitions: Smooth toggle, chevron rotation
+
+**Mobile Navigation:**
+- User section with divider + username header
+- Same links as desktop, displayed inline
+- Visual separation from main nav items
+
+**JavaScript:**
+- Toggle dropdown on button click
+- Click-outside handler to close menu
+- Chevron rotation animation (0° → 180°)
+- Event propagation handled correctly
+
+**Lucide Icons:**
+- `user-circle` - User dropdown trigger (w-5 h-5)
+- `chevron-down` - Dropdown arrow (w-4 h-4)
+- `file-text` - My Transactions
+- `user` - Profile
+- `shield-check` - Admin/Auditor dashboards
+- `log-out` - Logout
+- `layout-dashboard` - Dashboard (mobile)
+- `shopping-bag` - Marketplace (mobile)
+
+### Results
+- ✅ Reduced navbar clutter from 7-8 links to 4 main links
+- ✅ Clear visual hierarchy for user actions
+- ✅ Eliminated duplicate transaction links
+- ✅ Better mobile UX with organized user section
+- ✅ Consistent Lucide icon usage throughout
+
+### Files Modified
+- `templates/components/navbar.html` - Complete restructure (lines 18-186)
 
 ---
 

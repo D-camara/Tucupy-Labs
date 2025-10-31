@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
 /* Tailwind v4: tell it where to scan for classes */
-@source "../../templates/**/*.html";         /* theme templates */
-@source "../../../templates/**/*.html";       /* project templates */
-@source "../../../**/templates/**/*.html";    /* app templates */
+@source "../../templates/**/*.html"; /* theme templates */
+@source "../../../templates/**/*.html"; /* project templates */
+@source "../../../**/templates/**/*.html"; /* app templates */
 
 /* EcoTrade theme variables */
 @theme {
   /* Tucupi Brand Colors */
-  --color-tucupi-black: #0A0A0A;
-  --color-tucupi-dark: #1A1A1A;
-  --color-tucupi-accent: #00FF88;
+  --color-tucupi-black: #0a0a0a;
+  --color-tucupi-dark: #1a1a1a;
+  --color-tucupi-accent: #00ff88;
 
-  --color-tucupi-green-50: #ECFDF5;
-  --color-tucupi-green-100: #D1FAE5;
-  --color-tucupi-green-200: #A7F3D0;
-  --color-tucupi-green-300: #6EE7B7;
-  --color-tucupi-green-400: #34D399;
-  --color-tucupi-green-500: #10B981;
+  --color-tucupi-green-50: #ecfdf5;
+  --color-tucupi-green-100: #d1fae5;
+  --color-tucupi-green-200: #a7f3d0;
+  --color-tucupi-green-300: #6ee7b7;
+  --color-tucupi-green-400: #34d399;
+  --color-tucupi-green-500: #10b981;
   --color-tucupi-green-600: #059669;
   --color-tucupi-green-700: #047857;
-  --color-tucupi-green-800: #065F46;
-  --color-tucupi-green-900: #064E3B;
+  --color-tucupi-green-800: #065f46;
+  --color-tucupi-green-900: #064e3b;
 
   /* Legacy eco color aliases */
   --color-eco-primary: #10b981;
@@ -51,34 +51,68 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
-  body { @apply bg-gray-50 text-gray-900; }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
 }
 
 /* Custom Keyframes */
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideDown {
-  0% { transform: translateY(-20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  0% { transform: scale(0.95); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes glow {
-  0% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.5), 0 0 10px rgba(16, 185, 129, 0.3); }
-  100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 30px rgba(16, 185, 129, 0.5); }
+  0% {
+    box-shadow:
+      0 0 5px rgba(16, 185, 129, 0.5),
+      0 0 10px rgba(16, 185, 129, 0.3);
+  }
+  100% {
+    box-shadow:
+      0 0 20px rgba(16, 185, 129, 0.8),
+      0 0 30px rgba(16, 185, 129, 0.5);
+  }
 }
 
 @layer utilities {
@@ -88,7 +122,10 @@
   }
 
   .bg-gradient-conic {
-    background-image: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+    background-image: conic-gradient(
+      from 180deg at 50% 50%,
+      var(--tw-gradient-stops)
+    );
   }
 
   .bg-grid-pattern {
@@ -99,3 +136,60 @@
   }
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}
+
+/* Grid background pattern */
+.grid-bg {
+  background-color: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #00ff88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism */
+.glass {
+  background: color-mix(in srgb, var(--color-tucupi-dark) 80%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hover glow effect */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+.hover-glow:hover {
+  box-shadow:
+    0 0 10px rgba(16, 185, 129, 0.6),
+    0 0 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-2px);
+}

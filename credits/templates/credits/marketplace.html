@@ -13,9 +13,7 @@
       <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
         <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
         <span class="relative z-10 flex items-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
+          <i data-lucide="plus" class="w-5 h-5"></i>
           Cadastrar Crédito
         </span>
       </a>
@@ -58,30 +56,22 @@
               <div class="flex items-center gap-2 flex-wrap">
                 {% if item.credit.validation_status == 'APPROVED' %}
                 <span class="px-3 py-1 text-xs font-bold rounded-full bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50 flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
+                  <i data-lucide="check-circle" class="w-3 h-3"></i>
                   APROVADO
                 </span>
                 {% elif item.credit.validation_status == 'UNDER_REVIEW' %}
-                <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/50 flex items-center gap-1 animate-pulse">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/50 flex items-center gap-1">
+                  <i data-lucide="loader-2" class="w-3 h-3"></i>
                   EM ANÁLISE
                 </span>
                 {% elif item.credit.validation_status == 'PENDING' %}
-                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 flex items-center gap-1 animate-pulse">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 flex items-center gap-1">
+                  <i data-lucide="clock" class="w-3 h-3"></i>
                   AGUARDANDO
                 </span>
                 {% elif item.credit.validation_status == 'REJECTED' %}
                 <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/50 flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
+                  <i data-lucide="x-circle" class="w-3 h-3"></i>
                   REJEITADO
                 </span>
                 {% endif %}
@@ -110,39 +100,23 @@
             <div class="flex justify-between items-center">
               <span class="text-sm text-gray-400">Produtor</span>
               <span class="font-medium text-white text-sm flex items-center gap-1">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
+                <i data-lucide="user" class="w-4 h-4 text-gray-500"></i>
                 {{ item.credit.owner.username }}
               </span>
             </div>
           </div>
           
           <!-- CTA -->
-          {% if item.credit.validation_status == 'APPROVED' %}
-          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
-            <span class="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition"></span>
-            <span class="relative z-10 flex items-center gap-2">
+          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn inline-flex items-center justify-center w-full px-6 py-3 bg-tucupi-green-500 text-white font-bold rounded-lg transition-all hover:scale-105 hover-glow">
+            <span class="flex items-center gap-2">
               Ver Detalhes
-              <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></i>
             </span>
           </a>
-          {% else %}
-          <div class="space-y-2">
-            <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gray-700 text-gray-300 font-bold rounded-lg overflow-hidden transition-all hover:bg-gray-600">
-              <span class="relative z-10 flex items-center gap-2">
-                Ver Detalhes
-                <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-              </span>
-            </a>
-            <p class="text-xs text-center text-gray-400 italic">
-              Aguardando aprovação do auditor
-            </p>
-          </div>
+          {% if item.credit.validation_status != 'APPROVED' %}
+          <p class="text-xs text-center text-gray-400 italic mt-2">
+            Aguardando aprovação do auditor
+          </p>
           {% endif %}
         </div>
       {% endfor %}
@@ -153,9 +127,7 @@
       <div class="mt-12 flex items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.3s;">
         {% if page_obj.has_previous %}
           <a href="?page={{ page_obj.previous_page_number }}" class="glass px-6 py-3 rounded-lg border border-white/10 hover:border-tucupi-green-500/50 text-white font-semibold transition hover-glow flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
             Anterior
           </a>
         {% endif %}
@@ -165,9 +137,7 @@
         {% if page_obj.has_next %}
           <a href="?page={{ page_obj.next_page_number }}" class="glass px-6 py-3 rounded-lg border border-white/10 hover:border-tucupi-green-500/50 text-white font-semibold transition hover-glow flex items-center gap-2">
             Próxima
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </a>
         {% endif %}
       </div>
@@ -186,9 +156,7 @@
         <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
           <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
           <span class="relative z-10 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
+            <i data-lucide="plus" class="w-5 h-5"></i>
             Cadastrar Primeiro Crédito
           </span>
         </a>
