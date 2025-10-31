@@ -183,6 +183,13 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Glass for navbar - no border (borders added via Tailwind) */
+.glass-navbar {
+  background: color-mix(in srgb, var(--color-tucupi-dark) 80%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
 /* Hover glow effect */
 .hover-glow {
   transition: all 0.3s ease;

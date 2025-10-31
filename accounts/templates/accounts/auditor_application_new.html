@@ -5,252 +5,286 @@
 {% block title %}Candidatura de Auditor - EcoTrade{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 py-12">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Header -->
-        <div class="text-center mb-12 animate-fade-in">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-            </div>
-            <h1 class="text-4xl font-bold text-white mb-3">Candidatura de Auditor</h1>
-            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
-                Preencha o formulário abaixo para se candidatar como auditor de créditos de carbono
-            </p>
+<div class="min-h-[90vh] flex items-center justify-center py-12 animate-fade-in">
+  <div class="max-w-4xl w-full px-4 sm:px-6 lg:px-8">
+    
+    <!-- Logo -->
+    <div class="text-center mb-8 animate-scale-in">
+      <div class="inline-block relative mb-4">
+        <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-2xl"></div>
+        <div class="relative flex justify-center">
+          <i data-lucide="shield-check" class="w-16 h-16 text-tucupi-green-400"></i>
         </div>
-
-        <!-- Info Box -->
-        <div class="bg-blue-900/30 backdrop-blur-sm rounded-xl border border-blue-500/30 p-6 mb-8">
-            <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                O que acontece após o envio?
-            </h3>
-            <ol class="space-y-2 text-gray-300 text-sm">
-                <li class="flex items-start gap-3">
-                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 text-xs font-bold">1</span>
-                    <span>Sua candidatura será analisada pela equipe administrativa</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 text-xs font-bold">2</span>
-                    <span>Você receberá um email de confirmação imediatamente</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="flex-shrink-0 w-6 h-6 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400 text-xs font-bold">3</span>
-                    <span>Após aprovação, você receberá acesso ao dashboard de auditoria</span>
-                </li>
-            </ol>
-        </div>
-
-        <!-- Formulário -->
-        <form method="post" enctype="multipart/form-data" class="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8">
-            {% csrf_token %}
-
-            {% if form.non_field_errors %}
-            <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm mb-6">
-                {{ form.non_field_errors }}
-            </div>
-            {% endif %}
-
-            <!-- Seção 1: Conta -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-gray-700">
-                    1. Criar Conta
-                </h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.username.label }}</label>
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.username.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.email.label }}</label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.email.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.password1.label }}</label>
-                        {{ form.password1 }}
-                        {% if form.password1.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.password1.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.password2.label }}</label>
-                        {{ form.password2 }}
-                        {% if form.password2.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.password2.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seção 2: Dados Pessoais -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-gray-700">
-                    2. Dados Pessoais
-                </h2>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.full_name.label }} *</label>
-                        {{ form.full_name }}
-                        {% if form.full_name.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.full_name.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.phone.label }} *</label>
-                        {{ form.phone }}
-                        {% if form.phone.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.phone.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.organization.label }}</label>
-                        {{ form.organization }}
-                        {% if form.organization.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.organization.errors.0 }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.linkedin_url.label }}</label>
-                        {{ form.linkedin_url }}
-                        {% if form.linkedin_url.errors %}
-                            <p class="text-red-400 text-sm mt-1">{{ form.linkedin_url.errors.0 }}</p>
-                        {% endif %}
-                        <p class="text-xs text-gray-500 mt-1">Opcional, mas recomendado</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seção 3: Documentos -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-gray-700">
-                    3. Documentos
-                </h2>
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">
-                            {{ form.certificate.label }} *
-                        </label>
-                        <div class="bg-gray-900/50 rounded-lg p-4 border border-gray-600">
-                            {{ form.certificate }}
-                            {% if form.certificate.errors %}
-                                <p class="text-red-400 text-sm mt-2">{{ form.certificate.errors.0 }}</p>
-                            {% endif %}
-                            <p class="text-xs text-gray-500 mt-2">{{ form.certificate.help_text }}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">
-                            {{ form.resume.label }} *
-                        </label>
-                        <div class="bg-gray-900/50 rounded-lg p-4 border border-gray-600">
-                            {{ form.resume }}
-                            {% if form.resume.errors %}
-                                <p class="text-red-400 text-sm mt-2">{{ form.resume.errors.0 }}</p>
-                            {% endif %}
-                            <p class="text-xs text-gray-500 mt-2">{{ form.resume.help_text }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Seção 4: Motivação -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-gray-700">
-                    4. Motivação
-                </h2>
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">{{ form.justification.label }} *</label>
-                    {{ form.justification }}
-                    {% if form.justification.errors %}
-                        <p class="text-red-400 text-sm mt-1">{{ form.justification.errors.0 }}</p>
-                    {% endif %}
-                    <p class="text-xs text-gray-500 mt-1">Descreva sua experiência profissional e motivação para ser auditor</p>
-                </div>
-            </div>
-
-            <!-- Seção 5: Termos -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-gray-700">
-                    5. Termos e Responsabilidades
-                </h2>
-                <div class="bg-yellow-900/20 backdrop-blur-sm rounded-lg border border-yellow-700/30 p-6 mb-6">
-                    <h3 class="text-yellow-400 font-semibold mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        Responsabilidades do Auditor
-                    </h3>
-                    <ul class="space-y-2 text-sm text-gray-300">
-                        <li class="flex items-start gap-2">
-                            <span class="text-yellow-400 mt-1">•</span>
-                            <span>Analisar créditos de carbono com imparcialidade e rigor técnico</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-yellow-400 mt-1">•</span>
-                            <span>Validar documentação e conformidade com normas ambientais</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-yellow-400 mt-1">•</span>
-                            <span>Manter confidencialidade das informações</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-yellow-400 mt-1">•</span>
-                            <span>Fornecer justificativas claras nas decisões de aprovação/rejeição</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="flex items-start gap-3">
-                    {{ form.terms_accepted }}
-                    <label for="{{ form.terms_accepted.id_for_label }}" class="text-sm text-gray-300 cursor-pointer">
-                        {{ form.terms_accepted.label }}
-                    </label>
-                </div>
-                {% if form.terms_accepted.errors %}
-                    <p class="text-red-400 text-sm mt-1">{{ form.terms_accepted.errors.0 }}</p>
-                {% endif %}
-            </div>
-
-            <!-- Botões -->
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button 
-                    type="submit" 
-                    class="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold text-lg hover-glow transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Enviar Candidatura
-                </button>
-                <a 
-                    href="{% url 'dashboard:landing' %}" 
-                    class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white rounded-lg font-semibold text-lg hover:bg-white/10 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Voltar
-                </a>
-            </div>
-        </form>
-
-        <!-- Login alternativo -->
-        <div class="text-center mt-8">
-            <p class="text-gray-400">
-                Já possui uma conta?
-                <a href="{% url 'accounts:login' %}" class="text-blue-400 hover:text-blue-300 font-semibold transition">
-                    Fazer login
-                </a>
-            </p>
-        </div>
+      </div>
+      <h1 class="text-4xl font-display font-bold text-gradient">Candidatura de Auditor</h1>
+      <p class="text-gray-400 mt-2">Preencha o formulário abaixo para se candidatar como auditor de créditos de carbono</p>
     </div>
+
+    <!-- Info Box -->
+    <div class="glass rounded-xl border border-tucupi-green-500/30 p-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
+        <h3 class="text-lg font-bold text-tucupi-green-400 mb-3 flex items-center gap-2">
+            <i data-lucide="info" class="w-5 h-5"></i>
+            O que acontece após o envio?
+        </h3>
+        <ol class="space-y-2 text-gray-300 text-sm">
+            <li class="flex items-start gap-3">
+                <span class="shrink-0 w-6 h-6 bg-tucupi-green-500/20 rounded-full flex items-center justify-center text-tucupi-green-400 text-xs font-bold">1</span>
+                <span>Sua candidatura será analisada pela equipe administrativa</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="shrink-0 w-6 h-6 bg-tucupi-green-500/20 rounded-full flex items-center justify-center text-tucupi-green-400 text-xs font-bold">2</span>
+                <span>Você receberá um email de confirmação imediatamente</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="shrink-0 w-6 h-6 bg-tucupi-green-500/20 rounded-full flex items-center justify-center text-tucupi-green-400 text-xs font-bold">3</span>
+                <span>Após aprovação, você receberá acesso ao dashboard de auditoria</span>
+            </li>
+        </ol>
+    </div>
+
+    <!-- Formulário -->
+    <form method="post" enctype="multipart/form-data" class="glass rounded-2xl p-8 border border-white/10 animate-slide-up" style="animation-delay: 0.2s;">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="bg-red-500/10 border-l-4 border-red-500 text-red-400 px-4 py-3 rounded-lg text-sm flex items-start gap-3 animate-scale-in mb-6">
+            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0 mt-0.5"></i>
+            <div>
+                <p class="font-semibold mb-1">Erro no formulário</p>
+                <p>{{ form.non_field_errors.0 }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Seção 1: Conta -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-white/10">
+                1. Criar Conta
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.username.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.email.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.password1.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.password2.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Dados Pessoais -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-white/10">
+                2. Dados Pessoais
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.full_name.label }} *</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.full_name.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.phone.label }} *</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.phone.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.organization.label }}</label>
+                    {{ form.organization }}
+                    {% if form.organization.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.organization.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.linkedin_url.label }}</label>
+                    {{ form.linkedin_url }}
+                    {% if form.linkedin_url.errors %}
+                        <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ form.linkedin_url.errors.0 }}
+                        </p>
+                    {% endif %}
+                    <p class="text-xs text-gray-500 mt-1">Opcional, mas recomendado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 3: Documentos -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-white/10">
+                3. Documentos
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        {{ form.certificate.label }} *
+                    </label>
+                    <div class="glass rounded-lg p-4 border border-white/10">
+                        {{ form.certificate }}
+                        {% if form.certificate.errors %}
+                            <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                {{ form.certificate.errors.0 }}
+                            </p>
+                        {% endif %}
+                        <p class="text-xs text-gray-500 mt-2">{{ form.certificate.help_text }}</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-2">
+                        {{ form.resume.label }} *
+                    </label>
+                    <div class="glass rounded-lg p-4 border border-white/10">
+                        {{ form.resume }}
+                        {% if form.resume.errors %}
+                            <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                {{ form.resume.errors.0 }}
+                            </p>
+                        {% endif %}
+                        <p class="text-xs text-gray-500 mt-2">{{ form.resume.help_text }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 4: Motivação -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-white/10">
+                4. Motivação
+            </h2>
+            <div>
+                <label class="block text-sm font-semibold text-gray-300 mb-2">{{ form.justification.label }} *</label>
+                {{ form.justification }}
+                {% if form.justification.errors %}
+                    <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                        {{ form.justification.errors.0 }}
+                    </p>
+                {% endif %}
+                <p class="text-xs text-gray-500 mt-1">Descreva sua experiência profissional e motivação para ser auditor</p>
+            </div>
+        </div>
+
+        <!-- Seção 5: Termos -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 pb-3 border-b border-white/10">
+                5. Termos e Responsabilidades
+            </h2>
+            <div class="glass rounded-lg border border-yellow-500/30 p-6 mb-6">
+                <h3 class="text-yellow-400 font-semibold mb-3 flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    Responsabilidades do Auditor
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                        <span>Analisar créditos de carbono com imparcialidade e rigor técnico</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                        <span>Validar documentação e conformidade com normas ambientais</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                        <span>Manter confidencialidade das informações</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                        <span>Fornecer justificativas claras nas decisões de aprovação/rejeição</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex items-start gap-3">
+                {{ form.terms_accepted }}
+                <label for="{{ form.terms_accepted.id_for_label }}" class="text-sm text-gray-300 cursor-pointer">
+                    {{ form.terms_accepted.label }}
+                </label>
+            </div>
+            {% if form.terms_accepted.errors %}
+                <p class="text-red-400 text-sm mt-2 flex items-center gap-1">
+                    <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                    {{ form.terms_accepted.errors.0 }}
+                </p>
+            {% endif %}
+        </div>
+
+        <!-- Botões -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button 
+                type="submit" 
+                class="group relative flex-1 py-3 bg-tucupi-green-500 text-white font-bold rounded-lg overflow-hidden transition-all hover-glow disabled:opacity-50 disabled:cursor-not-allowed">
+                <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    Enviar Candidatura
+                </span>
+            </button>
+            <a 
+                href="{% url 'dashboard:landing' %}" 
+                class="inline-flex items-center justify-center gap-2 py-3 px-8 glass border border-white/10 hover:border-tucupi-green-500/50 text-white font-semibold rounded-lg transition hover-glow">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Voltar
+            </a>
+        </div>
+    </form>
+
+    <!-- Login alternativo -->
+    <div class="text-center mt-8">
+        <p class="text-gray-400">
+            Já possui uma conta?
+            <a href="{% url 'accounts:login' %}" class="text-tucupi-green-400 hover:text-tucupi-accent font-semibold transition">
+                Fazer login
+            </a>
+        </p>
+    </div>
+  </div>
 </div>
 {% endblock %}

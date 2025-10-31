@@ -14,32 +14,32 @@ class RegistrationForm(UserCreationForm):
     username = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "seu_usuario"
         })
     )
-    
+
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "seu@email.com"
         })
     )
-    
+
     password1 = forms.CharField(
         label="Senha",
         strip=False,
         widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "••••••••"
         })
     )
-    
+
     password2 = forms.CharField(
         label="Confirmar senha",
         strip=False,
         widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "••••••••"
         })
     )
@@ -71,19 +71,19 @@ class RegistrationForm(UserCreationForm):
 
 class CustomLoginForm(AuthenticationForm):
     """Formulário de login customizado com estilos Tucupi Labs."""
-    
+
     username = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "seu_usuario",
             "autocomplete": "username"
         })
     )
-    
+
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "••••••••",
             "autocomplete": "current-password"
         })
@@ -262,7 +262,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Nome de usuário",
         max_length=150,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "seu_usuario"
         })
     )
@@ -271,7 +271,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Senha",
         strip=False,
         widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "••••••••"
         })
     )
@@ -280,7 +280,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Confirmar senha",
         strip=False,
         widget=forms.PasswordInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "••••••••"
         })
     )
@@ -290,7 +290,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Nome completo",
         max_length=255,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "Seu nome completo"
         })
     )
@@ -298,7 +298,7 @@ class AuditorRegistrationForm(UserCreationForm):
     email = forms.EmailField(
         label="E-mail",
         widget=forms.EmailInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "seu@email.com"
         })
     )
@@ -307,7 +307,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Telefone",
         max_length=20,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "(00) 00000-0000"
         })
     )
@@ -317,7 +317,7 @@ class AuditorRegistrationForm(UserCreationForm):
         max_length=255,
         required=False,
         widget=forms.TextInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "Empresa/Instituição"
         })
     )
@@ -326,7 +326,7 @@ class AuditorRegistrationForm(UserCreationForm):
         label="Perfil LinkedIn",
         required=False,
         widget=forms.URLInput(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "placeholder": "https://linkedin.com/in/seuusuario"
         })
     )
@@ -352,7 +352,7 @@ class AuditorRegistrationForm(UserCreationForm):
     justification = forms.CharField(
         label="Por que deseja ser auditor?",
         widget=forms.Textarea(attrs={
-            "class": "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition",
+            "class": "w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition",
             "rows": 5,
             "placeholder": "Descreva sua experiência e motivação..."
         })
@@ -361,7 +361,7 @@ class AuditorRegistrationForm(UserCreationForm):
     terms_accepted = forms.BooleanField(
         label="Aceito os termos e responsabilidades de um auditor",
         widget=forms.CheckboxInput(attrs={
-            "class": "w-5 h-5 text-blue-500 bg-white/5 border-white/30 rounded focus:ring-blue-500 focus:ring-offset-gray-900"
+            "class": "w-5 h-5 text-tucupi-green-500 border-white/30 rounded focus:ring-tucupi-green-500 focus:ring-offset-gray-900"
         })
     )
     
