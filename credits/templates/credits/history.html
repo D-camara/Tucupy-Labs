@@ -62,14 +62,9 @@
 
   <!-- Ownership Timeline -->
   <div class="relative space-y-6 animate-slide-up" style="animation-delay: 0.2s;">
-    <!-- Vertical line -->
-    <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-tucupi-green-500 via-blue-500 to-purple-500"></div>
 
     {% for entry in history %}
-      <div class="relative pl-20 animate-slide-up" style="animation-delay: {{ forloop.counter|add:2|floatformat:1 }}00ms;">
-        <!-- Timeline dot -->
-        <div class="absolute left-5 w-6 h-6 rounded-full border-4 {% if entry.transfer_type == 'CREATION' %}bg-tucupi-green-500 border-tucupi-green-400 shadow-glow-green{% elif entry.transfer_type == 'SALE' %}bg-blue-500 border-blue-400{% else %}bg-purple-500 border-purple-400{% endif %}"></div>
-
+      <div class="relative animate-slide-up" style="animation-delay: {{ forloop.counter|add:2|floatformat:1 }}00ms;">
         <!-- Card -->
         <div class="glass rounded-xl p-6 border {% if entry.transfer_type == 'CREATION' %}border-tucupi-green-500/50 bg-tucupi-green-500/5{% elif entry.transfer_type == 'SALE' %}border-blue-500/50 bg-blue-500/5{% else %}border-purple-500/50 bg-purple-500/5{% endif %} hover-glow transition-all">
 
