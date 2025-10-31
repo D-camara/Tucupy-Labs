@@ -91,7 +91,7 @@ class LoginView(DjangoLoginView):
 
 class LogoutView(DjangoLogoutView):
     """View de logout que aceita GET e POST."""
-    next_page = reverse_lazy("dashboard:index")
+    next_page = reverse_lazy("dashboard:landing")  # Redireciona para landing page, não login
     http_method_names = ['get', 'post', 'options']
     
     def dispatch(self, request, *args, **kwargs):

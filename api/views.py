@@ -58,24 +58,20 @@ def credits_list(request: HttpRequest) -> JsonResponse:
     total_count = queryset.count()
     queryset = queryset[offset:offset + limit]
     
-    # Serializar dados
+    # Serializar dados (anonimizados para privacidade)
     credits_data = []
     for credit in queryset:
         credits_data.append({
             'id': credit.id,
             'amount': float(credit.amount),
             'unit': credit.unit,
-            'origin': credit.origin,
+            # NÃO expõe origem específica (privacidade)
             'generation_date': credit.generation_date.isoformat(),
             'status': credit.status,
             'validation_status': credit.validation_status,
-            'owner': {
-                'username': credit.owner.username,
-                'role': credit.owner.role,
-            },
-            'validated_by': {
-                'username': credit.validated_by.username if credit.validated_by else None,
-            } if credit.validated_by else None,
+            # NÃO expõe informações do produtor (privacidade)
+            'owner_type': credit.owner.role,  # Apenas o tipo
+            'is_validated': bool(credit.validated_by),
             'validated_at': credit.validated_at.isoformat() if credit.validated_at else None,
             'created_at': credit.created_at.isoformat(),
         })
@@ -119,25 +115,21 @@ def credit_detail(request: HttpRequest, credit_id: int) -> JsonResponse:
             'error': 'Crédito não encontrado ou não disponível publicamente.',
         }, status=404)
     
-    # Dados detalhados
+    # Dados detalhados (anonimizados para privacidade)
     data = {
         'id': credit.id,
         'amount': float(credit.amount),
         'unit': credit.unit,
-        'origin': credit.origin,
+        # NÃO expõe origem específica (privacidade da propriedade/fazenda)
         'generation_date': credit.generation_date.isoformat(),
         'status': credit.status,
         'validation_status': credit.validation_status,
         'is_verified': credit.is_verified,
-        'owner': {
-            'username': credit.owner.username,
-            'role': credit.owner.role,
-        },
-        'validated_by': {
-            'username': credit.validated_by.username if credit.validated_by else None,
-        } if credit.validated_by else None,
+        # NÃO expõe dados do produtor (privacidade)
+        'owner_type': credit.owner.role,
+        'is_validated': bool(credit.validated_by),
         'validated_at': credit.validated_at.isoformat() if credit.validated_at else None,
-        'auditor_notes': credit.auditor_notes if credit.auditor_notes else None,
+        # NÃO expõe notas do auditor (podem conter informações sensíveis)
         'created_at': credit.created_at.isoformat(),
     }
     

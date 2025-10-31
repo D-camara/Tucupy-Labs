@@ -2,6 +2,48 @@
 
 ## 2025-10-31
 
+### Fixed - UX e Linguagem Simplificada
+- **Logout agora redireciona para landing page** (não mais para tela de login)
+  - `accounts/views.py`: `LogoutView.next_page` mudado de `dashboard:index` para `dashboard:landing`
+  - Experiência mais natural: usuário sai e volta à página inicial pública
+
+- **Linguagem técnica removida da landing page** (seção API)
+  - **Antes**: "GET /api/stats/", "JSON Estruturado", "Endpoints Disponíveis"
+  - **Depois**: Linguagem acessível para não-programadores:
+    - "📊 Números Gerais" - Quantos créditos existem, quanto CO₂ foi compensado
+    - "📋 Lista de Créditos" - Veja todos os créditos aprovados
+    - "🔍 Detalhes Completos" - Busque informações específicas
+    - "🌐 Acesso Livre" - Qualquer pessoa pode ver
+    - "✅ Informação Confiável" - Créditos verificados
+    - "⚡ Sempre Atualizado" - Números mais recentes
+    - "🔒 Privacidade Protegida" - Dados pessoais não aparecem
+  - Botão mudado: "Explorar Documentação Interativa" → "Ver Dados Públicos Agora"
+  - Subtítulo: "📱 Clique e veja tudo direto no navegador • Não precisa instalar nada"
+
+### Security - Anonimização de Dados na API Pública
+- **Problema Identificado**: API pública expunha informações sensíveis (nomes de usuários, fazendas, notas de auditores)
+- **Solução**:
+  - **Dados Removidos**:
+    - `origin` (nome de fazenda/projeto) - proteção de propriedade privada
+    - `owner.username` - substituído por `owner_type` (apenas PRODUCER/COMPANY)
+    - `validated_by.username` - substituído por `is_validated` (booleano)
+    - `auditor_notes` - pode conter informações confidenciais
+  
+  - **Dados Mantidos (Anonimizados)**:
+    - `id`, `amount`, `unit` - dados quantitativos agregados
+    - `generation_date`, `created_at`, `validated_at` - datas públicas
+    - `status`, `validation_status` - estados do crédito
+    - `owner_type` - tipo do produtor sem identificação
+    - `is_validated` - se foi aprovado por auditor (sim/não)
+  
+  - **Arquivos Atualizados**:
+    - `api/views.py`: Serialização anonimizada nos endpoints `/credits/` e `/credits/{id}/`
+    - `templates/api_docs.html`: UI atualizada para refletir dados públicos permitidos
+    - `api/tests/test_api.py`: Testes verificam anonimização (9/9 passando)
+    - `API_DOCS.md`: Documentação atualizada com avisos de privacidade
+
+### Added - API Pública com Documentação Simplificada (Tucupi Labs Branding)
+
 ### Fixed - Dashboard do Auditor e Visualização de Créditos do Produtor
 - **Problemas Identificados**:
   1. Dashboard do auditor mostrava contagem de "Em Análise" mas não exibia os créditos

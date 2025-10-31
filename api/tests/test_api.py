@@ -75,13 +75,18 @@ class PublicAPITests(TestCase):
         self.assertEqual(data['count'], 1)  # Apenas approved
         self.assertEqual(len(data['data']), 1)
         
-        # Verificar estrutura do crédito
+        # Verificar estrutura do crédito (anonimizado)
         credit = data['data'][0]
         self.assertIn('id', credit)
         self.assertIn('amount', credit)
-        self.assertIn('origin', credit)
         self.assertIn('validation_status', credit)
         self.assertEqual(credit['validation_status'], 'APPROVED')
+        
+        # Verificar anonimização (NÃO deve ter origem, owner.username, etc)
+        self.assertNotIn('origin', credit)
+        self.assertIn('owner_type', credit)  # Apenas tipo
+        self.assertNotIn('owner', credit)  # Sem dados do usuário
+        self.assertIn('is_validated', credit)
 
     def test_credits_list_only_shows_approved(self):
         """Testa que apenas créditos aprovados aparecem na lista."""
@@ -90,7 +95,8 @@ class PublicAPITests(TestCase):
         
         # Deve ter apenas 1 crédito (o aprovado)
         self.assertEqual(data['count'], 1)
-        self.assertEqual(data['data'][0]['origin'], "Fazenda Teste")
+        # Não expõe origem por privacidade
+        self.assertNotIn('origin', data['data'][0])
 
     def test_credits_list_with_filters(self):
         """Testa filtros da listagem."""
@@ -114,7 +120,7 @@ class PublicAPITests(TestCase):
         self.assertIn('next_offset', data)
 
     def test_credit_detail_endpoint(self):
-        """Testa endpoint de detalhe do crédito."""
+        """Testa endpoint de detalhe do crédito (anonimizado)."""
         response = self.client.get(f'/api/credits/{self.approved_credit.id}/')
         self.assertEqual(response.status_code, 200)
         
@@ -123,10 +129,16 @@ class PublicAPITests(TestCase):
         self.assertIn('data', data)
         
         credit = data['data']
-        self.assertEqual(credit['origin'], "Fazenda Teste")
+        # Dados públicos permitidos
         self.assertEqual(credit['validation_status'], 'APPROVED')
-        self.assertIn('validated_by', credit)
-        self.assertEqual(credit['validated_by']['username'], 'auditor1')
+        self.assertIn('is_validated', credit)
+        self.assertIn('owner_type', credit)
+        
+        # Dados privados NÃO devem aparecer
+        self.assertNotIn('origin', credit)
+        self.assertNotIn('owner', credit)
+        self.assertNotIn('validated_by', credit)
+        self.assertNotIn('auditor_notes', credit)
 
     def test_credit_detail_not_found(self):
         """Testa que crédito não aprovado retorna 404."""
@@ -146,4 +158,4 @@ class PublicAPITests(TestCase):
         """Testa que a página de documentação carrega."""
         response = self.client.get('/api/')
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'API Pública EcoTrade')
+        self.assertContains(response, 'Dados Públicos - Tucupi Labs')
