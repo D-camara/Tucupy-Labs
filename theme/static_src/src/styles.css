@@ -57,6 +57,16 @@
   body {
     @apply bg-gray-50 text-gray-900;
   }
+
+  /* Standardize focus states to tucupi-green across all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus,
+  textarea:focus,
+  select:focus,
+  [tabindex]:focus-visible {
+    @apply outline-none ring-2 ring-tucupi-green-500/50 ring-offset-2 ring-offset-tucupi-dark;
+  }
 }
 
 /* Custom Keyframes */
