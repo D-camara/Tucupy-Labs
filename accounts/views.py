@@ -212,19 +212,26 @@ def auditor_application_view(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             user = form.save()
             
-            # Faz login automático
-            login(request, user)
+            # NÃO faz login automático - usuário só entra após aprovação
+            # login(request, user)  # REMOVIDO: auditor deve ser aprovado primeiro
             
             # Pega a candidatura recém-criada
             application = AuditorApplication.objects.get(user=user)
             
             # Envia email de confirmação ao candidato
+            print(f"\n🔵 [DEBUG] Tentando enviar email para: {application.email}")
+            print(f"🔵 [DEBUG] Nome do candidato: {application.full_name}")
+            
             try:
-                send_auditor_application_confirmation(
+                result = send_auditor_application_confirmation(
                     user_email=application.email,
                     user_name=application.full_name
                 )
+                print(f"✅ [DEBUG] Email enviado com sucesso! Resultado: {result}")
             except Exception as e:
+                print(f"❌ [DEBUG] ERRO ao enviar email: {type(e).__name__}: {str(e)}")
+                import traceback
+                traceback.print_exc()
                 messages.warning(
                     request,
                     f"⚠️ Candidatura enviada, mas houve erro ao enviar email de confirmação: {str(e)}"
@@ -249,9 +256,10 @@ def auditor_application_view(request: HttpRequest) -> HttpResponse:
             
             messages.success(
                 request,
-                "✅ Candidatura enviada com sucesso! Você receberá um email quando sua candidatura for analisada."
+                "✅ Candidatura enviada com sucesso! Você receberá um email quando for aprovado. "
+                "Após a aprovação, você poderá fazer login com suas credenciais."
             )
-            return redirect("dashboard:index")
+            return redirect("accounts:login")
     else:
         form = AuditorRegistrationForm()
     

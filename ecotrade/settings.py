@@ -127,12 +127,12 @@ NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 # EMAIL CONFIGURATION
 # ==============================================================================
 
-# Email backend - SMTP real (Gmail) para envio local
-# Nota: Projeto funciona 100% localmente, emails serão enviados de verdade
+# Email backend - respeita configuração do .env
+# Para desenvolvimento use: EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+# Para produção use: EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 EMAIL_BACKEND = os.environ.get(
     "EMAIL_BACKEND",
-    "django.core.mail.backends.smtp.EmailBackend"  # SMTP real por padrão
-    # "django.core.mail.backends.console.EmailBackend"  # Descomente para debug (imprime no terminal)
+    "django.core.mail.backends.console.EmailBackend"  # Console por padrão (dev)
 )
 
 # Configurações SMTP (Gmail)

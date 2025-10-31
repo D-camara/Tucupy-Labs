@@ -268,8 +268,9 @@ class AuditorApplication(models.Model):
         self.reviewed_by = admin_user
         self.save()
         
-        # Promove o usuário para AUDITOR
+        # Promove o usuário para AUDITOR e ATIVA a conta
         self.user.role = User.Roles.AUDITOR
+        self.user.is_active = True  # ATIVA o usuário
         self.user.save()
     
     def reject(self, admin_user: User, reason: str = "") -> None:

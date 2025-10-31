@@ -406,10 +406,11 @@ class AuditorRegistrationForm(UserCreationForm):
         return url
     
     def save(self, commit: bool = True):
-        """Salva usuário com role PRODUCER (será mudado para AUDITOR quando aprovado)."""
+        """Salva usuário INATIVO até aprovação da candidatura."""
         user = super().save(commit=False)
         user.email = self.cleaned_data.get("email")
-        user.role = User.Roles.PRODUCER  # Temporário, muda após aprovação
+        user.role = User.Roles.PRODUCER  # Temporário, muda para AUDITOR após aprovação
+        user.is_active = False  # DESATIVA até admin aprovar
         
         if commit:
             user.save()
