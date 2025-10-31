@@ -83,6 +83,10 @@ class LoginView(DjangoLoginView):
     form_class = CustomLoginForm
     redirect_authenticated_user = True
     
+    def get_success_url(self) -> str:
+        """Redireciona para o dashboard após login bem-sucedido."""
+        return reverse_lazy("dashboard:index")
+    
     def form_invalid(self, form):
         """Adiciona mensagem de erro amigável."""
         messages.error(self.request, "Nome de usuário ou senha incorretos. Verifique e tente novamente.")

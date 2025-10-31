@@ -268,7 +268,6 @@ def review_credit(request, pk):
         notes = request.POST.get('notes', '').strip()
         
         from django.contrib import messages
-        from accounts.emails import send_credit_validation_result
         
         if action == 'start_review':
             credit.start_review(request.user)
@@ -281,17 +280,7 @@ def review_credit(request, pk):
             
             credit.approve_validation(request.user, notes)
             
-            # Envia email ao produtor
-            try:
-                send_credit_validation_result(
-                    producer_email=credit.owner.email,
-                    producer_name=credit.owner.get_full_name() or credit.owner.username,
-                    credit_title=f"{credit.amount} {credit.unit} - {credit.origin}",
-                    approved=True,
-                    auditor_notes=notes
-                )
-            except Exception as e:
-                messages.warning(request, f"⚠️ Crédito aprovado, mas erro ao enviar email: {str(e)}")
+            # Email de aprovação de crédito removido (não necessário)
             
             messages.success(request, f"✅ Crédito #{credit.id} aprovado com sucesso!")
             return redirect('credits:auditor_dashboard')
@@ -303,19 +292,9 @@ def review_credit(request, pk):
             
             credit.reject_validation(request.user, notes)
             
-            # Envia email ao produtor
-            try:
-                send_credit_validation_result(
-                    producer_email=credit.owner.email,
-                    producer_name=credit.owner.get_full_name() or credit.owner.username,
-                    credit_title=f"{credit.amount} {credit.unit} - {credit.origin}",
-                    approved=False,
-                    auditor_notes=notes
-                )
-            except Exception as e:
-                messages.warning(request, f"⚠️ Crédito rejeitado, mas erro ao enviar email: {str(e)}")
+            # Email de rejeição de crédito removido (não necessário)
             
-            messages.success(request, f"✅ Crédito #{credit.id} rejeitado. Produtor será notificado.")
+            messages.success(request, f"✅ Crédito #{credit.id} rejeitado.")
             return redirect('credits:auditor_dashboard')
     
     return render(request, "credits/review_credit.html", {'credit': credit})
