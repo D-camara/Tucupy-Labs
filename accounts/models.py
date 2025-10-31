@@ -36,6 +36,18 @@ class User(AbstractUser):
         """Retorna True se o usuário é admin (superuser ou role ADMIN)"""
         return self.is_superuser or self.role == self.Roles.ADMIN
 
+    @property
+    def is_approved(self) -> bool:
+        # Por padrão usamos is_active para o gate de login.
+        return bool(self.is_active)
+
+    def approve(self):
+        """Aprova o usuário para acesso (Admin)."""
+        if not self.is_active:
+            self.is_active = True
+            self.approved_at = timezone.now()
+            self.save(update_fields=["is_active", "approved_at"])
+
     def __str__(self) -> str:  # pragma: no cover - trivial
         return self.username
 
@@ -74,6 +86,19 @@ class Profile(models.Model):
         return f"Profile<{self.user.username}>"
 
 
+class AuditorProfile(models.Model):
+    """Perfil específico para Auditor, preenchido no cadastro."""
+    user = models.OneToOneField("accounts.User", on_delete=models.CASCADE, related_name="auditor_profile")
+    full_name = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, blank=True)
+    document_id = models.CharField(max_length=100, blank=True, help_text="Documento/Registro do auditor")
+    phone = models.CharField(max_length=64, blank=True)
+    notes = models.TextField(blank=True)
+    
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        return f"AuditorProfile<{self.user.username}>"
+
+
 # Criação automática de Profile para cada User
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance: User, created: bool, **kwargs):
@@ -84,8 +109,15 @@ def create_or_update_user_profile(sender, instance: User, created: bool, **kwarg
         if instance.is_superuser and instance.role != User.Roles.ADMIN:
             instance.role = User.Roles.ADMIN
             instance.save(update_fields=['role'])
+        
+        # Se é AUDITOR, cria AuditorProfile
+        if instance.role == User.Roles.AUDITOR:
+            AuditorProfile.objects.get_or_create(
+                user=instance, 
+                defaults={"full_name": instance.get_full_name() or instance.username}
+            )
     else:
-        # garante que o perfil exista
+        # Garante que o perfil exista
         Profile.objects.get_or_create(user=instance)
         
         # Se virou superuser, torna ADMIN

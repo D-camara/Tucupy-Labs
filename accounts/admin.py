@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import AuditorApplication, Profile, User
+from .models import AuditorApplication, AuditorProfile, Profile, User
 
 
 @admin.register(User)
@@ -122,4 +122,12 @@ class AuditorApplicationAdmin(admin.ModelAdmin):
             level="success"
         )
     reject_applications.short_description = "❌ Rejeitar candidaturas selecionadas"
+
+
+@admin.register(AuditorProfile)
+class AuditorProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "full_name", "organization", "document_id", "phone")
+    search_fields = ("user__username", "full_name", "organization", "document_id")
+    list_filter = ("organization",)
+    readonly_fields = ("user",)
 
