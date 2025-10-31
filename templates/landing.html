@@ -47,6 +47,14 @@
         <i data-lucide="play-circle" class="w-5 h-5"></i>
         Como Funciona
       </a>
+      <a href="{% url 'api:docs' %}" 
+         class="group px-8 py-4 glass border border-blue-500/30 text-white rounded-lg font-semibold text-lg hover:border-blue-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-all flex items-center gap-2">
+        <i data-lucide="code-2" class="w-5 h-5"></i>
+        API Pública
+        <span class="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+          Aberto
+        </span>
+      </a>
     </div>
 
     <!-- Stats -->
@@ -483,6 +491,129 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- API Section -->
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 rounded-full filter blur-3xl opacity-20"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-3xl opacity-20"></div>
+  </div>
+  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-blue-500/30 mb-6">
+        <i data-lucide="code-2" class="w-5 h-5 text-blue-400"></i>
+        <span class="text-sm font-medium text-blue-400">API Pública & Transparente</span>
+      </div>
+      
+      <h2 class="text-4xl sm:text-5xl font-bold mb-6">
+        Dados <span class="text-gradient bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Abertos</span> para Todos
+      </h2>
+      <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+        Acesse dados de créditos de carbono via API RESTful. 
+        Sem autenticação, sem limites. Transparência total para desenvolvedores, 
+        pesquisadores e o público em geral.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <!-- O que você pode consultar -->
+      <div class="glass rounded-2xl p-8 border border-blue-500/20">
+        <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <i data-lucide="search" class="w-6 h-6 text-blue-400"></i>
+          O que você pode consultar?
+        </h3>
+        
+        <div class="space-y-4">
+          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
+            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-white mb-1">📊 Números Gerais</p>
+              <p class="text-sm text-gray-400">Quantos créditos existem, quanto CO₂ foi compensado, número de participantes</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
+            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="list" class="w-5 h-5 text-green-400"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-white mb-1">📋 Lista de Créditos</p>
+              <p class="text-sm text-gray-400">Veja todos os créditos aprovados com quantidade de CO₂ e status</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-4 bg-black/30 rounded-lg p-4">
+            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i data-lucide="file-text" class="w-5 h-5 text-purple-400"></i>
+            </div>
+            <div>
+              <p class="font-semibold text-white mb-1">🔍 Detalhes Completos</p>
+              <p class="text-sm text-gray-400">Busque informações específicas de qualquer crédito pelo número</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benefícios -->
+      <div class="glass rounded-2xl p-8 border border-blue-500/20">
+        <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-6 h-6 text-cyan-400"></i>
+          Por que é útil?
+        </h3>
+        
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <i data-lucide="unlock" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">🌐 Acesso Livre</p>
+              <p class="text-sm text-gray-400">Qualquer pessoa pode ver, não precisa fazer login nem cadastro</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <i data-lucide="shield-check" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">✅ Informação Confiável</p>
+              <p class="text-sm text-gray-400">Mostramos apenas créditos verificados e aprovados por especialistas</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <i data-lucide="zap" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">⚡ Sempre Atualizado</p>
+              <p class="text-sm text-gray-400">Os números que você vê são os mais recentes, atualizados automaticamente</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start gap-3">
+            <i data-lucide="users" class="w-5 h-5 text-green-400 flex-shrink-0 mt-1"></i>
+            <div>
+              <p class="font-semibold text-white">🔒 Privacidade Protegida</p>
+              <p class="text-sm text-gray-400">Nomes e dados pessoais não aparecem, apenas informações públicas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA da API -->
+    <div class="text-center">
+      <a href="{% url 'api:docs' %}" 
+         class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-semibold text-lg hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] transition-all group">
+        <i data-lucide="eye" class="w-6 h-6"></i>
+        Ver Dados Públicos Agora
+        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+      </a>
+      <p class="text-sm text-gray-400 mt-4">
+        📱 Clique e veja tudo direto no navegador • Não precisa instalar nada
+      </p>
     </div>
   </div>
 </section>

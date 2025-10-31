@@ -225,7 +225,7 @@ def _sse_event_stream(client_ip: str, rate_limit_key: str, session_key: str) -> 
 
             if new_transactions.exists():
                 for txn in new_transactions:
-                    # Build anonymized transaction data
+                    # Build anonymized transaction data (NO personal info like farm names)
                     data = {
                         "id": txn.id,
                         "timestamp": txn.timestamp.isoformat(),
@@ -233,7 +233,7 @@ def _sse_event_stream(client_ip: str, rate_limit_key: str, session_key: str) -> 
                         "seller_role": txn.seller.get_role_display(),
                         "amount": str(txn.amount),
                         "total_price": str(txn.total_price),
-                        "credit_origin": txn.credit.origin,
+                        # "credit_origin" removed for privacy - no farm names exposed
                     }
                     yield f"data: {json.dumps(data)}\n\n"
                     last_txn_time = txn.timestamp

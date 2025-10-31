@@ -1,0 +1,921 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados Públicos - Tucupi Labs</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0a0f0d;
+            color: #e5e7eb;
+            min-height: 100vh;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(15, 23, 20, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .navbar-logo:hover {
+            transform: translateY(-2px);
+        }
+        
+        .navbar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .navbar-logo-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #4ade80;
+        }
+        
+        .navbar-logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+        
+        .navbar-logo-text p {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin: 0;
+        }
+        
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .navbar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .navbar-link:hover {
+            color: #4ade80;
+        }
+        
+        .navbar-link svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .navbar-badge {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            color: #4ade80;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.05), rgba(34, 197, 94, 0.05));
+            border-radius: 20px;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: #4ade80;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #9ca3af;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        /* Intro Grid */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .intro-card {
+            background: rgba(15, 23, 20, 0.6);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .intro-card:hover {
+            border-color: #4ade80;
+            transform: translateY(-4px);
+        }
+        
+        .intro-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: rgba(74, 222, 128, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .intro-icon svg {
+            width: 32px;
+            height: 32px;
+            color: #4ade80;
+        }
+        
+        .intro-card h3 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .intro-card p {
+            color: #9ca3af;
+            line-height: 1.5;
+        }
+        
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 4rem 0 2rem;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #9ca3af;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Endpoint Cards */
+        .endpoint-grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .endpoint-card {
+            background: rgba(15, 23, 20, 0.6);
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+        
+        .endpoint-card:hover {
+            border-color: #4ade80;
+            box-shadow: 0 20px 40px rgba(74, 222, 128, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .endpoint-icon-large {
+            width: 70px;
+            height: 70px;
+            background: rgba(74, 222, 128, 0.1);
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .endpoint-icon-large svg {
+            width: 40px;
+            height: 40px;
+            color: #4ade80;
+        }
+        
+        .endpoint-info h3 {
+            font-size: 1.75rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .endpoint-description {
+            font-size: 1.1rem;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .what-you-get {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .what-you-get h4 {
+            color: #4ade80;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .what-you-get ul {
+            list-style: none;
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .what-you-get li {
+            color: #e5e7eb;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+        
+        .what-you-get li svg {
+            width: 20px;
+            height: 20px;
+            color: #4ade80;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .test-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: #0a0f0d;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+        }
+        
+        .test-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+        }
+        
+        .test-button svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Results Box */
+        .result-box {
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .result-box.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result-box pre {
+            color: #a3e635;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        
+        .loading {
+            color: #4ade80;
+            text-align: center;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .loading svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        /* Example Tag */
+        .example-tag {
+            display: inline-block;
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer Info */
+        .footer-info {
+            background: rgba(74, 222, 128, 0.05);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .footer-info h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-info p {
+            color: #9ca3af;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Input for credit ID */
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .input-group input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .input-group button {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            color: #0a0f0d;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .input-group button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-links {
+                gap: 1rem;
+            }
+            
+            .navbar-link span {
+                display: none;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .endpoint-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">
+                <div class="navbar-logo-icon">
+                    <i data-lucide="sprout"></i>
+                </div>
+                <div class="navbar-logo-text">
+                    <h1>Tucupi Labs</h1>
+                    <p>Carbon Credits</p>
+                </div>
+            </a>
+            
+            <div class="navbar-links">
+                <a href="/" class="navbar-link">
+                    <i data-lucide="home"></i>
+                    <span>Início</span>
+                </a>
+                <a href="{% url 'credits:credits_marketplace' %}" class="navbar-link">
+                    <i data-lucide="shopping-bag"></i>
+                    <span>Marketplace</span>
+                </a>
+                <span class="navbar-badge">API Pública</span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="badge">
+                <i data-lucide="unlock"></i>
+                <span>100% Aberto • Sem Login Necessário</span>
+            </div>
+            
+            <h1>🌍 Dados Públicos de Créditos de Carbono</h1>
+            
+            <p class="subtitle">
+                Veja em tempo real todos os créditos de carbono aprovados no sistema.
+                <br><strong>Qualquer pessoa pode consultar</strong> - transparência total!
+            </p>
+        </div>
+        
+        <!-- Intro Cards -->
+        <div class="intro-grid">
+            <div class="intro-card">
+                <div class="intro-icon">
+                    <i data-lucide="users"></i>
+                </div>
+                <h3>Para Todos</h3>
+                <p>Você não precisa de conta, senha ou ser desenvolvedor. Clique e veja os dados!</p>
+            </div>
+            
+            <div class="intro-card">
+                <div class="intro-icon">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h3>Dados Verificados</h3>
+                <p>Só mostramos créditos aprovados por auditores. Informação confiável!</p>
+            </div>
+            
+            <div class="intro-card">
+                <div class="intro-icon">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h3>Atualização Instantânea</h3>
+                <p>Os números que você vê são reais e atualizados automaticamente.</p>
+            </div>
+        </div>
+        
+        <!-- Section Title -->
+        <h2 class="section-title">O que você pode consultar?</h2>
+        <p class="section-subtitle">Clique nos botões verdes abaixo para ver os dados em tempo real</p>
+        
+        <!-- Endpoints -->
+        <div class="endpoint-grid">
+            <!-- Endpoint 1: Stats -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="endpoint-icon-large">
+                        <i data-lucide="bar-chart-3"></i>
+                    </div>
+                    <div class="endpoint-info">
+                        <h3>📊 Estatísticas Gerais</h3>
+                        <p class="endpoint-description">
+                            Veja os números totais do sistema: quantos créditos existem, 
+                            quanto CO2 foi compensado, quantos produtores e empresas participam.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="what-you-get">
+                    <h4>
+                        <i data-lucide="gift"></i>
+                        O que você vai ver:
+                    </h4>
+                    <ul>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Total de créditos de carbono registrados</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Quantidade total de CO₂ compensado (em toneladas)</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Número de produtores e empresas cadastradas</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Total de transações completadas</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <button class="test-button" onclick="testStats()">
+                    <i data-lucide="play"></i>
+                    <span>Clique para Ver as Estatísticas</span>
+                </button>
+                
+                <div id="result-stats" class="result-box"></div>
+            </div>
+            
+            <!-- Endpoint 2: Credits List -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="endpoint-icon-large">
+                        <i data-lucide="list"></i>
+                    </div>
+                    <div class="endpoint-info">
+                        <h3>📋 Lista de Créditos</h3>
+                        <p class="endpoint-description">
+                            Veja a lista completa de créditos de carbono aprovados e disponíveis.
+                            Cada crédito mostra de onde veio, quanto CO2 compensa e quem é o dono.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="what-you-get">
+                    <h4>
+                        <i data-lucide="gift"></i>
+                        Informações de cada crédito:
+                    </h4>
+                    <ul>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Quantidade de CO₂ compensado</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Data de geração do crédito</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Status (disponível, listado no marketplace, vendido)</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Tipo do produtor (sem identificação pessoal)</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Se foi validado por auditor (sim/não)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <span class="example-tag">Mostrando os 5 primeiros resultados</span>
+                
+                <button class="test-button" onclick="testCredits()">
+                    <i data-lucide="play"></i>
+                    <span>Clique para Ver os Créditos</span>
+                </button>
+                
+                <div id="result-credits" class="result-box"></div>
+            </div>
+            
+            <!-- Endpoint 3: Credit Detail -->
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <div class="endpoint-icon-large">
+                        <i data-lucide="search"></i>
+                    </div>
+                    <div class="endpoint-info">
+                        <h3>🔍 Buscar Crédito Específico</h3>
+                        <p class="endpoint-description">
+                            Quer ver todos os detalhes de um crédito específico? 
+                            Digite o número do ID e veja informações completas, incluindo notas do auditor.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="what-you-get">
+                    <h4>
+                        <i data-lucide="gift"></i>
+                        Detalhes completos que você verá:
+                    </h4>
+                    <ul>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Quantidade de CO₂ e data de geração</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Status atual e se está verificado</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Tipo do produtor (sem identificação pessoal)</span>
+                        </li>
+                        <li>
+                            <i data-lucide="check-circle"></i>
+                            <span>Data de criação e aprovação (se aprovado)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="input-group">
+                    <input 
+                        type="number" 
+                        id="credit-id" 
+                        placeholder="Digite o ID do crédito (ex: 1, 2, 3...)"
+                    >
+                    <button onclick="testCreditDetail()">
+                        <i data-lucide="search"></i>
+                        Buscar
+                    </button>
+                </div>
+                
+                <div id="result-detail" class="result-box"></div>
+            </div>
+        </div>
+        
+        <!-- Footer Info -->
+        <div class="footer-info">
+            <h3>💡 Por que isso é importante?</h3>
+            <p>
+                Transparência é fundamental no mercado de carbono. Qualquer pessoa - jornalistas, 
+                pesquisadores, estudantes ou cidadãos preocupados com o meio ambiente - pode 
+                verificar os dados e garantir que tudo está correto. Nenhuma informação escondida!
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Inicializar ícones
+        lucide.createIcons();
+        
+        function formatJSON(data) {
+            return JSON.stringify(data, null, 2);
+        }
+        
+        function showResult(elementId, content, isError = false) {
+            const box = document.getElementById(elementId);
+            box.classList.add('show');
+            if (isError) {
+                box.innerHTML = `<div class="error">${content}</div>`;
+            } else {
+                box.innerHTML = `<pre>${content}</pre>`;
+            }
+        }
+        
+        function showLoading(elementId) {
+            const box = document.getElementById(elementId);
+            box.classList.add('show');
+            box.innerHTML = `
+                <div class="loading">
+                    <i data-lucide="loader-2"></i>
+                    <span>Buscando dados...</span>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+        
+        async function testStats() {
+            showLoading('result-stats');
+            try {
+                const response = await fetch('/api/stats/');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const formatted = `✅ ESTATÍSTICAS DO SISTEMA
+
+📊 Total de créditos registrados: ${data.data.total_credits_registered}
+🌱 Total de CO₂ compensado: ${data.data.total_co2_amount.toFixed(2)} toneladas
+✅ Créditos disponíveis: ${data.data.credits_available}
+🏪 Créditos no marketplace: ${data.data.credits_listed}
+💚 Créditos já vendidos: ${data.data.credits_sold}
+
+👥 PARTICIPANTES
+👨‍🌾 Produtores cadastrados: ${data.data.total_producers}
+🏢 Empresas cadastradas: ${data.data.total_companies}
+
+💰 TRANSAÇÕES
+✅ Transações completadas: ${data.data.total_transactions}
+
+(Dados atualizados em tempo real)`;
+                    
+                    showResult('result-stats', formatted);
+                } else {
+                    throw new Error('Erro ao buscar dados');
+                }
+            } catch (error) {
+                showResult('result-stats', '❌ Erro ao carregar dados. Por favor, tente novamente.', true);
+            }
+        }
+        
+        async function testCredits() {
+            showLoading('result-credits');
+            try {
+                const response = await fetch('/api/credits/?limit=5');
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    let formatted = `✅ PRIMEIROS ${data.data.length} CRÉDITOS DE CARBONO\n\n`;
+                    formatted += `Total de créditos no sistema: ${data.total}\n`;
+                    formatted += `═══════════════════════════════════════\n\n`;
+                    
+                    data.data.forEach((credit, index) => {
+                        formatted += `📍 CRÉDITO #${credit.id}\n`;
+                        formatted += `💚 Quantidade: ${credit.amount} ${credit.unit}\n`;
+                        formatted += `📅 Gerado em: ${new Date(credit.generation_date).toLocaleDateString('pt-BR')}\n`;
+                        formatted += `✅ Status: ${credit.status === 'LISTED' ? 'No Marketplace' : credit.status === 'SOLD' ? 'Vendido' : 'Disponível'}\n`;
+                        formatted += `� Tipo: ${credit.owner_type}\n`;
+                        formatted += `${credit.is_validated ? '✔️ Validado por auditor' : '⏳ Aguardando validação'}\n`;
+                        formatted += `\n─────────────────────────────────────\n\n`;
+                    });
+                    
+                    showResult('result-credits', formatted);
+                } else {
+                    showResult('result-credits', '⚠️ Nenhum crédito encontrado ainda.', true);
+                }
+            } catch (error) {
+                showResult('result-credits', '❌ Erro ao carregar dados. Por favor, tente novamente.', true);
+            }
+        }
+        
+        async function testCreditDetail() {
+            const creditId = document.getElementById('credit-id').value;
+            
+            if (!creditId) {
+                showResult('result-detail', '⚠️ Por favor, digite um ID de crédito.', true);
+                return;
+            }
+            
+            showLoading('result-detail');
+            
+            try {
+                const response = await fetch(`/api/credits/${creditId}/`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const credit = data.data;
+                    let formatted = `✅ DETALHES DO CRÉDITO #${credit.id}\n\n`;
+                    formatted += `═══════════════════════════════════════\n\n`;
+                    formatted += `🌳 INFORMAÇÕES PRINCIPAIS\n`;
+                    formatted += `Quantidade: ${credit.amount} ${credit.unit}\n`;
+                    formatted += `Data de geração: ${new Date(credit.generation_date).toLocaleDateString('pt-BR')}\n`;
+                    formatted += `Status: ${credit.status === 'LISTED' ? '🏪 No Marketplace' : credit.status === 'SOLD' ? '💚 Vendido' : '✅ Disponível'}\n`;
+                    formatted += `Verificado: ${credit.is_verified ? '✔️ Sim' : '⏳ Aguardando'}\n\n`;
+                    
+                    formatted += `� PRODUTOR\n`;
+                    formatted += `Tipo: ${credit.owner_type}\n`;
+                    formatted += `(identidade protegida por privacidade)\n\n`;
+                    
+                    if (credit.is_validated) {
+                        formatted += `✔️ VALIDAÇÃO\n`;
+                        formatted += `Aprovado por auditor: Sim\n`;
+                        formatted += `Data de aprovação: ${new Date(credit.validated_at).toLocaleDateString('pt-BR')}\n`;
+                    }
+                    
+                    formatted += `\n═══════════════════════════════════════\n`;
+                    formatted += `Criado em: ${new Date(credit.created_at).toLocaleDateString('pt-BR')}`;
+                    
+                    showResult('result-detail', formatted);
+                } else {
+                    showResult('result-detail', `❌ Crédito #${creditId} não encontrado ou ainda não foi aprovado.`, true);
+                }
+            } catch (error) {
+                showResult('result-detail', '❌ Erro ao buscar crédito. Verifique o ID e tente novamente.', true);
+            }
+        }
+    </script>
+</body>
+</html>

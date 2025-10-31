@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "credits",
     "transactions",
     "dashboard",
+    "api",
 ]
 
 

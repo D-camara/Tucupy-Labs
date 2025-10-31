@@ -21,6 +21,9 @@ urlpatterns = [
 
     # Histórico de transações
     path("transactions/", include("transactions.urls")),
+    
+    # API pública
+    path("api/", include("api.urls")),
 ]
 
 # Servir arquivos de media em desenvolvimento
