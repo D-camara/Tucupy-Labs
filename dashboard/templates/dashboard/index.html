@@ -182,13 +182,13 @@
                             <p class="text-sm text-gray-400">{{ credit.origin }}</p>
                         </div>
                         {% if credit.validation_status == 'APPROVED' %}
-                        <span class="px-2 py-1 text-xs font-semibold bg-green-500/10 text-green-500 rounded-full">✅ Aprovado</span>
+                        <span class="px-2 py-1 text-xs font-semibold bg-green-500/10 text-green-500 rounded-full inline-flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Aprovado</span>
                         {% elif credit.validation_status == 'PENDING' %}
-                        <span class="px-2 py-1 text-xs font-semibold bg-yellow-500/10 text-yellow-500 rounded-full animate-pulse">🟡 Pendente</span>
+                        <span class="px-2 py-1 text-xs font-semibold bg-yellow-500/10 text-yellow-500 rounded-full animate-pulse inline-flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Pendente</span>
                         {% elif credit.validation_status == 'UNDER_REVIEW' %}
-                        <span class="px-2 py-1 text-xs font-semibold bg-blue-500/10 text-blue-500 rounded-full animate-pulse">🔵 Em Análise</span>
+                        <span class="px-2 py-1 text-xs font-semibold bg-blue-500/10 text-blue-500 rounded-full animate-pulse inline-flex items-center gap-1"><i data-lucide="loader-2" class="w-3 h-3"></i> Em Análise</span>
                         {% elif credit.validation_status == 'REJECTED' %}
-                        <span class="px-2 py-1 text-xs font-semibold bg-red-500/10 text-red-500 rounded-full">❌ Rejeitado</span>
+                        <span class="px-2 py-1 text-xs font-semibold bg-red-500/10 text-red-500 rounded-full inline-flex items-center gap-1"><i data-lucide="x-circle" class="w-3 h-3"></i> Rejeitado</span>
                         {% endif %}
                     </div>
                     

@@ -115,6 +115,59 @@ Business flow (high level):
 - Auto-reload via `django-browser-reload`; prefer `python manage.py tailwind dev` during development.
 - Eco/green color scheme; semantic HTML with accessible components (labels, focus states, contrast).
 
+## Icons & Visual Elements
+
+**Use Lucide Icons, Not Emojis** (for web templates)
+
+- **Library**: Lucide Icons (loaded via CDN in base.html)
+- **Syntax**: `<i data-lucide="icon-name" class="w-5 h-5"></i>`
+- **Initialization**: Icons auto-initialize via `lucide.createIcons()` in base template
+- **NEVER use emojis** in web templates (HTML served to browsers)
+- **Exception**: Email templates ONLY (email clients don't support JavaScript/Lucide)
+
+Common Icon Mappings (emoji → Lucide):
+```
+✅ → check-circle       🔍 → search           💡 → lightbulb
+❌ → x-circle           📊 → bar-chart-3      🔒 → shield-check
+⏳ → hourglass          📋 → list             🌍 → globe
+🟡 → clock (pending)    📱 → smartphone       ⚡ → zap
+🔵 → loader-2 (review)  ℹ️ → info             🌐 → unlock
+```
+
+Implementation Pattern:
+```html
+<!-- CORRECT: Lucide icon with Tailwind sizing -->
+<i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+
+<!-- CORRECT: Inline icon with text -->
+<p class="flex items-center gap-2">
+  <i data-lucide="globe" class="w-4 h-4"></i> Public Data
+</p>
+
+<!-- WRONG: Don't use emojis in web templates -->
+<p>✅ Approved</p>  <!-- NO! -->
+
+<!-- EXCEPTION: Email templates only -->
+<!-- templates/emails/base.html -->
+<h1>🌱 EcoTrade</h1>  <!-- OK for emails -->
+```
+
+Icon Sizing with Tailwind:
+- `w-3 h-3` - Small (12px) - inline badges, compact UI
+- `w-4 h-4` - Small+ (16px) - inline text, list items
+- `w-5 h-5` - Medium (20px) - buttons, headers, standard UI
+- `w-6 h-6` - Large (24px) - prominent features
+- `w-8 h-8`+ - XL (32px+) - hero sections, large cards
+
+When adding new icons:
+1. Search Lucide docs: https://lucide.dev/icons/
+2. Use semantic names (prefer `check-circle` over `checkmark`)
+3. Add ARIA labels for accessibility when icon-only
+4. Style with Tailwind color utilities (text-green-500, etc.)
+5. Initialize dynamic icons: call `lucide.createIcons()` after DOM insertion
+
+See PLAN.md "Emoji to Lucide Icon Migration" section for complete mapping reference.
+
 ## Testing
 
 - Use `python manage.py test` for the suite; keep tests close to apps (`<app>/tests/`).
