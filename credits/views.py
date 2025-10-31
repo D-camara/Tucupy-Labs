@@ -48,13 +48,12 @@ class MarketplaceListView(ListView):
 
     def get_queryset(self):
         # select_related otimiza joins para acessar credit e owner sem múltiplas queries
-        # Apenas créditos aprovados por auditor aparecem no marketplace
+        # Mostra todos os créditos listados, mas com indicador de status de validação
         return (
-            CreditListing.objects.select_related("credit", "credit__owner")
+            CreditListing.objects.select_related("credit", "credit__owner", "credit__validated_by")
             .filter(
                 is_active=True,
-                credit__status=CarbonCredit.Status.LISTED,
-                credit__validation_status=CarbonCredit.ValidationStatus.APPROVED
+                credit__status=CarbonCredit.Status.LISTED
             )
             .order_by("-listed_at")
         )
@@ -122,13 +121,19 @@ def list_for_sale(request, pk: int):
     if request.method == "POST":
         form = CreditListingForm(request.POST)
         if form.is_valid():
-            # Regras de prevenção: deve estar aprovado, status AVAILABLE, e sem listagem ativa
-            if credit.validation_status != CarbonCredit.ValidationStatus.APPROVED:
-                form.add_error(None, "Este crédito precisa ser aprovado por um auditor antes de ser listado.")
-            elif credit.status != CarbonCredit.Status.AVAILABLE:
-                form.add_error(None, "Este crédito não está disponível para listagem.")
+            # Regras de prevenção: status AVAILABLE e sem listagem ativa
+            if credit.status != CarbonCredit.Status.AVAILABLE:
+                messages.error(
+                    request,
+                    "❌ Este crédito não está disponível para listagem."
+                )
+                return redirect("credits:credit_detail", pk=credit.pk)
             elif credit.listings.filter(is_active=True).exists():
-                form.add_error(None, "Já existe uma listagem ativa para este crédito.")
+                messages.warning(
+                    request,
+                    "⚠️ Já existe uma listagem ativa para este crédito."
+                )
+                return redirect("credits:credit_detail", pk=credit.pk)
             else:
                 # Atualizações sensíveis feitas dentro de uma transação para consistência
                 with transaction.atomic():
@@ -139,7 +144,26 @@ def list_for_sale(request, pk: int):
                     # Marca o crédito como LISTED
                     credit.status = CarbonCredit.Status.LISTED
                     credit.save(update_fields=["status"])
-                return redirect("credits:credit_detail", pk=credit.pk)
+                
+                # Mensagem diferente dependendo do status de validação
+                if credit.validation_status == CarbonCredit.ValidationStatus.APPROVED:
+                    messages.success(
+                        request,
+                        "✅ Crédito listado com sucesso no marketplace!"
+                    )
+                else:
+                    messages.info(
+                        request,
+                        "📋 Crédito enviado para o marketplace! Ele aparecerá como 'Em Análise' até ser aprovado por um auditor."
+                    )
+                
+                return redirect("credits:credits_marketplace")
+        else:
+            messages.error(
+                request,
+                "❌ Erro ao listar o crédito. Verifique os dados do formulário."
+            )
+            return redirect("credits:credit_detail", pk=credit.pk)
     else:
         form = CreditListingForm()
 

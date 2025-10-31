@@ -225,6 +225,37 @@
         Listar para venda
       </h3>
       
+      <!-- Aviso sobre validação -->
+      {% if credit.validation_status != 'APPROVED' %}
+      <div class="mb-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <div>
+            <h4 class="text-yellow-400 font-semibold mb-1">⏳ Validação Pendente</h4>
+            <p class="text-sm text-gray-300">
+              Este crédito precisa ser <strong>aprovado por um auditor</strong> antes de poder ser listado no marketplace. 
+              Após clicar em "Listar", o crédito entrará em análise até a aprovação do auditor.
+            </p>
+            {% if credit.validation_status == 'PENDING' %}
+            <p class="text-xs text-yellow-300 mt-2">
+              Status atual: <strong>Aguardando revisão inicial</strong>
+            </p>
+            {% elif credit.validation_status == 'UNDER_REVIEW' %}
+            <p class="text-xs text-blue-300 mt-2">
+              Status atual: <strong>Em análise por {{ credit.validated_by.username }}</strong>
+            </p>
+            {% elif credit.validation_status == 'REJECTED' %}
+            <p class="text-xs text-red-300 mt-2">
+              Status atual: <strong>Rejeitado</strong> - Entre em contato com o auditor
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
       <form action="{% url 'credits:credit_list_for_sale' credit.id %}" method="post" class="space-y-6">
         {% csrf_token %}
         {% if listing_form.non_field_errors %}
@@ -253,6 +284,7 @@
           {% endif %}
         </div>
         
+        {% if credit.validation_status == 'APPROVED' %}
         <button type="submit" class="group relative w-full px-6 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
           <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
           <span class="relative z-10 flex items-center justify-center gap-2">
@@ -262,6 +294,20 @@
             Listar no Marketplace
           </span>
         </button>
+        {% else %}
+        <button type="submit" class="group relative w-full px-6 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-lg">
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Enviar para Análise do Auditor
+          </span>
+        </button>
+        <p class="text-xs text-center text-gray-400 mt-2">
+          O crédito será enviado para validação antes de aparecer no marketplace
+        </p>
+        {% endif %}
       </form>
     </div>
   {% endif %}

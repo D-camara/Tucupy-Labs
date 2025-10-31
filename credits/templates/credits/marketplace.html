@@ -55,9 +55,37 @@
                 <i data-lucide="sprout" class="w-6 h-6 text-tucupi-green-400"></i>
                 <h3 class="text-xl font-bold text-white">Crédito #{{ item.credit.id }}</h3>
               </div>
-              <span class="px-3 py-1 text-xs font-bold rounded-full bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50">
-                DISPONÍVEL
-              </span>
+              <div class="flex items-center gap-2 flex-wrap">
+                {% if item.credit.validation_status == 'APPROVED' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  APROVADO
+                </span>
+                {% elif item.credit.validation_status == 'UNDER_REVIEW' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/50 flex items-center gap-1 animate-pulse">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  EM ANÁLISE
+                </span>
+                {% elif item.credit.validation_status == 'PENDING' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 flex items-center gap-1 animate-pulse">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  AGUARDANDO
+                </span>
+                {% elif item.credit.validation_status == 'REJECTED' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/50 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  REJEITADO
+                </span>
+                {% endif %}
+              </div>
             </div>
           </div>
           
@@ -91,6 +119,7 @@
           </div>
           
           <!-- CTA -->
+          {% if item.credit.validation_status == 'APPROVED' %}
           <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
             <span class="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition"></span>
             <span class="relative z-10 flex items-center gap-2">
@@ -100,6 +129,21 @@
               </svg>
             </span>
           </a>
+          {% else %}
+          <div class="space-y-2">
+            <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gray-700 text-gray-300 font-bold rounded-lg overflow-hidden transition-all hover:bg-gray-600">
+              <span class="relative z-10 flex items-center gap-2">
+                Ver Detalhes
+                <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </a>
+            <p class="text-xs text-center text-gray-400 italic">
+              Aguardando aprovação do auditor
+            </p>
+          </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
