@@ -2,6 +2,50 @@
 
 ## 2025-10-31
 
+### Added - Icon Usage Guidelines (Lucide over Emojis)
+- **AGENTS.md**: Added comprehensive "Icons & Visual Elements" section
+  - Explicit rule: Use Lucide icons, NOT emojis in web templates
+  - Exception documented: Email templates retain emojis (no JS support)
+  - Common emoji → Lucide mappings (14 common patterns)
+  - Implementation patterns with code examples
+  - Tailwind sizing guide (w-3 through w-8+)
+  - Dynamic icon initialization guide
+  - Accessibility guidance (ARIA labels)
+
+- **CLAUDE.md**: Added "Icons (Lucide, Not Emojis)" section
+  - Quick reference for basic usage
+  - Categorized icon mappings (Status, Workflow, Info, Data, Global, Action)
+  - Tailwind size reference
+  - Email template exception clearly stated
+  - Dynamic initialization snippet
+  - Links to Lucide docs and PLAN.md
+
+- **Rationale**:
+  - Establishes Lucide icons as the standard across the codebase
+  - Prevents future emoji usage in web templates
+  - Documents migration work completed today
+  - Provides clear patterns for new development
+  - Ensures consistency in UI/UX going forward
+
+### Changed - Emoji to Lucide Icon Migration
+- **Completed migration**: 22 emoji replacements across 6 template files
+  - templates/landing.html (8 emojis)
+  - templates/api_docs.html (5 emojis)
+  - dashboard/templates/dashboard/index.html (4 emojis)
+  - transactions/templates/transactions/public_transactions.html (2 emojis)
+  - accounts/templates/accounts/add_balance.html (1 emoji)
+  - credits/templates/credits/detail.html (1 emoji)
+
+- **Email templates preserved**: templates/emails/*.html retain emojis
+  - Email clients don't support JavaScript-based icons
+  - Universal emoji support ensures compatibility
+
+- **Documentation**: PLAN.md updated with complete migration reference
+  - Full emoji → Lucide mapping table
+  - Implementation patterns
+  - Benefits and rationale
+  - Email template exclusion documented
+
 ### Changed - Tailwind Build Output
 - `theme/static/css/dist/` removed from git tracking (already in .gitignore)
 - Build artifacts now ignored properly

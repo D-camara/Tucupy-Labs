@@ -125,6 +125,54 @@ python manage.py show_ownership_stats
 - Content paths via `@source` directive in CSS (optional config.js)
 - Single `tailwind dev` command replaces dual terminal setup
 
+## Icons (Lucide, Not Emojis)
+
+**IMPORTANT**: Use Lucide icons in all web templates. DO NOT use emoji characters.
+
+### Basic Usage
+```html
+<!-- Standard icon -->
+<i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+
+<!-- Inline with text -->
+<span class="flex items-center gap-2">
+  <i data-lucide="globe" class="w-4 h-4"></i> Public Data
+</span>
+```
+
+### Common Mappings
+```
+Status:     ✅ → check-circle  |  ❌ → x-circle  |  ⏳ → hourglass
+Workflow:   🟡 → clock         |  🔵 → loader-2  |  ✅ → check-circle
+Info:       💡 → lightbulb     |  ℹ️ → info      |  🔒 → shield-check
+Data:       📊 → bar-chart-3   |  📋 → list      |  🔍 → search
+Global:     🌍 → globe         |  🌐 → unlock    |  📱 → smartphone
+Action:     ⚡ → zap           |  🎯 → target    |  🔧 → wrench
+```
+
+### Icon Sizes (Tailwind)
+- `w-3 h-3` - 12px (badges)
+- `w-4 h-4` - 16px (inline text)
+- `w-5 h-5` - 20px (buttons, standard)
+- `w-6 h-6` - 24px (headers)
+- `w-8 h-8`+ - 32px+ (heroes)
+
+### Email Templates Exception
+Email templates (templates/emails/\*.html) MUST use emojis since Lucide requires JavaScript:
+```html
+<!-- templates/emails/base.html -->
+<h1>🌱 EcoTrade</h1>  <!-- CORRECT for email -->
+```
+
+### Dynamic Icon Initialization
+When adding icons via JavaScript (SSE, AJAX):
+```javascript
+// After inserting HTML with icons
+lucide.createIcons();
+```
+
+**See**: PLAN.md "Emoji to Lucide Icon Migration" for complete reference | https://lucide.dev/icons/ for icon search
+
 ## Implementation Status
 
 See `PLAN.md` for phase tracking. Update status checkboxes as phases complete.

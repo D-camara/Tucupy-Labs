@@ -304,6 +304,96 @@ pip install -r requirements.txt  # installs Faker==33.1.0
 - [x] Phase 1: Project Bootstrap ✅
 - [x] Phase 2: User Management ✅
 - [x] Phase 3: Credits Management ✅
-- [ ] Phase 4: Transactions (em progresso - pendente implementação de compra)
+- [x] Phase 4: Transactions ✅
 - [x] Phase 5: Dashboard ✅ (métricas por papel, últimas transações)
 - [x] Phase 6: Polish & Testing ✅ (42 testes passando, admin configurado)
+- [x] Emoji to Lucide Icon Migration ✅
+
+---
+
+## Emoji to Lucide Icon Migration ✅
+
+### Overview
+Migrated all emoji characters in web templates to Lucide icons for consistency, better rendering, and modern design.
+
+### Scope
+**Total:** ~22 emoji replacements across 6 template files
+
+### Completed Files
+
+#### Core App Templates (18 replacements)
+1. **templates/landing.html** - 8 emojis ✅
+   - Removed: 📊📋🔍🌐✅⚡🔒📱
+   - Icons already present, removed redundant emoji text
+
+2. **templates/api_docs.html** - 5 emojis ✅
+   - 🌍 → `globe` icon (line 571)
+   - 📊📋🔍 → Removed (icons already present)
+   - 💡 → `lightbulb` icon (line 772)
+
+3. **dashboard/templates/dashboard/index.html** - 4 emojis ✅
+   - ✅ → `check-circle` icon (validation status)
+   - 🟡 → `clock` icon (pending status)
+   - 🔵 → `loader-2` icon (under review)
+   - ❌ → `x-circle` icon (rejected status)
+
+4. **transactions/templates/transactions/public_transactions.html** - 2 emojis ✅
+   - 🔒 → Removed (shield-check icon already present)
+   - 💡 → `lightbulb` icon (line 136)
+
+5. **accounts/templates/accounts/add_balance.html** - 1 emoji ✅
+   - ℹ️ → Removed (info icon already present)
+
+6. **credits/templates/credits/detail.html** - 1 emoji ✅
+   - ⏳ → `hourglass` icon (validation pending)
+
+#### Email Templates (Excluded)
+- **templates/emails/*.html** - Emojis retained
+- **Reason:** Email clients don't support JavaScript required for Lucide icons
+- **Status:** Emojis kept for universal compatibility in HTML emails
+
+### Emoji → Lucide Icon Mapping Reference
+
+| Emoji | Lucide Icon | Usage Context |
+|-------|-------------|---------------|
+| 🌍 | `globe` | Public data, global access |
+| 📊 | `bar-chart-3` | Statistics, charts |
+| 📋 | `list` | Lists, credits |
+| 🔍 | `search` | Search, detailed view |
+| 🌐 | `unlock` | Public access |
+| ✅ | `check-circle` | Approved, verified |
+| ⚡ | `zap` | Fast, instant updates |
+| 🔒 | `shield-check` | Privacy, security |
+| 📱 | `smartphone` | Mobile-friendly |
+| 💡 | `lightbulb` | Tips, information |
+| 🟡 | `clock` | Pending status |
+| 🔵 | `loader-2` | Under review |
+| ❌ | `x-circle` | Rejected, error |
+| ⏳ | `hourglass` | Waiting, validation pending |
+| ℹ️ | `info` | Information box |
+
+### Implementation Pattern
+```html
+<!-- Before -->
+<p>📊 Estatísticas</p>
+
+<!-- After -->
+<p><i data-lucide="bar-chart-3" class="w-5 h-5 inline"></i> Estatísticas</p>
+
+<!-- Or when icon already present -->
+<i data-lucide="bar-chart-3"></i>
+<p>Estatísticas</p> <!-- emoji removed -->
+```
+
+### Benefits
+- Consistent icon style across platform
+- Better control over size, color, accessibility
+- Scalable vector graphics
+- Supports dark/light themes
+- Modern, professional appearance
+
+### Notes
+- Lucide icons auto-initialized via `lucide.createIcons()` in base.html
+- Icons styled with Tailwind classes
+- Email templates preserve emojis (no JS support)
+- All replacements tested for visual consistency
