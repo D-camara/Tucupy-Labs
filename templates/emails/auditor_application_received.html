@@ -1,0 +1,31 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Candidatura Recebida! ✅</h2>
+
+<p>Olá <strong>{{ user_name }}</strong>,</p>
+
+<p>Recebemos sua candidatura para se tornar um <strong>Auditor Certificado</strong> na plataforma EcoTrade!</p>
+
+<div class="info-box">
+    <p style="margin: 0;"><strong>📋 Próximos Passos:</strong></p>
+    <p style="margin: 5px 0 0 0;">
+        Nossa equipe irá analisar sua candidatura em breve. Você receberá um novo email assim que 
+        houver uma decisão sobre seu pedido.
+    </p>
+</div>
+
+<p>Como auditor, você terá a responsabilidade de:</p>
+<ul style="margin-left: 20px; color: #555555;">
+    <li>Validar créditos de carbono submetidos por produtores</li>
+    <li>Garantir a conformidade e autenticidade dos créditos</li>
+    <li>Contribuir para a transparência do marketplace</li>
+</ul>
+
+<p>Agradecemos seu interesse em fazer parte da nossa rede de auditores!</p>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

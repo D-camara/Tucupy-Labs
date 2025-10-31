@@ -1,0 +1,39 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Sobre seu Crédito de Carbono</h2>
+
+<p>Olá <strong>{{ producer_name }}</strong>,</p>
+
+<p>Seu crédito de carbono foi revisado por nossos auditores.</p>
+
+<div class="warning-box">
+    <p style="margin: 0;"><strong>Status:</strong> Necessita Revisão</p>
+    <p style="margin: 5px 0 0 0;"><strong>{{ credit_title }}</strong></p>
+</div>
+
+{% if auditor_notes %}
+<p><strong>Observações do Auditor:</strong></p>
+<p style="margin-left: 20px; color: #555555; background-color: #fef3c7; padding: 15px; border-radius: 4px;">
+    {{ auditor_notes }}
+</p>
+{% endif %}
+
+<p><strong>O que fazer agora:</strong></p>
+<ul style="margin-left: 20px; color: #555555;">
+    <li>📝 Revise as observações do auditor cuidadosamente</li>
+    <li>🔧 Faça as correções necessárias na documentação</li>
+    <li>📤 Resubmeta o crédito para nova análise</li>
+</ul>
+
+<a href="http://localhost:8000/dashboard/" class="email-button" style="background-color: #f59e0b;">
+    Revisar e Corrigir
+</a>
+
+<p>Nossa equipe está disponível para ajudá-lo caso tenha dúvidas sobre as observações.</p>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

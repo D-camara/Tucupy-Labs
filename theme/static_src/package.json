@@ -1,0 +1,15 @@
+{
+  "name": "theme-tailwind",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "scripts": {
+    "build": "tailwindcss -c ./tailwind.config.js -i ./src/styles.css -o ../static/css/dist/styles.css --minify",
+    "start": "tailwindcss -c ./tailwind.config.js -i ./src/styles.css -o ../static/css/dist/styles.css --watch"
+  }
+}

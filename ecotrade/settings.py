@@ -1,9 +1,14 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+import django_stubs_ext
 
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
+
+django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # WARNING: Replace for production via environment variable
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key-change-me")
@@ -20,11 +25,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Tailwind & reload
+    "tailwind",
+    "django_browser_reload",
     # Local apps
+    "theme",
     "accounts",
     "credits",
     "transactions",
     "dashboard",
+    "api",
 ]
 
 
@@ -36,6 +46,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 
@@ -91,6 +102,10 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Media files (uploads)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -98,3 +113,41 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom user model must be set before first migration
 AUTH_USER_MODEL = "accounts.User"
 
+# Tailwind configuration
+TAILWIND_APP_NAME = "theme"
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# ==============================================================================
+# EMAIL CONFIGURATION
+# ==============================================================================
+
+# Email backend - respeita configuração do .env
+# Para desenvolvimento use: EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+# Para produção use: EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"  # Console por padrão (dev)
+)
+
+# Configurações SMTP (Gmail)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "False") == "True"
+
+# Credenciais (usar variáveis de ambiente em produção)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "tucupilabs@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")  # Senha de app do Gmail
+
+# Email padrão para envio
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "Tucupi Labs <tucupilabs@gmail.com>")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL  # Para emails de erro do servidor
+
+# URL do site (para links nos emails)
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000")
+SITE_NAME = "Tucupi Labs"
+
+# Timeout para conexões SMTP (em segundos)
+EMAIL_TIMEOUT = 30

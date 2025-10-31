@@ -1,6 +1,14 @@
 from __future__ import annotations
 
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
+
+
+class CarbonCreditManager(models.Manager):
+    """Manager que filtra créditos deletados (soft delete)."""
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
 
 
 class CarbonCredit(models.Model):
@@ -8,6 +16,12 @@ class CarbonCredit(models.Model):
         AVAILABLE = "AVAILABLE", "Available"
         LISTED = "LISTED", "Listed"
         SOLD = "SOLD", "Sold"
+    
+    class ValidationStatus(models.TextChoices):
+        PENDING = "PENDING", "Aguardando Validação"
+        UNDER_REVIEW = "UNDER_REVIEW", "Em Análise"
+        APPROVED = "APPROVED", "Aprovado"
+        REJECTED = "REJECTED", "Rejeitado"
 
     owner = models.ForeignKey("accounts.User", on_delete=models.CASCADE, related_name="credits")
     amount = models.DecimalField(max_digits=12, decimal_places=2)
@@ -16,6 +30,123 @@ class CarbonCredit(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.AVAILABLE)
     unit = models.CharField(max_length=32, default="tons CO2")
+    
+    # Campos de validação
+    validation_status = models.CharField(
+        max_length=20,
+        choices=ValidationStatus.choices,
+        default=ValidationStatus.PENDING,
+        help_text="Status de validação pelo auditor"
+    )
+    validated_by = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="validated_credits",
+        help_text="Auditor que validou o crédito"
+    )
+    validated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Data da validação"
+    )
+    auditor_notes = models.TextField(
+        blank=True,
+        help_text="Observações do auditor sobre a validação"
+    )
+    
+    # Campos legados (manter compatibilidade)
+    is_verified = models.BooleanField(default=False, help_text="Crédito verificado por administrador")
+    is_deleted = models.BooleanField(default=False, help_text="Soft delete - crédito imutável")
+
+    # Managers
+    objects = CarbonCreditManager()  # Filtra deletados por padrão
+    objects_all = models.Manager()   # Inclui deletados (para admin)
+
+    def clean(self):
+        """Validações de negócio."""
+        if self.amount is not None and self.amount <= 0:
+            raise ValidationError({"amount": "A quantidade deve ser maior que zero."})
+        
+        # Converte string para date se necessário (útil em testes)
+        from datetime import date
+        gen_date = self.generation_date
+        if isinstance(gen_date, str):
+            from datetime import datetime
+            gen_date = datetime.strptime(gen_date, '%Y-%m-%d').date()
+        
+        if gen_date and gen_date > timezone.now().date():
+            raise ValidationError({"generation_date": "A data de geração não pode ser no futuro."})
+    
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    def delete(self, using=None, keep_parents=False):
+        """Soft delete - marca como deletado sem remover do banco (imutabilidade)."""
+        self.is_deleted = True
+        self.save(update_fields=['is_deleted'])
+
+    def hard_delete(self):
+        """Deleção real (apenas para admin se necessário)."""
+        super().delete()
+    
+    def approve_validation(self, auditor, notes: str = "") -> None:
+        """
+        Aprova a validação do crédito.
+        
+        Args:
+            auditor: User com role AUDITOR que está aprovando
+            notes: Observações do auditor
+        """
+        self.validation_status = self.ValidationStatus.APPROVED
+        self.validated_by = auditor
+        self.validated_at = timezone.now()
+        self.auditor_notes = notes
+        self.is_verified = True  # Marca como verificado (legado)
+        self.save()
+    
+    def reject_validation(self, auditor, notes: str) -> None:
+        """
+        Rejeita a validação do crédito.
+        
+        Args:
+            auditor: User com role AUDITOR que está rejeitando
+            notes: Observações do auditor (obrigatório)
+        """
+        self.validation_status = self.ValidationStatus.REJECTED
+        self.validated_by = auditor
+        self.validated_at = timezone.now()
+        self.auditor_notes = notes
+        self.is_verified = False
+        self.save()
+    
+    def start_review(self, auditor) -> None:
+        """
+        Marca o crédito como em análise por um auditor.
+        
+        Args:
+            auditor: User com role AUDITOR que está revisando
+        """
+        self.validation_status = self.ValidationStatus.UNDER_REVIEW
+        self.validated_by = auditor
+        self.save()
+    
+    @property
+    def can_be_listed(self) -> bool:
+        """Crédito só pode ser listado se estiver aprovado."""
+        return self.validation_status == self.ValidationStatus.APPROVED
+    
+    @property
+    def is_pending_validation(self) -> bool:
+        """Verifica se o crédito está aguardando validação."""
+        return self.validation_status == self.ValidationStatus.PENDING
+    
+    @property
+    def is_approved(self) -> bool:
+        """Verifica se o crédito foi aprovado."""
+        return self.validation_status == self.ValidationStatus.APPROVED
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"Credit<{self.id}> {self.amount} {self.unit}"
@@ -28,6 +159,83 @@ class CreditListing(models.Model):
     expires_at = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
+    def clean(self):
+        """Validações de negócio."""
+        if self.price_per_unit is not None and self.price_per_unit <= 0:
+            raise ValidationError({"price_per_unit": "O preço deve ser maior que zero."})
+
+        # Só valida status se já tem um credit_id (objeto salvo)
+        if self.credit_id:
+            try:
+                if self.credit.status == 'SOLD':
+                    raise ValidationError("Não é possível listar um crédito já vendido.")
+            except CarbonCredit.DoesNotExist:
+                pass
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"Listing<{self.id}> for Credit<{self.credit_id}>"
+
+
+class CreditOwnershipHistory(models.Model):
+    """Registro imutável de histórico de propriedade (blockchain-style audit trail)."""
+
+    class TransferType(models.TextChoices):
+        CREATION = "CREATION", "Credit Created"
+        SALE = "SALE", "Sold"
+        TRANSFER = "TRANSFER", "Transferred"
+
+    credit = models.ForeignKey(
+        "credits.CarbonCredit",
+        on_delete=models.CASCADE,
+        related_name="ownership_history"
+    )
+    from_owner = models.ForeignKey(
+        "accounts.User",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="credits_transferred_from",
+        help_text="Null para criação inicial"
+    )
+    to_owner = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.PROTECT,
+        related_name="credits_transferred_to"
+    )
+    transfer_type = models.CharField(
+        max_length=16,
+        choices=TransferType.choices
+    )
+    transaction = models.ForeignKey(
+        "transactions.Transaction",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="ownership_records"
+    )
+    price = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text="Preço pago na transferência (se aplicável)"
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['timestamp']
+        verbose_name = "Histórico de Propriedade"
+        verbose_name_plural = "Históricos de Propriedade"
+        indexes = [
+            models.Index(fields=['credit', 'timestamp']),
+        ]
+
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        from_str = self.from_owner.username if self.from_owner else "GENESIS"
+        return f"{from_str} → {self.to_owner.username} ({self.transfer_type})"
 

@@ -1,0 +1,85 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Tucupi Labs · Créditos de Carbono{% endblock %}</title>
+    <meta name="description" content="Marketplace regional de créditos de carbono. Conectando produtores sustentáveis e empresas conscientes.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    {% tailwind_css %}
+    
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="min-h-screen bg-tucupi-black text-white font-sans antialiased">
+    <!-- Background effects -->
+    <div class="fixed inset-0 grid-bg pointer-events-none"></div>
+    <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-tucupi-green-500 opacity-10 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="fixed bottom-0 left-0 w-[400px] h-[400px] bg-tucupi-accent opacity-10 blur-[100px] rounded-full pointer-events-none"></div>
+    
+    <!-- Content wrapper -->
+    <div class="relative z-10">
+      {% include "components/navbar.html" %}
+      
+      <!-- Messages -->
+      {% if messages %}
+        <div class="container mx-auto px-4 pt-4 animate-slide-down">
+          {% for message in messages %}
+            <div class="mb-4 p-4 rounded-lg glass border-l-4 
+                        {% if message.tags == 'success' %}border-tucupi-green-500 bg-tucupi-green-500/10
+                        {% elif message.tags == 'error' %}border-red-500 bg-red-500/10
+                        {% elif message.tags == 'warning' %}border-yellow-500 bg-yellow-500/10
+                        {% else %}border-blue-500 bg-blue-500/10{% endif %}">
+              <p class="text-sm font-medium">{{ message }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+      </main>
+      
+      <!-- Footer -->
+      <footer class="mt-20 border-t border-white/10 bg-tucupi-dark/50">
+        <div class="container mx-auto px-4 py-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 class="text-2xl font-display font-bold text-gradient mb-2">Tucupi Labs</h3>
+              <p class="text-gray-400 text-sm">Marketplace regional de créditos de carbono.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3 text-tucupi-green-400">Links Rápidos</h4>
+              <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="/credits/" class="hover:text-tucupi-green-400 transition">Marketplace</a></li>
+                <li><a href="/transactions/" class="hover:text-tucupi-green-400 transition">Transações</a></li>
+                <li><a href="/dashboard/" class="hover:text-tucupi-green-400 transition">Dashboard</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-semibold mb-3 text-tucupi-green-400">Contato</h4>
+              <p class="text-sm text-gray-400">contato@tucupilabs.com</p>
+              <p class="text-sm text-gray-400 mt-1">© 2025 Tucupi Labs</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    {% block extra_scripts %}{% endblock %}
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
+

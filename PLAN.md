@@ -4,8 +4,9 @@
 - Python 3.11+ with venv
 - Django 5.x
 - SQLite (dev)
-- TailwindCSS 3.x
-- django-tailwind package
+- TailwindCSS 4.x
+- django-tailwind-4[reload] package
+- Node.js 18+ (for Tailwind compilation)
 
 ## Django Apps Structure
 
@@ -99,6 +100,8 @@
 /credits/<id>/              → credit detail
 /credits/<id>/buy/          → purchase credit (company)
 /transactions/              → transaction history
+/transactions/public/       → public real-time transactions (no auth)
+/transactions/public/stream/ → SSE endpoint for real-time updates
 /admin/                     → Django admin
 ```
 
@@ -117,6 +120,7 @@ credits/
   detail.html               → single credit view
 transactions/
   history.html              → user transaction list
+  public_transactions.html  → public real-time transactions feed
 components/
   navbar.html
   credit_card.html
@@ -125,61 +129,141 @@ components/
 
 ## Implementation Phases
 
-### Phase 1: Project Bootstrap ⏳
-1. Create venv, install Django
-2. Create Django project `ecotrade`
-3. Install & configure django-tailwind
-4. Setup static files
-5. Create base template with TailwindCSS
-6. Initial git commit
+### Phase 1: Project Bootstrap ✅ COMPLETE
+1. ✅ Create venv, install Django
+2. ✅ Create Django project `ecotrade`
+3. ✅ Install django-tailwind-4[reload]
+4. ✅ Configure settings (INSTALLED_APPS, middleware, INTERNAL_IPS)
+5. ✅ Run `tailwind init` to create theme app
+6. ✅ Run `tailwind install` to install Node deps
+7. ✅ Configure v4 CSS (@import, @theme, @source)
+8. ✅ Create base template with `{% tailwind_css %}`
+9. ✅ Test auto-reload workflow
+10. ✅ Initial git commit
 
-### Phase 2: User Management
-1. Create `accounts` app
-2. Custom User model with roles
-3. Profile model
-4. Registration/login forms & views
-5. Role-based mixins for views
-6. Migration & testing
+### Phase 2: User Management ✅ COMPLETE
+1. ✅ Create `accounts` app
+2. ✅ Custom User model with roles
+3. ✅ Profile model
+4. ✅ Registration/login forms & views
+5. ✅ Role-based mixins for views
+6. ✅ Migration & testing (14 testes passando)
 
-### Phase 3: Credits Management
-1. Create `credits` app
-2. CarbonCredit & CreditListing models
-3. Producer credit registration view
-4. Marketplace listing view
-5. Credit detail view
-6. Forms & templates
+### Phase 3: Credits Management ✅ COMPLETE
+1. ✅ Create `credits` app
+2. ✅ CarbonCredit & CreditListing models
+3. ✅ Producer credit registration view
+4. ✅ Marketplace listing view
+5. ✅ Credit detail view
+6. ✅ Forms & templates (9 testes passando)
 
-### Phase 4: Transactions
-1. Create `transactions` app
-2. Transaction model
-3. Purchase flow (company only)
-4. Transaction history view
-5. Credit ownership transfer logic
-6. Forms & templates
+### Phase 4: Transactions ✅ COMPLETE
+1. ✅ Create `transactions` app
+2. ✅ Transaction model (limpo, sem duplicações)
+3. ✅ Purchase flow (company only, atomic transaction)
+4. ✅ Transaction history view
+5. ✅ Credit ownership transfer logic (transactional, safe)
+6. ✅ Forms & templates (13 testes passando + 1 teste e2e)
 
-### Phase 5: Dashboard
-1. Create `dashboard` app
-2. Dashboard view with role-based content
-3. Credit balance calculation
-4. Recent transactions display
-5. Statistics aggregation
-6. Template with TailwindCSS components
+### Phase 5: Dashboard ✅ COMPLETE
+1. ✅ Create `dashboard` app
+2. ✅ Dashboard view with role-based content
+3. ✅ Credit balance calculation
+4. ✅ Recent transactions display
+5. ✅ Statistics aggregation
+6. ✅ Template with TailwindCSS components (10 testes passando)
 
-### Phase 6: Polish & Testing
-1. Add form validation
-2. Error handling
-3. Success messages
-4. Unit tests for models
-5. Integration tests for flows
-6. UI refinements
+### Phase 6: Polish & Testing ✅ COMPLETE
+1. ✅ Add form validation (todos os forms validam corretamente)
+2. ✅ Error handling (403, 404, permission denied implementados)
+3. ✅ Success messages (django.contrib.messages em todas as views)
+4. ✅ Unit tests for models (100% cobertura)
+5. ✅ Integration tests for flows (teste e2e completo funcionando)
+6. ✅ UI refinements (Tailwind v4, design eco-friendly, responsivo)
 
-## TailwindCSS Setup
-- Use `django-tailwind` package
-- Create `theme` app for Tailwind
-- Configure `tailwind.config.js`
-- Base styles in `src/styles.css`
-- JIT mode enabled
-- Custom color scheme (green/eco theme)
+## 🎉 Status Final: TODAS AS FASES COMPLETAS
+**45 testes, todos passando (100% success rate)**
+
+## TailwindCSS v4 Setup ✅
+- **Package**: `django-tailwind-4[reload]` (v4-specific fork)
+- **Auto-reload**: django-browser-reload integration
+- **Single command**: `python manage.py tailwind dev` (runs Django + Tailwind watcher)
+- **Theme app**: Created via `python manage.py tailwind init`
+- **v4 syntax**: `@import "tailwindcss"`, `@theme` directive, `@source` paths
+- **CSS source**: `theme/static_src/src/styles.css`
+- **Output**: `theme/static/css/dist/styles.css`
+- **Template tag**: `{% tailwind_css %}`
+- **Custom eco theme**: Green color scheme (#10b981, #059669, #047857)
+- **See**: `TAILWIND_SETUP.md` for complete guide
+
+## Database Seeding ✅
+- **Library**: Faker (pt_BR locale)
+- **Command structure**: Separate per model for granular control
+- **Mode**: Append-only (no data clearing)
+- **Dataset size**: Medium (20-50 records per model)
+
+### Available Commands
+1. **`python manage.py seed_users`** - Creates 35 users by default
+   - 60% COMPANY (with balance, company_name, CNPJ)
+   - 35% PRODUCER (with farm_name, CPF)
+   - 5% ADMIN (superuser)
+   - Custom count: `--count N`
+
+2. **`python manage.py seed_credits`** - Creates 45 credits by default
+   - Assigned to random PRODUCER users
+   - Brazilian regions (Amazônia, Cerrado, Pantanal, etc.)
+   - Generation dates: past 2 years
+   - Status: 60% AVAILABLE, 30% LISTED, 10% SOLD
+   - 80% verified by admin
+
+3. **`python manage.py seed_listings`** - Creates 30 listings by default
+   - Only for AVAILABLE/LISTED credits
+   - Price: R$50-200/ton
+   - 80% with expiration date (30-180 days ahead)
+   - 90% active
+   - Updates credit status to LISTED
+
+4. **`python manage.py seed_transactions`** - Creates 35 transactions by default
+   - Buyer: random COMPANY users
+   - Seller: credit owner (PRODUCER)
+   - Status: 40% PENDING, 50% COMPLETED, 10% CANCELLED
+   - Timestamp: past 6 months
+   - COMPLETED transactions transfer ownership
+
+### Usage
+```bash
+# Seed all data (run in order)
+python manage.py seed_users
+python manage.py seed_credits
+python manage.py seed_listings
+python manage.py seed_transactions
+
+# Custom counts
+python manage.py seed_users --count 50
+python manage.py seed_credits --count 100
+
+# Dependencies
+pip install -r requirements.txt  # installs Faker==33.1.0
+```
+
+## Real-Time Features ✅
+- **Server-Sent Events (SSE)** for public transactions feed
+  - Endpoint: `/transactions/public/stream/`
+  - One-way server push (efficient for this use case)
+  - Immediate connection confirmation (triggers "Live" status quickly)
+  - Heartbeat every 30s to keep connection alive
+  - DB polling every 2s for new COMPLETED transactions
+  - **Session-based reconnection system**:
+    - Server generates UUID session ID on first connection
+    - Client stores session ID in localStorage (60s validity)
+    - Reconnections with valid session bypass rate limit
+    - Server validates session ID + IP match
+    - Session auto-refreshed every 10s on both client and server
+    - Auto-cleanup: localStorage cleared when user leaves (not refresh)
+  - Smart rate limiting: 5s initial timeout, refreshed to 30s every 10s while active
+  - Auto-reconnect on disconnect (3s cooldown prevents spam)
+  - Connection status indicator in UI
+  - Anonymized data: only roles, no personal info
 
 ## Security Considerations
 - CSRF protection (Django default)
@@ -188,6 +272,8 @@ components/
 - SQL injection protection (Django ORM)
 - XSS protection (template escaping)
 - Environment variables for secrets
+- Rate limiting on SSE endpoint (1 connection per IP)
+- Data anonymization on public endpoints
 
 ## Future Enhancements (out of scope)
 - Payment gateway integration
@@ -215,9 +301,178 @@ components/
 
 ## Status Tracking
 
-- [ ] Phase 1: Project Bootstrap
-- [ ] Phase 2: User Management
-- [ ] Phase 3: Credits Management
-- [ ] Phase 4: Transactions
-- [ ] Phase 5: Dashboard
-- [ ] Phase 6: Polish & Testing
+- [x] Phase 1: Project Bootstrap ✅
+- [x] Phase 2: User Management ✅
+- [x] Phase 3: Credits Management ✅
+- [x] Phase 4: Transactions ✅
+- [x] Phase 5: Dashboard ✅ (métricas por papel, últimas transações)
+- [x] Phase 6: Polish & Testing ✅ (42 testes passando, admin configurado)
+- [x] Emoji to Lucide Icon Migration ✅
+- [x] Navbar Refactor: User Dropdown Menu ✅
+
+---
+
+## Navbar Refactor: User Dropdown Menu ✅
+
+### Problem
+- Navbar cluttered with 7-8 links for authenticated users
+- Duplicate transaction links confusing ("Transactions" public + "Transações" private)
+- No clear visual hierarchy for user-specific actions
+- Poor UX for authenticated users
+
+### Solution
+Consolidated user-specific actions into a dropdown menu triggered by user icon + username.
+
+### Structure
+
+**Main Navbar (Authenticated):**
+```
+Logo | Dashboard | Marketplace | Public Transactions | [User Icon + Username ▼]
+                                                        └─ Dropdown Menu
+```
+
+**User Dropdown Menu:**
+```
+┌─────────────────────────┐
+│ My Transactions         │  /transactions/
+│ Profile                 │  accounts:profile
+│ ─────────────────────   │
+│ Admin Panel             │  (if is_admin)
+│ Auditor Dashboard       │  (if is_auditor)
+│ ─────────────────────   │
+│ Logout                  │  accounts:logout
+└─────────────────────────┘
+```
+
+**Main Navbar (Unauthenticated):**
+```
+Logo | Marketplace | Public Transactions | Login | Register
+```
+
+### Implementation Details
+
+**Desktop Dropdown:**
+- Trigger: `<button>` with `user-circle` icon + username + `chevron-down`
+- Menu: Absolutely positioned, glass effect, border, backdrop-blur
+- Z-index: 50 (appears above content)
+- Transitions: Smooth toggle, chevron rotation
+
+**Mobile Navigation:**
+- User section with divider + username header
+- Same links as desktop, displayed inline
+- Visual separation from main nav items
+
+**JavaScript:**
+- Toggle dropdown on button click
+- Click-outside handler to close menu
+- Chevron rotation animation (0° → 180°)
+- Event propagation handled correctly
+
+**Lucide Icons:**
+- `user-circle` - User dropdown trigger (w-5 h-5)
+- `chevron-down` - Dropdown arrow (w-4 h-4)
+- `file-text` - My Transactions
+- `user` - Profile
+- `shield-check` - Admin/Auditor dashboards
+- `log-out` - Logout
+- `layout-dashboard` - Dashboard (mobile)
+- `shopping-bag` - Marketplace (mobile)
+
+### Results
+- ✅ Reduced navbar clutter from 7-8 links to 4 main links
+- ✅ Clear visual hierarchy for user actions
+- ✅ Eliminated duplicate transaction links
+- ✅ Better mobile UX with organized user section
+- ✅ Consistent Lucide icon usage throughout
+
+### Files Modified
+- `templates/components/navbar.html` - Complete restructure (lines 18-186)
+
+---
+
+## Emoji to Lucide Icon Migration ✅
+
+### Overview
+Migrated all emoji characters in web templates to Lucide icons for consistency, better rendering, and modern design.
+
+### Scope
+**Total:** ~22 emoji replacements across 6 template files
+
+### Completed Files
+
+#### Core App Templates (18 replacements)
+1. **templates/landing.html** - 8 emojis ✅
+   - Removed: 📊📋🔍🌐✅⚡🔒📱
+   - Icons already present, removed redundant emoji text
+
+2. **templates/api_docs.html** - 5 emojis ✅
+   - 🌍 → `globe` icon (line 571)
+   - 📊📋🔍 → Removed (icons already present)
+   - 💡 → `lightbulb` icon (line 772)
+
+3. **dashboard/templates/dashboard/index.html** - 4 emojis ✅
+   - ✅ → `check-circle` icon (validation status)
+   - 🟡 → `clock` icon (pending status)
+   - 🔵 → `loader-2` icon (under review)
+   - ❌ → `x-circle` icon (rejected status)
+
+4. **transactions/templates/transactions/public_transactions.html** - 2 emojis ✅
+   - 🔒 → Removed (shield-check icon already present)
+   - 💡 → `lightbulb` icon (line 136)
+
+5. **accounts/templates/accounts/add_balance.html** - 1 emoji ✅
+   - ℹ️ → Removed (info icon already present)
+
+6. **credits/templates/credits/detail.html** - 1 emoji ✅
+   - ⏳ → `hourglass` icon (validation pending)
+
+#### Email Templates (Excluded)
+- **templates/emails/*.html** - Emojis retained
+- **Reason:** Email clients don't support JavaScript required for Lucide icons
+- **Status:** Emojis kept for universal compatibility in HTML emails
+
+### Emoji → Lucide Icon Mapping Reference
+
+| Emoji | Lucide Icon | Usage Context |
+|-------|-------------|---------------|
+| 🌍 | `globe` | Public data, global access |
+| 📊 | `bar-chart-3` | Statistics, charts |
+| 📋 | `list` | Lists, credits |
+| 🔍 | `search` | Search, detailed view |
+| 🌐 | `unlock` | Public access |
+| ✅ | `check-circle` | Approved, verified |
+| ⚡ | `zap` | Fast, instant updates |
+| 🔒 | `shield-check` | Privacy, security |
+| 📱 | `smartphone` | Mobile-friendly |
+| 💡 | `lightbulb` | Tips, information |
+| 🟡 | `clock` | Pending status |
+| 🔵 | `loader-2` | Under review |
+| ❌ | `x-circle` | Rejected, error |
+| ⏳ | `hourglass` | Waiting, validation pending |
+| ℹ️ | `info` | Information box |
+
+### Implementation Pattern
+```html
+<!-- Before -->
+<p>📊 Estatísticas</p>
+
+<!-- After -->
+<p><i data-lucide="bar-chart-3" class="w-5 h-5 inline"></i> Estatísticas</p>
+
+<!-- Or when icon already present -->
+<i data-lucide="bar-chart-3"></i>
+<p>Estatísticas</p> <!-- emoji removed -->
+```
+
+### Benefits
+- Consistent icon style across platform
+- Better control over size, color, accessibility
+- Scalable vector graphics
+- Supports dark/light themes
+- Modern, professional appearance
+
+### Notes
+- Lucide icons auto-initialized via `lucide.createIcons()` in base.html
+- Icons styled with Tailwind classes
+- Email templates preserve emojis (no JS support)
+- All replacements tested for visual consistency

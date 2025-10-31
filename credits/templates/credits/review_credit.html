@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_tags %}
+
+{% block title %}Revisar Crédito #{{ credit.id }} - EcoTrade{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-6 animate-fade-in">
+            <a href="{% url 'credits:auditor_dashboard' %}" class="inline-flex items-center gap-2 text-gray-400 hover:text-tucupi-green-400 transition mb-4">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Voltar ao Dashboard
+            </a>
+            
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-xl"></div>
+                    <div class="relative w-12 h-12 glass rounded-lg flex items-center justify-center border border-tucupi-green-500/30">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-tucupi-green-400"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-display font-bold text-gradient">Revisar Crédito #{{ credit.id }}</h1>
+                    <p class="text-gray-400">Análise de validação do crédito de carbono</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Badge -->
+        <div class="glass rounded-xl p-6 border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-400">Status atual:</span>
+                    <span class="px-4 py-2 rounded-full text-sm font-semibold
+                        {% if credit.validation_status == 'PENDING' %}bg-yellow-500/10 text-yellow-500
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                        {% elif credit.validation_status == 'APPROVED' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                        {% else %}bg-red-500/10 text-red-500{% endif %}">
+                        {{ credit.get_validation_status_display }}
+                    </span>
+                </div>
+                {% if credit.validated_by %}
+                <div class="text-sm text-gray-400">
+                    Auditor: <span class="text-white font-medium">{{ credit.validated_by.username }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informações do Crédito -->
+        <div class="glass rounded-xl border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="px-6 py-4 border-b border-white/10">
+                <h2 class="text-xl font-bold text-white">Informações do Crédito</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Proprietário</label>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 glass rounded-full flex items-center justify-center border border-white/10">
+                                <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+                            </div>
+                            <div>
+                                <div class="text-white font-medium">{{ credit.owner.username }}</div>
+                                <div class="text-xs text-gray-500">{{ credit.owner.email }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Quantidade</label>
+                        <div class="text-2xl font-bold text-tucupi-green-400">{{ credit.amount }} <span class="text-sm text-gray-400">{{ credit.unit }}</span></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Origem</label>
+                        <div class="text-white font-medium">{{ credit.origin }}</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Data de Geração</label>
+                        <div class="text-white font-medium">{{ credit.generation_date|date:"d/m/Y" }}</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Data de Criação</label>
+                        <div class="text-white font-medium">{{ credit.created_at|date:"d/m/Y H:i" }}</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-2">Status de Listagem</label>
+                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold
+                            {% if credit.status == 'AVAILABLE' %}bg-gray-600 text-gray-200
+                            {% elif credit.status == 'LISTED' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                            {% else %}bg-tucupi-green-500/10 text-tucupi-green-400{% endif %}">
+                            {{ credit.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observações Anteriores (se houver) -->
+        {% if credit.auditor_notes %}
+        <div class="glass rounded-xl border border-tucupi-green-500/30 mb-6 p-6 animate-slide-up" style="animation-delay: 0.3s;">
+            <h3 class="text-lg font-bold text-tucupi-green-400 mb-3 flex items-center gap-2">
+                <i data-lucide="info" class="w-5 h-5"></i>
+                Observações Anteriores
+            </h3>
+            <div class="glass rounded-lg p-4 border border-white/10">
+                <p class="text-gray-300 whitespace-pre-wrap">{{ credit.auditor_notes }}</p>
+                <div class="text-xs text-gray-500 mt-3">
+                    Por: {{ credit.validated_by.username }} em {{ credit.validated_at|date:"d/m/Y H:i" }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Formulário de Validação -->
+        {% if credit.validation_status == 'PENDING' or credit.validation_status == 'UNDER_REVIEW' and credit.validated_by == request.user %}
+        <div class="glass rounded-xl border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="px-6 py-4 border-b border-white/10">
+                <h2 class="text-xl font-bold text-white">Decisão de Validação</h2>
+            </div>
+            <form method="post" class="p-6">
+                {% csrf_token %}
+                
+                <!-- Campo de Observações -->
+                <div class="mb-6">
+                    <label for="notes" class="block text-sm font-medium text-gray-300 mb-2">
+                        Observações da Auditoria *
+                    </label>
+                    <textarea 
+                        id="notes" 
+                        name="notes" 
+                        rows="5"
+                        class="w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 transition"
+                        placeholder="Descreva sua análise do crédito, documentação fornecida, conformidade com normas, etc."
+                        required
+                    >{{ credit.auditor_notes }}</textarea>
+                    <p class="text-xs text-gray-500 mt-2">
+                        Essas observações serão enviadas ao produtor junto com sua decisão.
+                    </p>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    {% if credit.validation_status == 'PENDING' %}
+                    <button 
+                        type="submit" 
+                        name="action" 
+                        value="start_review"
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-tucupi-accent text-tucupi-black rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="eye" class="w-5 h-5"></i>
+                            Iniciar Análise
+                        </span>
+                    </button>
+                    {% endif %}
+                    
+                    <button 
+                        type="submit" 
+                        name="action" 
+                        value="approve"
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-tucupi-green-500 text-white rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            Aprovar Crédito
+                        </span>
+                    </button>
+                    
+                    <button 
+                        type="submit" 
+                        name="action" 
+                        value="reject"
+                        onclick="return confirm('Tem certeza que deseja REJEITAR este crédito? O produtor será notificado.')"
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="x-circle" class="w-5 h-5"></i>
+                            Rejeitar Crédito
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="glass rounded-xl border border-white/10 p-6 text-center animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="inline-flex items-center justify-center w-16 h-16 glass rounded-full mb-4 border border-white/10">
+                <i data-lucide="lock" class="w-8 h-8 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Crédito já validado</h3>
+            <p class="text-gray-400">
+                Este crédito já passou pelo processo de validação e não pode mais ser modificado.
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Informações Adicionais -->
+        <div class="glass rounded-xl border border-yellow-500/30 p-6 animate-slide-up" style="animation-delay: 0.5s;">
+            <h3 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                Diretrizes de Validação
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                    <span>Verificar se a quantidade e unidade estão corretas</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                    <span>Confirmar que a origem é válida e rastreável</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                    <span>Validar data de geração (não pode ser futura)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                    <span>Garantir conformidade com normas ambientais</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
+                    <span>Documentar observações detalhadas para transparência</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

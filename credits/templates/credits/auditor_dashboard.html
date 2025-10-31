@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tailwind_tags %}
+
+{% block title %}Dashboard de Auditoria - EcoTrade{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-8 animate-fade-in">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-xl"></div>
+                    <div class="relative w-12 h-12 glass rounded-lg flex items-center justify-center border border-tucupi-green-500/30">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-tucupi-green-400"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-display font-bold text-gradient">Dashboard de Auditoria</h1>
+                    <p class="text-gray-400">Valide créditos de carbono e garanta a qualidade da plataforma</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="glass rounded-xl p-6 border border-white/10 hover-glow">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Pendentes</span>
+                    <div class="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
+                        <i data-lucide="clock" class="w-5 h-5 text-yellow-500"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ pending_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Aguardando validação</p>
+            </div>
+
+            <div class="glass rounded-xl p-6 border border-white/10 hover-glow">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Em Análise</span>
+                    <div class="w-10 h-10 bg-tucupi-green-500/10 rounded-lg flex items-center justify-center">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 text-tucupi-green-500"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ under_review_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Por você e outros auditores</p>
+            </div>
+
+            <div class="glass rounded-xl p-6 border border-white/10 hover-glow">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Aprovados</span>
+                    <div class="w-10 h-10 bg-tucupi-green-500/10 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-tucupi-green-500"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ approved_by_me_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Validados por você</p>
+            </div>
+
+            <div class="glass rounded-xl p-6 border border-white/10 hover-glow">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-400 text-sm">Rejeitados</span>
+                    <div class="w-10 h-10 bg-red-500/10 rounded-lg flex items-center justify-center">
+                        <i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold text-white">{{ rejected_by_me_count }}</div>
+                <p class="text-xs text-gray-500 mt-1">Não aprovados por você</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="glass rounded-t-xl border-b border-white/10 animate-slide-up" style="animation-delay: 0.2s;">
+            <nav class="flex gap-4 px-6" aria-label="Tabs">
+                <a href="?tab=pending" class="{% if current_tab == 'pending' %}border-tucupi-green-500 text-tucupi-green-400{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-tucupi-green-500/50{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-semibold transition">
+                    Pendentes ({{ pending_count }})
+                </a>
+                <a href="?tab=under_review" class="{% if current_tab == 'under_review' %}border-tucupi-green-500 text-tucupi-green-400{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-tucupi-green-500/50{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-semibold transition">
+                    Em Análise ({{ under_review_count }})
+                </a>
+                <a href="?tab=history" class="{% if current_tab == 'history' %}border-tucupi-green-500 text-tucupi-green-400{% else %}border-transparent text-gray-400 hover:text-gray-300 hover:border-tucupi-green-500/50{% endif %} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-semibold transition">
+                    Histórico
+                </a>
+            </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="glass rounded-b-xl border border-white/10 border-t-0 p-6 animate-slide-up" style="animation-delay: 0.3s;">
+            
+            {% if page_obj.object_list %}
+                <div class="space-y-4">
+                    {% for credit in page_obj %}
+                    <div class="glass rounded-xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition hover-glow">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <!-- Header -->
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="text-xl font-bold text-white">Crédito #{{ credit.id }}</div>
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                        {% if credit.validation_status == 'PENDING' %}bg-yellow-500/10 text-yellow-500
+                                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                                        {% elif credit.validation_status == 'APPROVED' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                                        {% else %}bg-red-500/10 text-red-500{% endif %}">
+                                        {{ credit.get_validation_status_display }}
+                                    </span>
+                                    {% if credit.is_verified %}
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-tucupi-green-500/10 text-tucupi-green-400 flex items-center gap-1">
+                                            <i data-lucide="check" class="w-3 h-3"></i> Verificado
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Info Grid -->
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Proprietário</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.owner.username }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Quantidade</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.amount }} {{ credit.unit }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Origem</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.origin }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-gray-500 mb-1">Data de Geração</div>
+                                        <div class="text-sm text-white font-medium">{{ credit.generation_date|date:"d/m/Y" }}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Observações do auditor (se houver) -->
+                                {% if credit.auditor_notes %}
+                                <div class="glass rounded-lg p-4 mb-4 border border-white/10">
+                                    <div class="text-xs text-gray-500 mb-2">Observações do Auditor:</div>
+                                    <div class="text-sm text-gray-300">{{ credit.auditor_notes }}</div>
+                                    {% if credit.validated_by %}
+                                        <div class="text-xs text-gray-500 mt-2">
+                                            Por: {{ credit.validated_by.username }} em {{ credit.validated_at|date:"d/m/Y H:i" }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Ações -->
+                                <div class="flex gap-3">
+                                    {% if credit.validation_status == 'PENDING' %}
+                                        <a href="{% url 'credits:review_credit' credit.id %}" 
+                                           class="group relative inline-flex items-center gap-2 px-4 py-2 bg-tucupi-green-500 text-white rounded-lg font-semibold text-sm overflow-hidden transition hover-glow">
+                                            <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                                            <span class="relative z-10 flex items-center gap-2">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                                Revisar Crédito
+                                            </span>
+                                        </a>
+                                    {% elif credit.validation_status == 'UNDER_REVIEW' and credit.validated_by == request.user %}
+                                        <a href="{% url 'credits:review_credit' credit.id %}" 
+                                           class="group relative inline-flex items-center gap-2 px-4 py-2 bg-tucupi-accent text-tucupi-black rounded-lg font-semibold text-sm overflow-hidden transition hover-glow">
+                                            <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                                            <span class="relative z-10 flex items-center gap-2">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                                Continuar Análise
+                                            </span>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'credits:view_credit' credit.id %}" 
+                                           class="inline-flex items-center gap-2 px-4 py-2 glass border border-white/10 hover:border-tucupi-green-500/50 text-white rounded-lg font-semibold text-sm transition hover-glow">
+                                            <i data-lucide="eye" class="w-4 h-4"></i>
+                                            Ver Detalhes
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if is_paginated %}
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pt-6 border-t border-white/5 mt-6">
+                    <div class="text-sm text-gray-400">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </div>
+                    <div class="flex items-center gap-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?tab={{ current_tab }}&page={{ page_obj.previous_page_number }}" class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/10 text-sm font-medium text-gray-200 hover:text-white hover:border-tucupi-green-500/50 rounded-lg transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            Anterior
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/5 text-sm font-medium text-gray-600 rounded-lg cursor-not-allowed">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            Anterior
+                        </span>
+                        {% endif %}
+
+                        {% if page_obj.has_next %}
+                        <a href="?tab={{ current_tab }}&page={{ page_obj.next_page_number }}" class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/10 text-sm font-medium text-gray-200 hover:text-white hover:border-tucupi-green-500/50 rounded-lg transition">
+                            Próxima
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 px-3 py-2 glass border border-white/5 text-sm font-medium text-gray-600 rounded-lg cursor-not-allowed">
+                            Próxima
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-12">
+                    <div class="inline-flex items-center justify-center w-16 h-16 glass rounded-full mb-4 border border-white/10">
+                        <i data-lucide="file-text" class="w-8 h-8 text-gray-500"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Nenhum crédito encontrado</h3>
+                    <p class="text-gray-400">
+                        {% if current_tab == 'pending' %}
+                            Não há créditos aguardando validação no momento.
+                        {% elif current_tab == 'under_review' %}
+                            Não há créditos em análise no momento.
+                        {% else %}
+                            Você ainda não validou nenhum crédito.
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
