@@ -5,40 +5,39 @@
 {% block title %}Revisar Crédito #{{ credit.id }} - EcoTrade{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8">
+<div class="min-h-screen py-8">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="mb-6">
-            <a href="{% url 'credits:auditor_dashboard' %}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
+        <div class="mb-6 animate-fade-in">
+            <a href="{% url 'credits:auditor_dashboard' %}" class="inline-flex items-center gap-2 text-gray-400 hover:text-tucupi-green-400 transition mb-4">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
                 Voltar ao Dashboard
             </a>
             
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-xl"></div>
+                    <div class="relative w-12 h-12 glass rounded-lg flex items-center justify-center border border-tucupi-green-500/30">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-tucupi-green-400"></i>
+                    </div>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-bold text-white">Revisar Crédito #{{ credit.id }}</h1>
+                    <h1 class="text-3xl font-display font-bold text-gradient">Revisar Crédito #{{ credit.id }}</h1>
                     <p class="text-gray-400">Análise de validação do crédito de carbono</p>
                 </div>
             </div>
         </div>
 
         <!-- Status Badge -->
-        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 mb-6">
+        <div class="glass rounded-xl p-6 border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.1s;">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <span class="text-sm text-gray-400">Status atual:</span>
                     <span class="px-4 py-2 rounded-full text-sm font-semibold
                         {% if credit.validation_status == 'PENDING' %}bg-yellow-500/10 text-yellow-500
-                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-blue-500/10 text-blue-500
-                        {% elif credit.validation_status == 'APPROVED' %}bg-green-500/10 text-green-500
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                        {% elif credit.validation_status == 'APPROVED' %}bg-tucupi-green-500/10 text-tucupi-green-400
                         {% else %}bg-red-500/10 text-red-500{% endif %}">
                         {{ credit.get_validation_status_display }}
                     </span>
@@ -52,8 +51,8 @@
         </div>
 
         <!-- Informações do Crédito -->
-        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 mb-6">
-            <div class="px-6 py-4 border-b border-gray-700">
+        <div class="glass rounded-xl border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="px-6 py-4 border-b border-white/10">
                 <h2 class="text-xl font-bold text-white">Informações do Crédito</h2>
             </div>
             <div class="p-6">
@@ -61,10 +60,8 @@
                     <div>
                         <label class="block text-sm text-gray-400 mb-2">Proprietário</label>
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                            <div class="w-10 h-10 glass rounded-full flex items-center justify-center border border-white/10">
+                                <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
                             </div>
                             <div>
                                 <div class="text-white font-medium">{{ credit.owner.username }}</div>
@@ -75,7 +72,7 @@
 
                     <div>
                         <label class="block text-sm text-gray-400 mb-2">Quantidade</label>
-                        <div class="text-2xl font-bold text-green-400">{{ credit.amount }} <span class="text-sm text-gray-400">{{ credit.unit }}</span></div>
+                        <div class="text-2xl font-bold text-tucupi-green-400">{{ credit.amount }} <span class="text-sm text-gray-400">{{ credit.unit }}</span></div>
                     </div>
 
                     <div>
@@ -97,8 +94,8 @@
                         <label class="block text-sm text-gray-400 mb-2">Status de Listagem</label>
                         <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold
                             {% if credit.status == 'AVAILABLE' %}bg-gray-600 text-gray-200
-                            {% elif credit.status == 'LISTED' %}bg-blue-500/10 text-blue-400
-                            {% else %}bg-green-500/10 text-green-400{% endif %}">
+                            {% elif credit.status == 'LISTED' %}bg-tucupi-green-500/10 text-tucupi-green-400
+                            {% else %}bg-tucupi-green-500/10 text-tucupi-green-400{% endif %}">
                             {{ credit.get_status_display }}
                         </span>
                     </div>
@@ -108,14 +105,12 @@
 
         <!-- Observações Anteriores (se houver) -->
         {% if credit.auditor_notes %}
-        <div class="bg-blue-900/20 backdrop-blur-sm rounded-xl border border-blue-700/50 mb-6 p-6">
-            <h3 class="text-lg font-bold text-blue-400 mb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+        <div class="glass rounded-xl border border-tucupi-green-500/30 mb-6 p-6 animate-slide-up" style="animation-delay: 0.3s;">
+            <h3 class="text-lg font-bold text-tucupi-green-400 mb-3 flex items-center gap-2">
+                <i data-lucide="info" class="w-5 h-5"></i>
                 Observações Anteriores
             </h3>
-            <div class="bg-gray-900/50 rounded-lg p-4">
+            <div class="glass rounded-lg p-4 border border-white/10">
                 <p class="text-gray-300 whitespace-pre-wrap">{{ credit.auditor_notes }}</p>
                 <div class="text-xs text-gray-500 mt-3">
                     Por: {{ credit.validated_by.username }} em {{ credit.validated_at|date:"d/m/Y H:i" }}
@@ -126,8 +121,8 @@
 
         <!-- Formulário de Validação -->
         {% if credit.validation_status == 'PENDING' or credit.validation_status == 'UNDER_REVIEW' and credit.validated_by == request.user %}
-        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 mb-6">
-            <div class="px-6 py-4 border-b border-gray-700">
+        <div class="glass rounded-xl border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="px-6 py-4 border-b border-white/10">
                 <h2 class="text-xl font-bold text-white">Decisão de Validação</h2>
             </div>
             <form method="post" class="p-6">
@@ -142,7 +137,7 @@
                         id="notes" 
                         name="notes" 
                         rows="5"
-                        class="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition"
+                        class="w-full px-4 py-3 border border-white/10 rounded-lg text-white placeholder-gray-500 transition"
                         placeholder="Descreva sua análise do crédito, documentação fornecida, conformidade com normas, etc."
                         required
                     >{{ credit.auditor_notes }}</textarea>
@@ -158,12 +153,12 @@
                         type="submit" 
                         name="action" 
                         value="start_review"
-                        class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        Iniciar Análise
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-tucupi-accent text-tucupi-black rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="eye" class="w-5 h-5"></i>
+                            Iniciar Análise
+                        </span>
                     </button>
                     {% endif %}
                     
@@ -171,11 +166,12 @@
                         type="submit" 
                         name="action" 
                         value="approve"
-                        class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        Aprovar Crédito
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-tucupi-green-500 text-white rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            Aprovar Crédito
+                        </span>
                     </button>
                     
                     <button 
@@ -183,21 +179,20 @@
                         name="action" 
                         value="reject"
                         onclick="return confirm('Tem certeza que deseja REJEITAR este crédito? O produtor será notificado.')"
-                        class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Rejeitar Crédito
+                        class="group relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg font-semibold overflow-hidden transition hover:scale-105">
+                        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                        <span class="relative z-10 flex items-center gap-2">
+                            <i data-lucide="x-circle" class="w-5 h-5"></i>
+                            Rejeitar Crédito
+                        </span>
                     </button>
                 </div>
             </form>
         </div>
         {% else %}
-        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-700 rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
+        <div class="glass rounded-xl border border-white/10 p-6 text-center animate-slide-up" style="animation-delay: 0.4s;">
+            <div class="inline-flex items-center justify-center w-16 h-16 glass rounded-full mb-4 border border-white/10">
+                <i data-lucide="lock" class="w-8 h-8 text-gray-400"></i>
             </div>
             <h3 class="text-lg font-semibold text-white mb-2">Crédito já validado</h3>
             <p class="text-gray-400">
@@ -207,42 +202,30 @@
         {% endif %}
 
         <!-- Informações Adicionais -->
-        <div class="bg-blue-900/10 backdrop-blur-sm rounded-xl border border-blue-700/30 p-6">
-            <h3 class="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+        <div class="glass rounded-xl border border-yellow-500/30 p-6 animate-slide-up" style="animation-delay: 0.5s;">
+            <h3 class="text-lg font-bold text-yellow-400 mb-4 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
                 Diretrizes de Validação
             </h3>
             <ul class="space-y-2 text-sm text-gray-300">
                 <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
                     <span>Verificar se a quantidade e unidade estão corretas</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
                     <span>Confirmar que a origem é válida e rastreável</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
                     <span>Validar data de geração (não pode ser futura)</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
                     <span>Garantir conformidade com normas ambientais</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <i data-lucide="check" class="w-4 h-4 text-tucupi-green-400 mt-0.5 shrink-0"></i>
                     <span>Documentar observações detalhadas para transparência</span>
                 </li>
             </ul>
