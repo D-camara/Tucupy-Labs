@@ -55,6 +55,15 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
             messages.error(request, "Este crédito não está disponível para compra.")
             return redirect("credits:credit_detail", pk=pk)
         
+        # Validar que o crédito foi aprovado por um auditor
+        if credit.validation_status != CarbonCredit.ValidationStatus.APPROVED:
+            messages.error(
+                request, 
+                "⚠️ Este crédito ainda não foi aprovado por um auditor e não pode ser comprado. "
+                "Aguarde a validação para realizar a compra."
+            )
+            return redirect("credits:credit_detail", pk=pk)
+        
         # Buscar listing ativo
         try:
             listing = CreditListing.objects.get(credit=credit, is_active=True)

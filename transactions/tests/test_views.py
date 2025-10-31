@@ -64,6 +64,10 @@ class BuyCreditViewTests(TestCase):
 
     def test_buy_credit_success(self):
         """Empresa pode comprar crédito listado com sucesso."""
+        # Aprovar o crédito primeiro (necessário após implementação da validação)
+        self.credit.validation_status = CarbonCredit.ValidationStatus.APPROVED
+        self.credit.save()
+        
         self.client.force_login(self.company)
         resp = self.client.post(
             reverse("credits:credit_buy", kwargs={"pk": self.credit.id}), follow=True
@@ -123,6 +127,24 @@ class BuyCreditViewTests(TestCase):
         self.client.force_login(self.company)
         resp = self.client.get(reverse("credits:credit_buy", kwargs={"pk": self.credit.id}))
         self.assertEqual(resp.status_code, 405)  # Method Not Allowed
+
+    def test_buy_credit_requires_approval(self):
+        """Não pode comprar crédito que não foi aprovado por auditor."""
+        # Crédito está PENDING por padrão no setUp
+        self.client.force_login(self.company)
+        resp = self.client.post(
+            reverse("credits:credit_buy", kwargs={"pk": self.credit.id}), follow=True
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        # Não deve ter criado transação
+        self.assertEqual(Transaction.objects.count(), 0)
+        # Deve ter mensagem de erro
+        messages_list = list(resp.context.get('messages', []))
+        self.assertTrue(
+            any('não foi aprovado' in str(msg) for msg in messages_list),
+            "Deveria mostrar mensagem sobre crédito não aprovado"
+        )
 
 
 class TransactionHistoryViewTests(TestCase):
