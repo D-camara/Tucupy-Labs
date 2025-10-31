@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block title %}Histórico · Crédito #{{ credit.id }} · Tucupi Labs{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto animate-fade-in">
+  <!-- Breadcrumb -->
+  <div class="mb-6 animate-slide-down">
+    <a href="{% url 'credits:credit_detail' credit.id %}" class="inline-flex items-center gap-2 text-tucupi-green-400 hover:text-tucupi-accent transition group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      Voltar ao Crédito
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="mb-8 animate-slide-down">
+    <div class="flex items-center gap-4 mb-3">
+      <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <i data-lucide="link" class="w-8 h-8 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-4xl font-display font-bold text-gradient">Histórico de Propriedade</h1>
+        <p class="text-gray-400">Crédito #{{ credit.id }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credit Summary Card -->
+  <div class="glass rounded-2xl p-6 border border-white/10 mb-8 animate-slide-up">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="text-center">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Quantidade</p>
+        <p class="text-xl font-bold text-gradient">{{ credit.amount }} {{ credit.unit }}</p>
+      </div>
+      <div class="text-center">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Origem</p>
+        <p class="text-lg font-semibold text-white">{{ credit.origin }}</p>
+      </div>
+      <div class="text-center">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Proprietário Atual</p>
+        <p class="text-lg font-semibold text-tucupi-green-400">{{ credit.owner.username }}</p>
+      </div>
+      <div class="text-center">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Transferências</p>
+        <p class="text-xl font-bold text-white">{{ total_transfers }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Header -->
+  <div class="flex items-center gap-3 mb-6 animate-slide-up" style="animation-delay: 0.1s;">
+    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-tucupi-green-500 to-transparent"></div>
+    <div class="flex items-center gap-2 px-4 py-2 bg-tucupi-green-500/20 rounded-full border border-tucupi-green-500/50">
+      <svg class="w-5 h-5 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <span class="text-sm font-bold text-tucupi-green-400 uppercase tracking-wider">Timeline Completa</span>
+    </div>
+    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-tucupi-green-500 to-transparent"></div>
+  </div>
+
+  <!-- Ownership Timeline -->
+  <div class="relative space-y-6 animate-slide-up" style="animation-delay: 0.2s;">
+    <!-- Vertical line -->
+    <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-tucupi-green-500 via-blue-500 to-purple-500"></div>
+
+    {% for entry in history %}
+      <div class="relative pl-20 animate-slide-up" style="animation-delay: {{ forloop.counter|add:2|floatformat:1 }}00ms;">
+        <!-- Timeline dot -->
+        <div class="absolute left-5 w-6 h-6 rounded-full border-4 {% if entry.transfer_type == 'CREATION' %}bg-tucupi-green-500 border-tucupi-green-400 shadow-glow-green{% elif entry.transfer_type == 'SALE' %}bg-blue-500 border-blue-400{% else %}bg-purple-500 border-purple-400{% endif %}"></div>
+
+        <!-- Card -->
+        <div class="glass rounded-xl p-6 border {% if entry.transfer_type == 'CREATION' %}border-tucupi-green-500/50 bg-tucupi-green-500/5{% elif entry.transfer_type == 'SALE' %}border-blue-500/50 bg-blue-500/5{% else %}border-purple-500/50 bg-purple-500/5{% endif %} hover-glow transition-all">
+
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <!-- Transfer Type Icon -->
+              <div class="w-12 h-12 {% if entry.transfer_type == 'CREATION' %}bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent{% elif entry.transfer_type == 'SALE' %}bg-gradient-to-br from-blue-500 to-blue-600{% else %}bg-gradient-to-br from-purple-500 to-purple-600{% endif %} rounded-xl flex items-center justify-center">
+                {% if entry.transfer_type == 'CREATION' %}
+                  <i data-lucide="sprout" class="w-6 h-6 text-white"></i>
+                {% elif entry.transfer_type == 'SALE' %}
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                {% else %}
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                  </svg>
+                {% endif %}
+              </div>
+
+              <div>
+                <h3 class="text-xl font-bold {% if entry.transfer_type == 'CREATION' %}text-tucupi-green-400{% elif entry.transfer_type == 'SALE' %}text-blue-400{% else %}text-purple-400{% endif %}">
+                  {{ entry.get_transfer_type_display }}
+                </h3>
+                <p class="text-xs text-gray-500 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  {{ entry.timestamp|date:"d/m/Y H:i:s" }}
+                </p>
+              </div>
+            </div>
+
+            {% if entry.price %}
+              <div class="text-right">
+                <p class="text-xs text-gray-400 uppercase tracking-wider">Valor</p>
+                <p class="text-2xl font-bold text-gradient">R$ {{ entry.price }}</p>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Transfer Details -->
+          <div class="flex items-center gap-4 py-4 px-5 bg-white/5 rounded-lg border border-white/10">
+            <!-- From Owner -->
+            <div class="flex-1">
+              <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">De</p>
+              <div class="flex items-center gap-2">
+                {% if entry.from_owner %}
+                  <div class="w-8 h-8 bg-gradient-to-br from-gray-500 to-gray-600 rounded-full flex items-center justify-center">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                  </div>
+                  <span class="font-semibold text-white">{{ entry.from_owner.username }}</span>
+                {% else %}
+                  <div class="w-8 h-8 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-full flex items-center justify-center">
+                    <i data-lucide="globe" class="w-5 h-5 text-white"></i>
+                  </div>
+                  <span class="font-semibold text-tucupi-green-400">GENESIS</span>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Arrow -->
+            <svg class="w-6 h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+
+            <!-- To Owner -->
+            <div class="flex-1 text-right">
+              <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Para</p>
+              <div class="flex items-center gap-2 justify-end">
+                <span class="font-semibold text-white">{{ entry.to_owner.username }}</span>
+                <div class="w-8 h-8 {% if entry.to_owner == credit.owner %}bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent{% else %}bg-gradient-to-br from-gray-500 to-gray-600{% endif %} rounded-full flex items-center justify-center">
+                  <svg class="w-4 h-4 {% if entry.to_owner == credit.owner %}text-tucupi-black{% else %}text-white{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction Link -->
+          {% if entry.transaction %}
+            <div class="mt-4 flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              <span class="text-sm text-gray-400">
+                Transação:
+                <span class="text-blue-400 font-mono">#{{ entry.transaction.id }}</span>
+              </span>
+            </div>
+          {% endif %}
+
+          <!-- Notes -->
+          {% if entry.notes %}
+            <div class="mt-4 p-3 bg-white/5 rounded-lg border border-white/10">
+              <p class="text-sm text-gray-300">{{ entry.notes }}</p>
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+    {% empty %}
+      <div class="glass rounded-2xl p-12 border border-white/10 text-center">
+        <div class="mb-4 flex justify-center">
+          <i data-lucide="scroll-text" class="w-16 h-16 text-gray-500"></i>
+        </div>
+        <p class="text-xl text-gray-400">Nenhum histórico disponível</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Footer Info -->
+  <div class="mt-12 p-6 glass rounded-xl border border-white/10 text-center animate-slide-up" style="animation-delay: 0.4s;">
+    <p class="text-sm text-gray-400 flex items-center justify-center gap-2">
+      <i data-lucide="check-circle-2" class="w-5 h-5 text-tucupi-green-400"></i>
+      Todas as transferências são registradas de forma permanente e transparente
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Nova Candidatura a Auditor 👤</h2>
+
+<p>Olá Administrador,</p>
+
+<p>Uma nova candidatura para auditor foi submetida na plataforma EcoTrade.</p>
+
+<div class="info-box">
+    <p style="margin: 0;"><strong>📋 Detalhes do Candidato:</strong></p>
+    <ul style="margin: 10px 0 0 20px;">
+        <li><strong>Nome:</strong> {{ applicant_name }}</li>
+        <li><strong>Email:</strong> {{ applicant_email }}</li>
+        <li><strong>ID da Candidatura:</strong> #{{ application_id }}</li>
+    </ul>
+</div>
+
+<p><strong>Ação necessária:</strong></p>
+<p>Por favor, revise a candidatura e aprove ou rejeite através do painel administrativo.</p>
+
+<a href="http://localhost:8000/admin/" class="email-button">
+    Acessar Painel Admin
+</a>
+
+<p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
+    Este é um email automático de notificação administrativa.
+</p>
+{% endblock %}

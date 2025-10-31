@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 EcoTrade: Carbon credit marketplace platform connecting producers (farmers) with companies for regional carbon credit trading.
 
-**Tech Stack**: Django 5.x, Python 3.11+, TailwindCSS 3.x (via django-tailwind), SQLite (dev)
+**Tech Stack**: Django 5.x, Python 3.11+, TailwindCSS 4.x (via django-tailwind-4[reload]), SQLite (dev), Node.js 18+
 
 ## Architecture
 
@@ -49,17 +49,20 @@ source venv/bin/activate  # macOS/Linux
 # Install deps
 pip install -r requirements.txt
 
-# Setup Tailwind (after django-tailwind installed)
+# Setup Tailwind v4
 python manage.py tailwind install
 ```
 
 ### Running Dev Server
 ```bash
-# Terminal 1: Django server
-python manage.py runserver
+# Single command (recommended) - runs Django + Tailwind watcher + auto-reload
+python manage.py tailwind dev
 
-# Terminal 2: Tailwind watcher
+# Alternative: Separate terminals
+# Terminal 1: Tailwind watcher only
 python manage.py tailwind start
+# Terminal 2: Django server
+python manage.py runserver
 ```
 
 ### Database
@@ -84,13 +87,43 @@ python manage.py test accounts
 python manage.py test accounts.tests.TestUserModel.test_role_assignment
 ```
 
-## TailwindCSS Integration
+### Seeding Data
+```bash
+# Basic seeding (run in order)
+python manage.py seed_users --count 20        # Creates users (producers/companies/admins)
+python manage.py seed_credits --count 30      # Creates carbon credits with GENESIS history
+python manage.py seed_listings --count 15     # Creates marketplace listings
+python manage.py seed_transactions --count 10 # Creates transactions with SALE history
 
-- **Package**: django-tailwind creates `theme` app
-- **Config**: `theme/static_src/tailwind.config.js`
-- **Styles**: `theme/static_src/src/styles.css`
-- **Color scheme**: Green/eco theme
-- **JIT mode**: Enabled for faster builds
+# Advanced: Multi-hop ownership chains (blockchain demo)
+python manage.py seed_ownership_transfers --chains 5 --depth 4
+# Creates credits that change hands multiple times
+# Perfect for demonstrating blockchain-style history
+
+# View ownership statistics
+python manage.py show_ownership_stats
+# Shows: total history entries, transfers, most-transferred credits
+
+# NOTE: All ownership changes are automatically tracked via Django signals
+# View any credit history at: /credits/<id>/history/
+```
+
+## TailwindCSS v4 Integration
+
+- **Package**: django-tailwind-4[reload] (v4-specific fork)
+- **Theme app**: `theme/` (created via `tailwind init`)
+- **v4 CSS source**: `theme/static_src/src/styles.css` (uses `@import "tailwindcss"`, `@theme`, `@source`)
+- **Compiled output**: `theme/static/css/dist/styles.css`
+- **Template tag**: `{% load tailwind_tags %}` → `{% tailwind_css %}`
+- **Auto-reload**: django-browser-reload (automatic page refresh on changes)
+- **Color scheme**: Eco green theme (#10b981, #059669, #047857)
+- **Full guide**: See `TAILWIND_SETUP.md` for complete v4 setup instructions
+
+### Tailwind v4 Differences
+- Uses `@import "tailwindcss"` instead of `@tailwind` directives
+- Custom theme via `@theme { --color-name: value }` not `tailwind.config.js`
+- Content paths via `@source` directive in CSS (optional config.js)
+- Single `tailwind dev` command replaces dual terminal setup
 
 ## Implementation Status
 

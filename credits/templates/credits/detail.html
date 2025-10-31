@@ -1,0 +1,358 @@
+{% extends 'base.html' %}
+{% block title %}Crédito #{{ credit.id }} · Tucupi Labs{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto animate-fade-in">
+  <!-- Breadcrumb -->
+  <div class="mb-6 animate-slide-down">
+    <a href="{% url 'credits:credits_marketplace' %}" class="inline-flex items-center gap-2 text-tucupi-green-400 hover:text-tucupi-accent transition group">
+      <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      Voltar ao Marketplace
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="mb-8 animate-slide-down">
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center">
+          <i data-lucide="sprout" class="w-8 h-8 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-4xl font-display font-bold text-gradient">Crédito #{{ credit.id }}</h1>
+          <p class="text-gray-400">Detalhes completos do crédito de carbono</p>
+        </div>
+      </div>
+      <!-- History Link Button -->
+      <a href="{% url 'credits:credit_history' credit.id %}" class="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl hover:scale-105 transition-all shadow-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Ver Histórico
+      </a>
+    </div>
+  </div>
+
+  <!-- Informações do Crédito -->
+  <div class="glass rounded-2xl p-8 border border-white/10 mb-6 animate-slide-up">
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+      <svg class="w-6 h-6 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      Informações do Crédito
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Quantidade -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Quantidade</span>
+        </div>
+        <p class="text-2xl font-bold text-white">{{ credit.amount }}</p>
+        <p class="text-sm text-gray-500 mt-1">{{ credit.unit }}</p>
+      </div>
+
+      <!-- Status -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-tucupi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Status</span>
+        </div>
+        <p class="text-lg font-semibold">
+          {% if credit.status == 'LISTED' %}
+            <span class="text-tucupi-green-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-tucupi-green-500 rounded-full animate-pulse"></span>
+              Disponível
+            </span>
+          {% elif credit.status == 'SOLD' %}
+            <span class="text-gray-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-gray-500 rounded-full"></span>
+              Vendido
+            </span>
+          {% else %}
+            <span class="text-yellow-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
+              Não listado
+            </span>
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Status de Validação -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Validação</span>
+        </div>
+        <p class="text-lg font-semibold">
+          {% if credit.validation_status == 'APPROVED' %}
+            <span class="text-green-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+              Aprovado
+            </span>
+          {% elif credit.validation_status == 'PENDING' %}
+            <span class="text-yellow-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
+              Aguardando Validação
+            </span>
+          {% elif credit.validation_status == 'UNDER_REVIEW' %}
+            <span class="text-blue-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></span>
+              Em Análise
+            </span>
+          {% elif credit.validation_status == 'REJECTED' %}
+            <span class="text-red-400 flex items-center gap-2">
+              <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+              Rejeitado
+            </span>
+          {% endif %}
+        </p>
+        {% if credit.validated_by %}
+          <p class="text-xs text-gray-500 mt-1">Por {{ credit.validated_by.username }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Origem -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Origem</span>
+        </div>
+        <p class="text-lg font-semibold text-white">{{ credit.origin }}</p>
+      </div>
+
+      <!-- Data de Geração -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Data de Geração</span>
+        </div>
+        <p class="text-lg font-semibold text-white">{{ credit.generation_date|date:"d/m/Y" }}</p>
+      </div>
+
+      <!-- Proprietário -->
+      <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <span class="text-xs text-gray-400 uppercase tracking-wider">Proprietário</span>
+        </div>
+        <p class="text-lg font-semibold text-white">{{ credit.owner.username }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão de Compra (para empresas) -->
+  {% if user.is_authenticated and user.role == 'COMPANY' and credit.status == 'LISTED' and credit.owner != user %}
+    <div class="glass rounded-2xl p-8 border-2 border-tucupi-green-500 bg-tucupi-green-500/10 mb-6 animate-scale-in">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-xl flex items-center justify-center">
+          <svg class="w-7 h-7 text-tucupi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white">Comprar este crédito</h3>
+      </div>
+      
+      {% if active_listings %}
+        {% with listing=active_listings.0 %}
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+              <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Preço por unidade</p>
+              <p class="text-3xl font-bold text-gradient">R$ {{ listing.price_per_unit }}</p>
+              <p class="text-xs text-gray-500 mt-1">por {{ credit.unit }}</p>
+            </div>
+            <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+              <p class="text-sm text-gray-400 uppercase tracking-wider mb-2">Valor Total</p>
+              <p class="text-3xl font-bold text-gradient">
+                R$ {% widthratio credit.amount 1 listing.price_per_unit %}
+              </p>
+              <p class="text-xs text-gray-500 mt-1">{{ credit.amount }} {{ credit.unit }}</p>
+            </div>
+          </div>
+          
+          <form action="{% url 'credits:credit_buy' credit.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="group relative w-full px-8 py-5 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold text-xl rounded-xl overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+              <span class="relative z-10 flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Comprar Agora
+              </span>
+            </button>
+          </form>
+        {% endwith %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Formulário de Listagem (para produtores donos) -->
+  {% if user.is_authenticated and user.id == credit.owner_id and user.role == 'PRODUCER' and credit.status == 'AVAILABLE' %}
+    <div class="glass rounded-2xl p-8 border border-white/10 mb-6 animate-slide-up" style="animation-delay: 0.2s;">
+      <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Listar para venda
+      </h3>
+      
+      <!-- Aviso sobre validação -->
+      {% if credit.validation_status != 'APPROVED' %}
+      <div class="mb-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <div>
+            <h4 class="text-yellow-400 font-semibold mb-1">⏳ Validação Pendente</h4>
+            <p class="text-sm text-gray-300">
+              Este crédito precisa ser <strong>aprovado por um auditor</strong> antes de poder ser listado no marketplace. 
+              Após clicar em "Listar", o crédito entrará em análise até a aprovação do auditor.
+            </p>
+            {% if credit.validation_status == 'PENDING' %}
+            <p class="text-xs text-yellow-300 mt-2">
+              Status atual: <strong>Aguardando revisão inicial</strong>
+            </p>
+            {% elif credit.validation_status == 'UNDER_REVIEW' %}
+            <p class="text-xs text-blue-300 mt-2">
+              Status atual: <strong>Em análise por {{ credit.validated_by.username }}</strong>
+            </p>
+            {% elif credit.validation_status == 'REJECTED' %}
+            <p class="text-xs text-red-300 mt-2">
+              Status atual: <strong>Rejeitado</strong> - Entre em contato com o auditor
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+      <form action="{% url 'credits:credit_list_for_sale' credit.id %}" method="post" class="space-y-6">
+        {% csrf_token %}
+        {% if listing_form.non_field_errors %}
+          <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
+            {{ listing_form.non_field_errors }}
+          </div>
+        {% endif %}
+        
+        <div>
+          <label for="id_price_per_unit" class="block text-sm font-bold text-gray-300 mb-2 flex items-center gap-2">
+            <svg class="w-4 h-4 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Preço por unidade (R$)
+          </label>
+          <input type="number" 
+                 name="price_per_unit" 
+                 id="id_price_per_unit"
+                 step="0.01"
+                 placeholder="100.00"
+                 class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-tucupi-green-500 focus:ring-2 focus:ring-tucupi-green-500/50 focus:outline-none transition"
+                 required>
+          <p class="mt-2 text-xs text-gray-500">Defina o preço por {{ credit.unit }}</p>
+          {% if listing_form.price_per_unit.errors %}
+            <p class="mt-2 text-sm text-red-400">{{ listing_form.price_per_unit.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        
+        {% if credit.validation_status == 'APPROVED' %}
+        <button type="submit" class="group relative w-full px-6 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            Listar no Marketplace
+          </span>
+        </button>
+        {% else %}
+        <button type="submit" class="group relative w-full px-6 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-lg">
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Enviar para Análise do Auditor
+          </span>
+        </button>
+        <p class="text-xs text-center text-gray-400 mt-2">
+          O crédito será enviado para validação antes de aparecer no marketplace
+        </p>
+        {% endif %}
+      </form>
+    </div>
+  {% endif %}
+
+  <!-- Listagens Ativas -->
+  <div class="glass rounded-2xl p-8 border border-white/10 animate-slide-up" style="animation-delay: 0.3s;">
+    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+      <svg class="w-6 h-6 text-tucupi-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+      </svg>
+      Listagens Ativas
+    </h3>
+    
+    {% if active_listings %}
+      <div class="space-y-3">
+        {% for l in active_listings %}
+          <div class="flex items-center justify-between p-5 bg-white/5 border border-white/10 rounded-xl hover-glow transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-tucupi-green-500 to-tucupi-accent rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 text-tucupi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                </svg>
+              </div>
+              <div>
+                <span class="text-sm text-gray-400">Listagem #{{ l.id }}</span>
+                <p class="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  desde {{ l.listed_at|date:"d/m/Y" }}
+                </p>
+              </div>
+            </div>
+            <span class="text-2xl font-bold text-gradient">R$ {{ l.price_per_unit }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-12">
+        <div class="mb-4 flex justify-center">
+          <i data-lucide="clipboard-list" class="w-12 h-12 text-gray-500"></i>
+        </div>
+        <p class="text-gray-400">Nenhuma listagem ativa no momento</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

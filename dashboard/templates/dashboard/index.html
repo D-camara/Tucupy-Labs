@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · Tucupi Labs{% endblock %}
+{% load tailwind_tags %}
+
+{% block content %}
+<div class="animate-fade-in">
+    
+    {% if not user.is_authenticated %}
+        <!-- Hero para usuários não autenticados -->
+        <div class="text-center py-16">
+            <!-- Logo animado -->
+            <div class="mb-8 flex justify-center">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-3xl animate-pulse-slow"></div>
+                    <div class="relative animate-scale-in flex justify-center">
+                        <i data-lucide="sprout" class="w-20 h-20 text-tucupi-green-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-display font-bold mb-6 animate-slide-up">
+                <span class="text-gradient">Tucupi Labs</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-4 max-w-3xl mx-auto animate-slide-up" style="animation-delay: 0.1s;">
+                Marketplace regional de créditos de carbono
+            </p>
+            <p class="text-lg text-gray-500 mb-12 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.2s;">
+                Conectando produtores sustentáveis e empresas conscientes. 
+                Juntos por um futuro mais verde.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-slide-up" style="animation-delay: 0.3s;">
+                <a href="{% url 'accounts:register' %}" 
+                   class="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+                    <svg class="w-5 h-5 mr-2 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                    <span class="relative z-10">Criar conta grátis</span>
+                </a>
+                <a href="{% url 'accounts:login' %}" 
+                   class="inline-flex items-center px-8 py-4 glass hover:bg-white/10 text-white font-semibold rounded-lg transition hover-glow">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                    Já tenho conta
+                </a>
+            </div>
+            
+            <!-- Features com efeito glass -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-16">
+                <!-- Produtor -->
+                <div class="group glass rounded-2xl p-8 border border-tucupi-green-500/30 hover:border-tucupi-green-500/60 transition-all hover-glow animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="sprout" class="w-12 h-12 text-tucupi-green-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-tucupi-green-400 mb-3">Para Produtores</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Registre seus créditos de carbono e coloque no marketplace.
+                        Monetize suas práticas sustentáveis e seja recompensado.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-tucupi-accent"></i>
+                        <span class="text-sm text-tucupi-accent font-semibold">Registro fácil</span>
+                    </div>
+                </div>
+                
+                <!-- Empresa -->
+                <div class="group glass rounded-2xl p-8 border border-blue-500/30 hover:border-blue-500/60 transition-all hover-glow animate-slide-up" style="animation-delay: 0.5s;">
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="building-2" class="w-12 h-12 text-blue-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-blue-400 mb-3">Para Empresas</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Compre créditos para compensar emissões de CO₂.
+                        Demonstre seu compromisso ambiental de forma transparente.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-blue-400"></i>
+                        <span class="text-sm text-blue-400 font-semibold">Compra segura</span>
+                    </div>
+                </div>
+                
+                <!-- Transparência -->
+                <div class="group glass rounded-2xl p-8 border border-purple-500/30 hover:border-purple-500/60 transition-all hover-glow animate-slide-up md:col-span-2 lg:col-span-1" style="animation-delay: 0.6s;">
+                    <div class="mb-4 group-hover:scale-110 transition-transform flex justify-center">
+                        <i data-lucide="lock" class="w-12 h-12 text-purple-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-purple-400 mb-3">100% Transparente</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Todas as transações rastreáveis. Histórico completo e verificável.
+                        Confiança através da tecnologia.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4 text-purple-400"></i>
+                        <span class="text-sm text-purple-400 font-semibold">Blockchain ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    {% else %}
+        <!-- Dashboard para usuários autenticados -->
+        <div class="mb-8 animate-slide-up">
+            <h1 class="text-4xl font-display font-bold text-gradient mb-2">Dashboard</h1>
+            <p class="text-gray-400">Bem-vindo de volta, <span class="text-tucupi-green-400 font-semibold">{{ user.username }}</span></p>
+        </div>
+
+        <!-- Card Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.1s;">
+            <!-- Saldo Virtual -->
+            <div class="group glass rounded-2xl p-6 border border-yellow-500/30 hover:border-yellow-500/60 transition-all hover-glow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Saldo Disponível</h3>
+                    <i data-lucide="banknote" class="w-6 h-6 text-yellow-400"></i>
+                </div>
+                <p class="text-4xl font-bold text-yellow-400 mb-2">R$ {{ balance|floatformat:2 }}</p>
+                <p class="text-sm text-gray-500">Para comprar créditos</p>
+                <div class="mt-4 h-1 bg-gradient-to-r from-yellow-500 to-yellow-300 rounded-full"></div>
+                {% if user.role == 'COMPANY' %}
+                <div class="mt-4 pt-4 border-t border-yellow-500/20">
+                    <a href="{% url 'accounts:add_balance' %}" 
+                       class="block w-full text-center bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-yellow-500/50">
+                        + Adicionar Saldo
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Carteira -->
+            <div class="group glass rounded-2xl p-6 border border-tucupi-green-500/30 hover:border-tucupi-green-500/60 transition-all hover-glow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Minha Carteira</h3>
+                    <i data-lucide="wallet" class="w-6 h-6 text-tucupi-green-400"></i>
+                </div>
+                <p class="text-4xl font-bold text-gradient mb-2">{{ my_credits }} <span class="text-xl">tCO₂</span></p>
+                <p class="text-sm text-gray-500">Créditos disponíveis</p>
+                <div class="mt-4 h-1 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent rounded-full"></div>
+            </div>
+
+            {% if user.role == 'PRODUCER' %}
+                <!-- Cards específicos do Produtor -->
+                <div class="group glass rounded-2xl p-6 border border-blue-500/30 hover:border-blue-500/60 transition-all hover-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Créditos Listados</h3>
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <p class="text-4xl font-bold text-blue-400 mb-2">{{ listed_credits }}</p>
+                    <p class="text-sm text-gray-500">Ativos no marketplace</p>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-blue-500 to-blue-300 rounded-full"></div>
+                </div>
+
+                <div class="group glass rounded-2xl p-6 border border-yellow-500/30 hover:border-yellow-500/60 transition-all hover-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Total de Vendas</h3>
+                        <i data-lucide="banknote" class="w-6 h-6 text-yellow-400"></i>
+                    </div>
+                    <p class="text-4xl font-bold text-yellow-400 mb-2">R$ {{ total_sales|floatformat:2 }}</p>
+                    <p class="text-sm text-gray-500">Em transações completadas</p>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-yellow-500 to-yellow-300 rounded-full"></div>
+                </div>
+        </div>
+
+        <!-- Lista de Créditos do Produtor -->
+        {% if producer_credits %}
+        <div class="mt-12 animate-slide-up" style="animation-delay: 0.15s;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-display font-bold text-white">Meus Créditos</h2>
+                <a href="{% url 'credits:create' %}" 
+                   class="px-4 py-2 bg-gradient-to-r from-tucupi-green-600 to-tucupi-green-500 hover:from-tucupi-green-500 hover:to-tucupi-green-400 text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-tucupi-green-500/50">
+                    + Criar Crédito
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for credit in producer_credits %}
+                <a href="{% url 'credits:credit_detail' credit.pk %}" 
+                   class="group glass rounded-xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition-all hover-glow block">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-1">{{ credit.amount }} {{ credit.unit }}</h3>
+                            <p class="text-sm text-gray-400">{{ credit.origin }}</p>
+                        </div>
+                        {% if credit.validation_status == 'APPROVED' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-green-500/10 text-green-500 rounded-full">✅ Aprovado</span>
+                        {% elif credit.validation_status == 'PENDING' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-yellow-500/10 text-yellow-500 rounded-full animate-pulse">🟡 Pendente</span>
+                        {% elif credit.validation_status == 'UNDER_REVIEW' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-blue-500/10 text-blue-500 rounded-full animate-pulse">🔵 Em Análise</span>
+                        {% elif credit.validation_status == 'REJECTED' %}
+                        <span class="px-2 py-1 text-xs font-semibold bg-red-500/10 text-red-500 rounded-full">❌ Rejeitado</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-gray-400">
+                            <span>Status:</span>
+                            <span class="font-medium text-white">{{ credit.get_status_display }}</span>
+                        </div>
+                        {% if credit.validated_by %}
+                        <div class="flex justify-between text-gray-400">
+                            <span>Auditor:</span>
+                            <span class="font-medium text-white">{{ credit.validated_by.username }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="flex justify-between text-gray-400">
+                            <span>Criado:</span>
+                            <span class="font-medium text-white">{{ credit.created_at|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-gray-500">ID: #{{ credit.id }}</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-tucupi-green-400 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+            {% elif user.role == 'COMPANY' %}
+                <!-- Cards específicos da Empresa -->
+                <div class="group glass rounded-2xl p-6 border border-purple-500/30 hover:border-purple-500/60 transition-all hover-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Créditos Disponíveis</h3>
+                        <i data-lucide="shopping-cart" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <p class="text-4xl font-bold text-purple-400 mb-2">{{ available_credits }}</p>
+                    <p class="text-sm text-gray-500">No marketplace</p>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-purple-500 to-purple-300 rounded-full"></div>
+                </div>
+
+                <div class="group glass rounded-2xl p-6 border border-pink-500/30 hover:border-pink-500/60 transition-all hover-glow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Total Adquirido</h3>
+                        <i data-lucide="package" class="w-6 h-6 text-pink-400"></i>
+                    </div>
+                    <p class="text-4xl font-bold text-pink-400 mb-2">{{ total_purchased|floatformat:2 }} <span class="text-xl">tCO₂</span></p>
+                    <p class="text-sm text-gray-500">Em transações completadas</p>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-pink-500 to-pink-300 rounded-full"></div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Últimas Transações -->
+        <div class="mt-12 animate-slide-up" style="animation-delay: 0.2s;">
+            <h2 class="text-2xl font-display font-bold text-white mb-6">Últimas Transações</h2>
+
+            <div class="glass rounded-2xl overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Data</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Quantidade</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Valor</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Status</th>
+
+        <!-- Últimas Transações -->
+        <div class="mt-12 animate-slide-up" style="animation-delay: 0.2s;">
+            <h2 class="text-2xl font-display font-bold text-white mb-6">Últimas Transações</h2>
+
+            <div class="glass rounded-2xl overflow-hidden border border-white/10">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Data</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Quantidade</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Valor</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-tucupi-green-400 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-white/5">
+                            {% for tx in recent_transactions %}
+                                <tr class="hover:bg-white/5 transition">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        {{ tx.timestamp|date:"d/m/Y H:i" }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        {% if tx.buyer == user %}
+                                            <span class="inline-flex items-center gap-1 text-blue-400 font-medium">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                </svg>
+                                                Compra
+                                            </span>
+                                        {% else %}
+                                            <span class="inline-flex items-center gap-1 text-yellow-400 font-medium">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                                </svg>
+                                                Venda
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-white">
+                                        {{ tx.amount }} tCO₂
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-tucupi-accent">
+                                        R$ {{ tx.total_price|floatformat:2 }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <span class="px-3 py-1 inline-flex text-xs font-bold rounded-full
+                                            {% if tx.status == 'COMPLETED' %} bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50
+                                            {% elif tx.status == 'PENDING' %} bg-yellow-500/20 text-yellow-400 border border-yellow-500/50
+                                            {% else %} bg-red-500/20 text-red-400 border border-red-500/50{% endif %}">
+                                            {{ tx.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="px-6 py-12 text-center">
+                                        <div class="text-gray-500">
+                                            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <p class="text-sm">Nenhuma transação encontrada</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <a href="/credits/" class="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg hover-glow transition-all hover:scale-105">
+                    <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    Explorar Marketplace
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% block title %}Criar Conta · Tucupi Labs{% endblock %}
+
+{% block content %}
+<div class="min-h-[90vh] flex items-center justify-center py-12 animate-fade-in">
+  <div class="max-w-2xl w-full">
+    <!-- Logo -->
+    <div class="text-center mb-8 animate-scale-in">
+      <div class="inline-block relative mb-4">
+        <div class="absolute inset-0 bg-tucupi-green-500 opacity-30 blur-2xl"></div>
+        <div class="relative flex justify-center">
+          <i data-lucide="sprout" class="w-16 h-16 text-tucupi-green-400"></i>
+        </div>
+      </div>
+      <h1 class="text-4xl font-display font-bold text-gradient">Junte-se ao Tucupi Labs</h1>
+      <p class="text-gray-400 mt-2">Crie sua conta e comece a negociar créditos de carbono</p>
+    </div>
+    
+    <!-- Form -->
+    <div class="glass rounded-2xl p-8 border border-white/10 animate-slide-up" style="animation-delay: 0.1s;">
+      <h2 class="text-2xl font-bold text-white mb-6">Crie sua conta</h2>
+  
+  <form method="post" class="space-y-5">
+    {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+          <div class="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm mb-6">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Username -->
+          <div>
+            <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-gray-300 mb-2">
+              Nome de usuário
+            </label>
+            {{ form.username }}
+            {% if form.username.errors %}
+              <p class="text-red-400 text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+            <p class="text-gray-500 text-xs mt-1">Usado para login</p>
+          </div>
+          
+          <!-- Email -->
+          <div>
+            <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-gray-300 mb-2">
+              E-mail
+            </label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <p class="text-red-400 text-sm mt-1">{{ form.email.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+    
+        <!-- Role (Tipo de conta) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-3">
+            Tipo de conta
+          </label>
+          <div class="grid md:grid-cols-2 gap-4" id="role-selection">
+            {% for value, label in form.fields.role.choices %}
+              <label class="role-option group relative cursor-pointer block">
+                <input type="radio" name="role" value="{{ value }}" 
+                       {% if form.role.value == value or forloop.first and not form.role.value %}checked{% endif %}
+                       class="role-radio sr-only">
+                <div class="role-card glass rounded-xl p-6 border-3 border-white/20 transition-all hover:border-tucupi-green-400/60 hover-glow relative">
+                  <div class="mb-3 group-hover:scale-110 transition-transform flex justify-center">
+                    {% if value == 'PRODUCER' %}<i data-lucide="sprout" class="w-10 h-10 text-tucupi-green-400"></i>{% elif value == 'COMPANY' %}<i data-lucide="building-2" class="w-10 h-10 text-blue-400"></i>{% endif %}
+                  </div>
+                  <div class="font-bold text-lg text-white mb-2">
+                    {% if value == 'PRODUCER' %}
+                      Produtor
+                    {% elif value == 'COMPANY' %}
+                      Empresa
+                    {% endif %}
+                  </div>
+                  <div class="text-xs text-gray-400">
+                    {% if value == 'PRODUCER' %}
+                      Registre e venda créditos de carbono
+                    {% elif value == 'COMPANY' %}
+                      Compre créditos para compensar emissões
+                    {% endif %}
+                  </div>
+                  
+                  <!-- Checkmark -->
+                  <div class="checkmark absolute top-4 right-4 hidden">
+                    <div class="w-8 h-8 bg-tucupi-green-500 rounded-full flex items-center justify-center shadow-lg shadow-tucupi-green-500/50">
+                      <svg class="w-5 h-5 text-tucupi-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            {% endfor %}
+          </div>
+          {% if form.role.errors %}
+            <p class="text-red-400 text-sm mt-2">{{ form.role.errors.0 }}</p>
+          {% endif %}
+          <div class="mt-3 p-3 glass rounded-lg border border-yellow-500/30">
+            <p class="text-xs text-yellow-400 flex items-start gap-2">
+              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span><strong>Nota:</strong> Contas de administrador são criadas apenas pelo superusuário via Django Admin.</span>
+            </p>
+          </div>
+        </div>
+    
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Password1 -->
+          <div>
+            <label for="{{ form.password1.id_for_label }}" class="block text-sm font-semibold text-gray-300 mb-2">
+              Senha
+            </label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+              <p class="text-red-400 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+            {% endif %}
+            <p class="text-gray-500 text-xs mt-1">Mínimo 8 caracteres</p>
+          </div>
+          
+          <!-- Password2 -->
+          <div>
+            <label for="{{ form.password2.id_for_label }}" class="block text-sm font-semibold text-gray-300 mb-2">
+              Confirmar senha
+            </label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+              <p class="text-red-400 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+        
+        <button type="submit" class="group relative w-full px-6 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green mt-8">
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+            Criar Conta
+          </span>
+        </button>
+      </form>
+      
+      <div class="mt-6 pt-6 border-t border-white/10 text-center">
+        <p class="text-sm text-gray-400">
+          Já possui conta? 
+          <a href="{% url 'accounts:login' %}" class="text-tucupi-green-400 hover:text-tucupi-accent font-semibold transition">
+            Entrar agora
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Seleção de role com visual claro
+  document.addEventListener('DOMContentLoaded', function() {
+    const roleOptions = document.querySelectorAll('.role-option');
+    
+    function updateRoleSelection() {
+      roleOptions.forEach(option => {
+        const radio = option.querySelector('.role-radio');
+        const card = option.querySelector('.role-card');
+        const checkmark = option.querySelector('.checkmark');
+        
+        if (radio.checked) {
+          card.classList.add('border-tucupi-green-500', 'bg-tucupi-green-500/10', 'shadow-glow-green');
+          card.classList.remove('border-white/20');
+          checkmark.classList.remove('hidden');
+          checkmark.classList.add('animate-scale-in');
+        } else {
+          card.classList.remove('border-tucupi-green-500', 'bg-tucupi-green-500/10', 'shadow-glow-green');
+          card.classList.add('border-white/20');
+          checkmark.classList.add('hidden');
+          checkmark.classList.remove('animate-scale-in');
+        }
+      });
+    }
+    
+    // Atualizar no load
+    updateRoleSelection();
+    
+    // Atualizar ao clicar
+    roleOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        setTimeout(updateRoleSelection, 10);
+      });
+    });
+  });
+
+  // Validação de senha em tempo real
+  const password1 = document.getElementById('{{ form.password1.id_for_label }}');
+  const password2 = document.getElementById('{{ form.password2.id_for_label }}');
+  const submitBtn = document.querySelector('button[type="submit"]');
+  
+  function validatePasswords() {
+    if (password2.value && password1.value !== password2.value) {
+      password2.classList.add('border-red-500');
+      password2.classList.remove('border-white/10');
+      
+      // Adicionar mensagem de erro se não existir
+      let errorMsg = password2.parentElement.querySelector('.password-mismatch');
+      if (!errorMsg) {
+        errorMsg = document.createElement('p');
+        errorMsg.className = 'password-mismatch text-red-400 text-sm mt-2 flex items-center gap-1 animate-scale-in';
+        errorMsg.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          As senhas não coincidem
+        `;
+        password2.parentElement.appendChild(errorMsg);
+      }
+    } else {
+      password2.classList.remove('border-red-500');
+      password2.classList.add('border-white/10');
+      
+      // Remover mensagem de erro
+      const errorMsg = password2.parentElement.querySelector('.password-mismatch');
+      if (errorMsg) {
+        errorMsg.remove();
+      }
+    }
+  }
+  
+  if (password2) {
+    password2.addEventListener('input', validatePasswords);
+    password1.addEventListener('input', validatePasswords);
+  }
+  
+  // Indicador de força da senha
+  if (password1) {
+    const strengthIndicator = document.createElement('div');
+    strengthIndicator.className = 'mt-2 space-y-1';
+    strengthIndicator.innerHTML = `
+      <div class="flex gap-1">
+        <div class="strength-bar h-1 flex-1 bg-white/10 rounded-full transition-all"></div>
+        <div class="strength-bar h-1 flex-1 bg-white/10 rounded-full transition-all"></div>
+        <div class="strength-bar h-1 flex-1 bg-white/10 rounded-full transition-all"></div>
+        <div class="strength-bar h-1 flex-1 bg-white/10 rounded-full transition-all"></div>
+      </div>
+      <p class="strength-text text-xs text-gray-500"></p>
+    `;
+    password1.parentElement.appendChild(strengthIndicator);
+    
+    password1.addEventListener('input', function() {
+      const password = this.value;
+      const bars = strengthIndicator.querySelectorAll('.strength-bar');
+      const text = strengthIndicator.querySelector('.strength-text');
+      
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+      if (password.match(/[0-9]/)) strength++;
+      if (password.match(/[^a-zA-Z0-9]/)) strength++;
+      
+      bars.forEach((bar, index) => {
+        if (index < strength) {
+          bar.classList.remove('bg-white/10');
+          if (strength <= 1) bar.classList.add('bg-red-500');
+          else if (strength === 2) bar.classList.add('bg-yellow-500');
+          else if (strength === 3) bar.classList.add('bg-blue-500');
+          else bar.classList.add('bg-tucupi-green-500');
+        } else {
+          bar.classList.add('bg-white/10');
+          bar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-tucupi-green-500');
+        }
+      });
+      
+      const strengthTexts = ['', 'Fraca', 'Média', 'Boa', 'Forte'];
+      text.textContent = password.length > 0 ? `Força: ${strengthTexts[strength]}` : '';
+    });
+  }
+</script>
+{% endblock %}

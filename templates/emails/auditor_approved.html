@@ -1,0 +1,35 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+<h2>Parabéns! Candidatura Aprovada 🎉</h2>
+
+<p>Olá <strong>{{ user_name }}</strong>,</p>
+
+<p>Temos uma excelente notícia! Sua candidatura para se tornar <strong>Auditor Certificado</strong> na EcoTrade foi <strong style="color: #10b981;">APROVADA</strong>!</p>
+
+<div class="info-box">
+    <p style="margin: 0;"><strong>✨ Bem-vindo à equipe de auditores!</strong></p>
+    <p style="margin: 5px 0 0 0;">
+        Você agora tem acesso a todas as funcionalidades de auditoria da plataforma.
+    </p>
+</div>
+
+<p><strong>Como auditor, você poderá:</strong></p>
+<ul style="margin-left: 20px; color: #555555;">
+    <li>✅ Validar créditos de carbono aguardando aprovação</li>
+    <li>📊 Acessar dashboard exclusivo de auditoria</li>
+    <li>📝 Adicionar observações e notas técnicas</li>
+    <li>🔍 Revisar documentação e evidências dos produtores</li>
+</ul>
+
+<a href="http://localhost:8000/dashboard/" class="email-button">
+    Acessar Dashboard de Auditoria
+</a>
+
+<p>Contamos com sua expertise para garantir a qualidade e transparência dos créditos de carbono em nossa plataforma!</p>
+
+<p style="margin-top: 30px;">
+    Atenciosamente,<br>
+    <strong>Equipe EcoTrade</strong>
+</p>
+{% endblock %}

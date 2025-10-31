@@ -1,0 +1,70 @@
+<div class="group glass rounded-2xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition-all hover-glow">
+  <!-- Header -->
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <i data-lucide="sprout" class="w-6 h-6 text-tucupi-green-400"></i>
+        <h3 class="text-xl font-bold text-white">{{ title|default:"Crédito de Carbono" }}</h3>
+      </div>
+      <p class="text-sm text-gray-400">ID: #{{ id|default:"XXX" }}</p>
+    </div>
+    <span class="px-3 py-1 text-xs font-bold rounded-full
+                 {% if status == 'AVAILABLE' or status == 'LISTED' %}
+                   bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50
+                 {% elif status == 'SOLD' %}
+                   bg-gray-500/20 text-gray-400 border border-gray-500/50
+                 {% else %}
+                   bg-blue-500/20 text-blue-400 border border-blue-500/50
+                 {% endif %}">
+      {{ status|default:"AVAILABLE" }}
+    </span>
+  </div>
+  
+  <!-- Details Grid -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="glass rounded-lg p-3 border border-white/5">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Origem</div>
+      <div class="text-sm font-semibold text-white truncate">{{ origin|default:"Fazenda/Projeto" }}</div>
+    </div>
+    <div class="glass rounded-lg p-3 border border-white/5">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Quantidade</div>
+      <div class="text-sm font-bold text-tucupi-accent">{{ amount|default:"1.0" }} tCO₂</div>
+    </div>
+    <div class="glass rounded-lg p-3 border border-white/5">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Data Geração</div>
+      <div class="text-sm font-semibold text-white">{{ generation_date|default:"YYYY-MM-DD" }}</div>
+    </div>
+    <div class="glass rounded-lg p-3 border border-white/5">
+      <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Preço</div>
+      <div class="text-sm font-bold text-tucupi-green-400">{{ price|default:"R$ 0,00" }}</div>
+    </div>
+  </div>
+  
+  <!-- Owner -->
+  {% if owner %}
+  <div class="mb-4 pb-4 border-b border-white/10">
+    <div class="flex items-center gap-2 text-sm text-gray-400">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      </svg>
+      Proprietário: <span class="text-white font-medium">{{ owner }}</span>
+    </div>
+  </div>
+  {% endif %}
+  
+  <!-- CTA -->
+  {% if cta_url %}
+  <div class="mt-6">
+    <a href="{{ cta_url }}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+      <span class="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition"></span>
+      <span class="relative z-10 flex items-center gap-2">
+        {{ cta_label|default:"Ver Detalhes" }}
+        <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </span>
+    </a>
+  </div>
+  {% endif %}
+</div>
+

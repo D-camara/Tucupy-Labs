@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% block title %}Marketplace · Tucupi Labs{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in">
+  <!-- Header -->
+  <div class="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-slide-up">
+    <div>
+      <h1 class="text-4xl font-display font-bold text-gradient mb-2">Marketplace</h1>
+      <p class="text-gray-400">Explore e adquira créditos de carbono verificados</p>
+    </div>
+    {% if user.is_authenticated and user.role == 'PRODUCER' %}
+      <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+        <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+        <span class="relative z-10 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Cadastrar Crédito
+        </span>
+      </a>
+    {% endif %}
+  </div>
+
+  {% if listings %}
+    <!-- Stats -->
+    <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-4 animate-slide-up" style="animation-delay: 0.1s;">
+      <div class="glass rounded-xl p-4 border border-white/10">
+        <div class="text-sm text-gray-400 mb-1">Total Disponível</div>
+        <div class="text-2xl font-bold text-white">{{ listings|length }}</div>
+      </div>
+      <div class="glass rounded-xl p-4 border border-white/10">
+        <div class="text-sm text-gray-400 mb-1">Volume Total</div>
+        <div class="text-2xl font-bold text-tucupi-green-400">
+          {% widthratio listings|length 1 100 %} tCO₂
+        </div>
+      </div>
+      <div class="glass rounded-xl p-4 border border-white/10">
+        <div class="text-sm text-gray-400 mb-1">Status</div>
+        <div class="text-2xl font-bold text-tucupi-accent flex items-center gap-2">
+          <i data-lucide="circle" class="w-4 h-4 fill-tucupi-green-400 text-tucupi-green-400"></i>
+          Ativo
+        </div>
+      </div>
+    </div>
+    
+    <!-- Grid de créditos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-slide-up" style="animation-delay: 0.2s;">
+      {% for item in listings %}
+        <div class="group glass rounded-2xl p-6 border border-white/10 hover:border-tucupi-green-500/50 transition-all hover-glow">
+          <!-- Card Header -->
+          <div class="flex items-start justify-between mb-6">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="sprout" class="w-6 h-6 text-tucupi-green-400"></i>
+                <h3 class="text-xl font-bold text-white">Crédito #{{ item.credit.id }}</h3>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap">
+                {% if item.credit.validation_status == 'APPROVED' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-tucupi-green-500/20 text-tucupi-green-400 border border-tucupi-green-500/50 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  APROVADO
+                </span>
+                {% elif item.credit.validation_status == 'UNDER_REVIEW' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/50 flex items-center gap-1 animate-pulse">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  EM ANÁLISE
+                </span>
+                {% elif item.credit.validation_status == 'PENDING' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/50 flex items-center gap-1 animate-pulse">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  AGUARDANDO
+                </span>
+                {% elif item.credit.validation_status == 'REJECTED' %}
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/50 flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  REJEITADO
+                </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          
+          <!-- Details Grid -->
+          <div class="space-y-3 mb-6">
+            <div class="flex justify-between items-center pb-2 border-b border-white/5">
+              <span class="text-sm text-gray-400">Quantidade</span>
+              <span class="font-bold text-tucupi-accent">{{ item.credit.amount }} {{ item.credit.unit }}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-white/5">
+              <span class="text-sm text-gray-400">Origem</span>
+              <span class="font-semibold text-white text-sm truncate ml-2">{{ item.credit.origin }}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-white/5">
+              <span class="text-sm text-gray-400">Geração</span>
+              <span class="font-semibold text-white text-sm">{{ item.credit.generation_date|date:"d/m/Y" }}</span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-white/5">
+              <span class="text-sm text-gray-400">Preço/unidade</span>
+              <span class="font-bold text-tucupi-green-400 text-lg">R$ {{ item.price_per_unit }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-400">Produtor</span>
+              <span class="font-medium text-white text-sm flex items-center gap-1">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                {{ item.credit.owner.username }}
+              </span>
+            </div>
+          </div>
+          
+          <!-- CTA -->
+          {% if item.credit.validation_status == 'APPROVED' %}
+          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+            <span class="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition"></span>
+            <span class="relative z-10 flex items-center gap-2">
+              Ver Detalhes
+              <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </a>
+          {% else %}
+          <div class="space-y-2">
+            <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn relative inline-flex items-center justify-center w-full px-6 py-3 bg-gray-700 text-gray-300 font-bold rounded-lg overflow-hidden transition-all hover:bg-gray-600">
+              <span class="relative z-10 flex items-center gap-2">
+                Ver Detalhes
+                <svg class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </a>
+            <p class="text-xs text-center text-gray-400 italic">
+              Aguardando aprovação do auditor
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Paginação -->
+    {% if is_paginated %}
+      <div class="mt-12 flex items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.3s;">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}" class="glass px-6 py-3 rounded-lg border border-white/10 hover:border-tucupi-green-500/50 text-white font-semibold transition hover-glow flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Anterior
+          </a>
+        {% endif %}
+        <span class="glass px-4 py-3 rounded-lg border border-white/10 text-gray-300 font-semibold">
+          Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}" class="glass px-6 py-3 rounded-lg border border-white/10 hover:border-tucupi-green-500/50 text-white font-semibold transition hover-glow flex items-center gap-2">
+            Próxima
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% else %}
+    <!-- Empty state -->
+    <div class="text-center py-20 animate-scale-in">
+      <div class="mb-6 flex justify-center">
+        <i data-lucide="wheat" class="w-20 h-20 text-gray-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-white mb-3">Nenhum crédito disponível</h3>
+      <p class="text-gray-400 mb-8 max-w-md mx-auto">
+        Não há listagens ativas no momento. Seja o primeiro a cadastrar um crédito!
+      </p>
+      {% if user.is_authenticated and user.role == 'PRODUCER' %}
+        <a href="{% url 'credits:credit_create' %}" class="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-tucupi-green-500 to-tucupi-accent text-tucupi-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 shadow-glow-green">
+          <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition"></span>
+          <span class="relative z-10 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Cadastrar Primeiro Crédito
+          </span>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
