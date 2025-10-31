@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
 /* Tailwind v4: tell it where to scan for classes */
 @source "../../templates/**/*.html";         /* theme templates */

@@ -2,6 +2,10 @@
 
 ## 2025-10-31
 
+### Changed - Tailwind Build Output
+- `theme/static/css/dist/` removed from git tracking (already in .gitignore)
+- Build artifacts now ignored properly
+
 ### Fixed - UX e Linguagem Simplificada
 - **Logout agora redireciona para landing page** (não mais para tela de login)
   - `accounts/views.py`: `LogoutView.next_page` mudado de `dashboard:index` para `dashboard:landing`
@@ -366,7 +370,3 @@
   - `seed_transactions`: Reports SALE history entries created via signals
   - `seed_ownership_transfers`: NEW - Creates multi-hop transfer chains for demo
   - `show_ownership_stats`: NEW - Displays ownership history statistics
-- **daisyUI v5**: Installed Tailwind component library for enhanced UI components
-  - Added daisyUI npm package (latest version)
-  - Configured via `@plugin` directive in styles.css (Tailwind v4 syntax)
-  - Compatible with existing custom components
