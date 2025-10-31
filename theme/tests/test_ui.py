@@ -132,7 +132,8 @@ class ComponentTests(TestCase):
         
         content = navbar_path.read_text()
         # Verifica links essenciais (usa template tags ao invés de hardcoded)
-        self.assertIn('href="/"', content)  # Dashboard
-        self.assertIn('href="/credits/"', content)  # Marketplace
-        self.assertIn('href="/transactions/"', content)  # Transactions
-        self.assertIn("{% url 'accounts:login' %}", content)  # Login com template tag
+        self.assertIn("{% url 'dashboard:index' %}", content)  # Dashboard
+        self.assertIn("{% url 'credits_marketplace' %}", content)  # Marketplace
+        self.assertIn("{% url 'public_transactions' %}", content)  # Transactions
+        self.assertIn("{% url 'accounts:login' %}", content)  # Login
+        self.assertIn("{% url 'accounts:register' %}", content)  # Register

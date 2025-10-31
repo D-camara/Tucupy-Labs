@@ -3,6 +3,7 @@ from django.shortcuts import render
 from credits.models import CarbonCredit, CreditListing
 from transactions.models import Transaction
 from django.db.models import Sum
+from accounts.models import Profile  # ✅ ADICIONADO
 
 
 def landing_page(request):
@@ -22,8 +23,9 @@ def index(request):
     user = request.user
     context = {}
     
-    # Saldo virtual
-    context['balance'] = user.profile.balance
+    # ✅ CORREÇÃO: Saldo virtual com validação de perfil
+    profile, created = Profile.objects.get_or_create(user=user)
+    context['balance'] = profile.balance
     
     # Carteira (comum a todos os usuários)
     context['my_credits'] = CarbonCredit.objects.filter(

@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
 
-from accounts.models import User
+from accounts.models import User, Profile  # ✅ ADICIONADO Profile
 from accounts.views import company_required
 from credits.models import CarbonCredit, CreditListing
 
@@ -70,13 +70,13 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
         # Calcular valor total
         total_price = credit.amount * listing.price_per_unit
         
-        # Verificar saldo do comprador
-        buyer_profile = request.user.profile
+        # ✅ CORREÇÃO: Verificar saldo do comprador com validação de perfil
+        buyer_profile, created = Profile.objects.get_or_create(user=request.user)
         if not buyer_profile.can_buy(total_price):
+            # ✅ CORREÇÃO: Mensagem genérica sem valores financeiros
             messages.error(
                 request, 
-                f"Saldo insuficiente. Você tem R$ {buyer_profile.balance:.2f}, "
-                f"mas precisa de R$ {total_price:.2f}."
+                "Saldo insuficiente para completar a transação."
             )
             return redirect("credit_detail", pk=pk)
         
@@ -103,10 +103,10 @@ def buy_credit(request: HttpRequest, pk: int) -> HttpResponse:
         credit.status = CarbonCredit.Status.SOLD
         credit.save()
     
+    # ✅ CORREÇÃO: Mensagem genérica sem valores financeiros
     messages.success(
         request,
-        f"✅ Crédito adquirido com sucesso! Transação #{txn.id} concluída. "
-        f"Total: R$ {txn.total_price:.2f} | Saldo restante: R$ {request.user.profile.balance:.2f}"
+        "✅ Crédito adquirido com sucesso! Transação concluída."
     )
     return redirect("transaction_history")
 

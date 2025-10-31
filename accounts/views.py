@@ -131,42 +131,66 @@ def add_balance_view(request: HttpRequest) -> HttpResponse:
     """View para empresas adicionarem saldo à conta."""
     user = cast(User, request.user)
     
+    # ✅ VALIDAÇÃO: Garantir que o perfil existe
+    profile, created = Profile.objects.get_or_create(user=user)
+    current_balance = profile.balance  # ✅ CORREÇÃO: Usar a variável 'profile'
+    
     if request.method == "POST":
         amount_str = request.POST.get("amount", "").strip()
         
         if not amount_str:
             messages.error(request, "❌ Por favor, informe o valor a adicionar.")
-            return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
+            # ✅ CORREÇÃO: Não expor valor exato do saldo
+            return render(request, "accounts/add_balance.html", {
+                "has_balance": current_balance > 0,
+                "balance_level": "high" if current_balance > 1000 else "low"
+            })
         
         try:
             amount = Decimal(amount_str)
             
             if amount <= 0:
                 messages.error(request, "❌ O valor deve ser maior que zero.")
-                return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
+                # ✅ CORREÇÃO: Não expor valor exato do saldo
+                return render(request, "accounts/add_balance.html", {
+                    "has_balance": current_balance > 0,
+                    "balance_level": "high" if current_balance > 1000 else "low"
+                })
             
             if amount > Decimal("1000000"):
                 messages.error(request, "❌ Valor muito alto. Máximo permitido: R$ 1.000.000,00")
-                return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
+                # ✅ CORREÇÃO: Não expor valor exato do saldo
+                return render(request, "accounts/add_balance.html", {
+                    "has_balance": current_balance > 0,
+                    "balance_level": "high" if current_balance > 1000 else "low"
+                })
             
-            # Adicionar saldo
-            old_balance = user.profile.balance
-            user.profile.add_balance(amount)
-            new_balance = user.profile.balance
+            # ✅ CORREÇÃO: Adicionar saldo usando a variável 'profile'
+            old_balance = profile.balance
+            profile.add_balance(amount)
+            new_balance = profile.balance
             
             messages.success(
                 request,
-                f"✅ Saldo adicionado com sucesso! "
-                f"R$ {old_balance:.2f} + R$ {amount:.2f} = R$ {new_balance:.2f}"
+                # ✅ CORREÇÃO: Mensagem genérica sem valores financeiros exatos
+                "✅ Saldo adicionado com sucesso! Verifique seu extrato para detalhes."
             )
             return redirect("dashboard:index")
             
         except (InvalidOperation, ValueError):
             messages.error(request, "❌ Valor inválido. Use apenas números (ex: 1000.50)")
-            return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
+            # ✅ CORREÇÃO: Não expor valor exato do saldo
+            return render(request, "accounts/add_balance.html", {
+                "has_balance": current_balance > 0,
+                "balance_level": "high" if current_balance > 1000 else "low"
+            })
     
     # GET
-    return render(request, "accounts/add_balance.html", {"current_balance": user.profile.balance})
+    # ✅ CORREÇÃO: Não expor valor exato do saldo
+    return render(request, "accounts/add_balance.html", {
+        "has_balance": current_balance > 0,
+        "balance_level": "high" if current_balance > 1000 else "low"
+    })
 
 
 # Healthcheck simples

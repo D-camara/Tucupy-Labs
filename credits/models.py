@@ -22,6 +22,9 @@ class CarbonCredit(models.Model):
     origin = models.CharField(max_length=255)
     generation_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
+    unit = models.CharField(max_length=32, default="tons CO2")
+    auditor_notes = models.TextField(blank=True, default="", help_text="Notas do auditor sobre a validação do crédito")  # ✅ ADICIONAR
+    is_verified = models.BooleanField(default=False, help_text="Crédito verificado por administrador")
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.AVAILABLE)
     unit = models.CharField(max_length=32, default="tons CO2")
     is_verified = models.BooleanField(default=False, help_text="Crédito verificado por administrador")
