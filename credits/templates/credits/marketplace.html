@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Marketplace · Tucupi Labs{% endblock %}
+{% block title %}Mercado · Tucupi Labs{% endblock %}
 
 {% block content %}
 <div class="animate-fade-in">
   <!-- Header -->
   <div class="mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-slide-up">
     <div>
-      <h1 class="text-4xl font-display font-bold text-gradient mb-2">Marketplace</h1>
+      <h1 class="text-4xl font-display font-bold text-gradient mb-2">Mercado</h1>
       <p class="text-gray-400">Explore e adquira créditos de carbono verificados</p>
     </div>
     {% if user.is_authenticated and user.role == 'PRODUCER' %}
@@ -107,7 +107,7 @@
           </div>
           
           <!-- CTA -->
-          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn inline-flex items-center justify-center w-full px-6 py-3 bg-tucupi-green-500 text-white font-bold rounded-lg transition-all hover:scale-105 hover-glow">
+          <a href="{% url 'credits:credit_detail' item.credit.id %}" class="group/btn inline-flex items-center justify-center w-full px-6 py-3 glass font-bold rounded-lg transition-all hover:scale-105 hover-glow">
             <span class="flex items-center gap-2">
               Ver Detalhes
               <i data-lucide="arrow-right" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></i>
